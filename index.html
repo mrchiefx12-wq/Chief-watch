@@ -1929,9 +1929,9 @@
         const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(selections.dialColor)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(selections.borderColor)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
         
         const adminNumber = "918209444808"; 
-        const whatsappAppUrl = `whatsapp://send?phone=${adminNumber}&text=${msg}`;
+        window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
 
-        triggerPopup('success', 'Order Received', 'We received your order! Our team will contact you by your number within 24 hours. Thank you for ordering.');
+        triggerPopup('success', 'Order Received', 'We received your order! Our team will contact you by your number within 24 hours. Copy the link that we will give you and past it in your Browser and confirm your order. Thank you for ordering.');
     }
 </script>
 
