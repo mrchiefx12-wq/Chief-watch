@@ -319,7 +319,239 @@
             </div>
         </div>
 
-        <div id="frag-about" class="embed-fragment"><h2>About Us</h2></div>
+        <div id="frag-about" class="embed-fragment"><h2><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+    /* 🚨 Google Sites Margins & Global Reset */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: #050505 !important;
+      overflow-x: hidden;
+      width: 100%;
+      color: #e0e0e0;
+      font-family: 'Montserrat', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::-webkit-scrollbar { display: none !important; width: 0 !important; }
+    * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; }
+
+    #chief-about-wrapper {
+      background: #050505;
+      padding: 40px 15px;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .about-card {
+      background: linear-gradient(145deg, #0a0a0a, #030303);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 50px 30px;
+      border-radius: 24px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.9);
+      text-align: center;
+    }
+
+    /* Gold Badge Effect */
+    .brand-badge {
+      background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728);
+      color: #000;
+      display: inline-block;
+      padding: 6px 22px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      border-radius: 50px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    .about-header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 32px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin: 0 0 15px 0;
+      background: linear-gradient(180deg, #fcf6ba 0%, #d4af37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .about-subtitle {
+      color: #888;
+      font-style: italic;
+      font-size: 14px;
+      margin-bottom: 35px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .story-text {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #cccccc;
+      font-weight: 300;
+      text-align: justify;
+      text-align-last: center;
+      margin-bottom: 35px;
+    }
+
+    .highlight-gold {
+      color: #d4af37;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Core Pillars Section */
+    .pillars-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 35px;
+      text-align: left;
+    }
+
+    .pillar-box {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(212, 175, 55, 0.08);
+      padding: 20px;
+      border-radius: 12px;
+      transition: 0.3s ease;
+    }
+
+    .pillar-box:hover {
+      border-color: rgba(212, 175, 55, 0.25);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .pillar-box h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      color: #d4af37;
+      margin: 0 0 8px 0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .pillar-box p {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #999;
+      margin: 0;
+    }
+
+    .signature-line {
+      margin-top: 45px;
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      padding-top: 25px;
+    }
+
+    .signature-text {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: #d4af37;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    /* 📱 Responsive Fixing for Mobile Phones */
+    @media (max-width: 600px) {
+      #chief-about-wrapper {
+        padding: 20px 10px;
+      }
+      
+      .about-card {
+        padding: 40px 20px;
+        border-radius: 16px;
+      }
+
+      .about-header h1 {
+        font-size: 24px;
+        letter-spacing: 4px;
+      }
+
+      .about-subtitle {
+        font-size: 12px;
+        margin-bottom: 25px;
+      }
+
+      .story-text {
+        font-size: 13px;
+        line-height: 1.7;
+        text-align: center;
+        text-align-last: center;
+      }
+
+      .pillars-container {
+        grid-template-columns: 1fr; /* फोन पर एक के नीचे एक आ जाएगा */
+        gap: 15px;
+      }
+
+      .pillar-box {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="chief-about-wrapper">
+  <div class="about-card">
+    <div class="brand-badge">The Elite Craftsmanship</div>
+    
+    <div class="about-header">
+      <h1>About Us</h1>
+    </div>
+
+    <div class="about-subtitle">A luxury brand needs a soul.</div>
+
+    <div class="story-text">
+      At <span class="highlight-gold">Chief</span>, we believe that time is the ultimate currency, and true luxury cannot be mass-produced. We do not just build watches; we forge private legacies. Operating at the pinnacle of artisanal engineering, we design ultra-exclusive bespoke timepieces tailored entirely to the identity of the collector. Every single masterpiece we create is a <span class="highlight-gold">1-of-1 in the entire world</span>—a unique testament of achievement designed to ensure that when you wear a Chief, <span class="highlight-gold">you command the room</span>.
+    </div>
+
+    <div class="pillars-container">
+      <div class="pillar-box">
+        <h3>✦ Absolute 1-of-1 Exclusivity</h3>
+        <p>We craft only one single piece per design worldwide. Your watch's blueprint is permanently retired upon creation, ensuring zero duplication across existence.</p>
+      </div>
+      
+      <div class="pillar-box">
+        <h3>✦ Cosmic Identification</h3>
+        <p>Each masterpiece is engraved with an unreplicable ownership verification code, embedding your identity permanently into the global registry of fine horology.</p>
+      </div>
+
+      <div class="pillar-box">
+        <h3>✦ Bespoke Tailoring</h3>
+        <p>From custom hand-engraved dials to raw astronomical materials, your watch is sketched from a blank canvas to mirror your individual journey.</p>
+      </div>
+
+      <div class="pillar-box">
+        <h3>✦ Special Abilities</h3>
+        <p>Engineered with custom mechanical complications, our timepieces boast specialized tactical abilities and bespoke mechanical movements tuned to your lifestyle.</p>
+      </div>
+    </div>
+
+    <div class="signature-line">
+      <div class="signature-text">MR CHIEF INDIA</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html></h2></div>
         <div id="frag-order" class="embed-fragment"><h2>Your Orders</h2></div>
         <div id="frag-history" class="embed-fragment"><h2>History Logs</h2></div>
         <div id="frag-review" class="embed-fragment"><h2>Reviews</h2></div>
