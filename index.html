@@ -1365,17 +1365,12 @@
         }
 
         .color-slider-container {
-            overflow-x: auto;
+            overflow-x: hidden;
             white-space: nowrap;
             scroll-behavior: smooth;
             width: 100%;
             padding: 4px 0;
             margin: 0 4px;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .color-slider-container::-webkit-scrollbar {
-            display: none;
         }
 
         .color-dot {
@@ -1815,8 +1810,8 @@
 
     function initLocations() {
         const stateSelect = document.getElementById('custState');
-        stateSelect.innerHTML = '<option value="" disabled selected>Select State...</option>';
         const sortedStates = Object.keys(indiaData).sort();
+        
         sortedStates.forEach(state => {
             let opt = document.createElement('option');
             opt.value = state;
@@ -1831,7 +1826,7 @@
         
         citySelect.innerHTML = '<option value="" disabled selected>Select City/Jila...</option>';
         citySelect.disabled = true;
-        
+
         if (indiaData[stateSelect]) {
             citySelect.disabled = false;
             const sortedDistricts = indiaData[stateSelect].sort();
@@ -1872,7 +1867,6 @@
 
     function initColorSlider(sliderId, selectionKey, textId, defaultIndex) {
         const slider = document.getElementById(sliderId);
-        slider.innerHTML = '';
         luxuryColors.forEach((c, index) => {
             const dot = document.createElement('div');
             dot.className = 'color-dot';
@@ -1897,6 +1891,7 @@
         initColorSlider('borderSlider', 'borderColor', 'selectedBorderColorName', 3);
         initLocations();
         
+        // Android localStorage sync fallback setup
         if (typeof initRealtimeSync === "undefined") {
             window.initRealtimeSync = function() {
                 console.log("Realtime sync triggered from WebView client side.");
@@ -1919,6 +1914,7 @@
         document.getElementById('topMeta').style.display = 'none';
         document.getElementById('mainConfigurator').style.display = 'block';
         
+        // ⚡ NAYA OPTIONAL ENTRY: Customizer start hote hi trigger system check
         if (window.AndroidBridge && window.AndroidBridge.loadRewardedAd) {
             window.AndroidBridge.loadRewardedAd();
         }
@@ -1931,6 +1927,7 @@
         
         document.getElementById('popupTitle').innerText = title;
         document.getElementById('popupMsg').innerText = message;
+
         if(type === 'error') {
             card.classList.add('alert-card');
             iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
@@ -1943,6 +1940,7 @@
         setTimeout(() => { overlay.classList.remove('show'); }, 2500);
     }
 
+    // ⚡ INTERFACE FIX: Yeh function Android se call hokar UI par instant update dikhayega
     window.onAdWatchedSuccess = function(adIndex) {
         console.log("Reward verified from Android native wrapper client. Index reference:", adIndex);
         triggerPopup('success', 'AD REWARD RECEIVED!', 'Bhai kamaal ho gaya! Video poori dekhne par coins database me bhej diye gaye hain.');
@@ -1966,6 +1964,8 @@
             return;
         }
 
+        // ⚡ NAYA WEBVIEW AD TRIGGER BRIDGE INTERFACE CONNECTIVITY
+        // Order complete submit hote hi pehle Android ki rewarded ad trigger karega!
         if (window.AndroidBridge && window.AndroidBridge.showRewardedAd) {
             window.AndroidBridge.showRewardedAd(1);
         }
@@ -1984,6 +1984,7 @@
             strapMaterial: selections.strap,
             mechanismInsideLook: selections.insideLook
         };
+
         console.log("Database Engine System Ready Payload:", finalizedOrderPayload);
 
         const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(selections.dialColor)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(selections.borderColor)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
@@ -1992,12 +1993,14 @@
         setTimeout(() => {
             window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
         }, 1000);
+
         triggerPopup('success', 'Order Received', 'We received your order! Our team will contact you by your number within 24 hours. Thank you for ordering.');
     }
 </script>
 
 </body>
 </html>
+</div>
         <div id="frag-review" class="embed-fragment">
             <!DOCTYPE html>
 <html>
