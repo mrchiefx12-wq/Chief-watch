@@ -216,13 +216,13 @@
         .daily-icon { font-size: 45px; color: var(--gold-primary); margin-bottom: 15px; }
         .daily-title { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: var(--gold-primary); margin-bottom: 10px; }
         .daily-text { font-size: 13px; color: var(--text-light); margin-bottom: 25px; line-height: 1.6; }
+        .daily-btn { padding: 10px 25px; background: var(--gold-primary); border: none; color: #000; font-weight: 700; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-    <!-- SIDEBAR DRAWER -->
     <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-close" onclick="closeSidebar()">✕</div>
         <ul class="sidebar-menu">
@@ -243,7 +243,6 @@
         </ul>
     </div>
 
-    <!-- 🔥 TOP HEADER (REAL-TIME SYNCED) -->
     <div class="top-header">
         <div class="menu-icon" onclick="openSidebar()">☰</div>
         <div class="brand-logo">CHIEF</div>
@@ -253,16 +252,13 @@
         </div>
     </div>
 
-    <!-- FRAGMENT MANAGER -->
     <div class="fragment-container" id="fragment-container">
         
-        <!-- HOME PAGE -->
         <div id="frag-home" class="embed-fragment active-fragment">
             <h2 style="font-family:'Cinzel'; color:var(--gold-primary);">Welcome Chief</h2>
             <p style="color:var(--text-muted); font-size:14px; margin-top:10px;">Select from menu or bottom bar to explore.</p>
         </div>
 
-        <!-- 🎁 DAILY REWARD INTEGRATED FRAGMENT -->
         <div id="frag-reward" class="embed-fragment">
             <div class="reward-wrapper">
                 <div class="reward-container">
@@ -289,12 +285,11 @@
                             </div>
                         </div>
                     </div>
-                    <button class="claim-btn" id="mainClaimBtn" disabled>Loading Data...</button>
+                    <button class="claim-btn" id="mainClaimBtn" onclick="processClaim()" disabled>Loading Data...</button>
                 </div>
             </div>
         </div>
 
-        <!-- OTHER DUMMY FRAGMENTS -->
         <div id="frag-about" class="embed-fragment"><h2>About Us</h2></div>
         <div id="frag-order" class="embed-fragment"><h2>Your Orders</h2></div>
         <div id="frag-history" class="embed-fragment"><h2>History Logs</h2></div>
@@ -305,7 +300,6 @@
         <div id="frag-help" class="embed-fragment"><h2>Help Desk</h2></div>
     </div>
 
-    <!-- GLOBAL SUCCESS MODAL -->
     <div class="daily-popup-overlay" id="dailyPopup">
         <div class="daily-card">
             <div class="daily-icon"><i class="fa-solid fa-circle-check"></i></div>
@@ -315,7 +309,6 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
         <a id="btn-home" class="nav-item active" onclick="switchFragment('home')"><i class="fa-solid fa-house"></i><span class="nav-text">Home</span></a>
         <a id="btn-about" class="nav-item" onclick="switchFragment('about')"><i class="fa-solid fa-circle-info"></i><span class="nav-text">About</span></a>
@@ -324,11 +317,9 @@
         <a id="btn-review" class="nav-item" onclick="switchFragment('review')"><i class="fa-solid fa-star"></i><span class="nav-text">Review</span></a>
     </div>
 
-    <!-- 🌐 STEP 1: FIREBASE COMPAT SCRIPTS INTEGRATION -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
-    <!-- 🌐 STEP 2: CONVERTED CONFIG FROM YOUR IMAGE (image_bc22a2.png) -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
@@ -341,12 +332,10 @@
             measurementId: "G-CB9F743N3M"
         };
         
-        // Initialize Firebase Globally
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
 
-    <!-- ⚙️ MAIN APP SYNC ENGINE -->
     <script>
         const rewardsMap = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200, 6: 400, 7: 800 };
         let timerInterval;
@@ -354,13 +343,10 @@
         let globalCoins = 0;
         let globalDay = 1;
 
-        // Auto-detect login setup
         function initRealtimeSync() {
-            // Agar pehle login page par user login hua tha, toh uska ID yahan fetch ho jayega
             currentUserId = localStorage.getItem('chief_user_id') || 'CHIEF_GUEST';
             document.getElementById("dbUserDisplay").innerText = `ID: ${currentUserId}`;
 
-            // Realtime listening from Firebase cloud database
             const userRef = database.ref('users/' + currentUserId);
             userRef.on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -370,7 +356,6 @@
                     globalDay = data.currentDay || 1;
                     renderUI(globalDay, data.cooldownEnd || 0);
                 } else {
-                    // Agar koi data nahi hai (Naya User hai), toh database structure initiate karo
                     database.ref('users/' + currentUserId).set({
                         coins: 0,
                         currentDay: 1,
@@ -381,25 +366,21 @@
         }
 
         function renderUI(currentDay, cooldownEnd) {
-            // 👑 TOP BAR COIN COUPLING - REALTIME UPDATED WITHOUT RELOAD
             document.getElementById("coinBalance").innerText = globalCoins;
 
             let now = Date.now();
             clearInterval(timerInterval);
 
-            // Clear box styling states
             for (let i = 1; i <= 7; i++) {
                 let box = document.getElementById(`box-day${i}`);
                 if(box) box.classList.remove('claimed', 'current');
             }
             
-            // Mark older days as claimed
             for (let i = 1; i < currentDay; i++) {
                 let box = document.getElementById(`box-day${i}`);
                 if(box) box.classList.add('claimed');
             }
 
-            // Check if timer lock is active
             if (cooldownEnd > now) {
                 let lastClaimedDay = currentDay - 1 === 0 ? 7 : currentDay - 1;
                 let activeBox = document.getElementById(`box-day${lastClaimedDay}`);
@@ -430,7 +411,6 @@
 
             let nextCooldown = now + (24 * 60 * 60 * 1000); // 24 Hours Lock
 
-            // 💾 Direct Push Data onto Firebase
             database.ref('users/' + currentUserId).update({
                 coins: newBalance,
                 currentDay: nextDay,
@@ -456,7 +436,6 @@
             timerInterval = setInterval(loop, 1000);
         }
 
-        /* 📱 FRAMEWORK ROUTING FUNCTIONS */
         function openSidebar() { document.getElementById("sidebarMenu").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("open"); document.getElementById("fragment-container").classList.add("blurred"); }
         function closeSidebar() { document.getElementById("sidebarMenu").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("open"); document.getElementById("fragment-container").classList.remove("blurred"); }
         function closePopup() { document.getElementById("dailyPopup").classList.remove("show"); }
@@ -476,8 +455,10 @@
         function clickReferEarn() { closeSidebar(); alert("Refer & Earn clicked!"); }
         function clickFreeReward() { closeSidebar(); alert("Free Reward clicked!"); }
 
-        // Start Firebase Sync Engine on Bootstrap
-        initRealtimeSync();
+        // Start Sync on Load
+        window.onload = function() {
+            initRealtimeSync();
+        };
     </script>
 </body>
 </html>
