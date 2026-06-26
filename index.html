@@ -1050,8 +1050,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            /* WebView ke swipe conflicts door karne ke liye standard touch control */
-            touch-action: pan-y;
+            overflow: hidden !important;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -1090,7 +1089,7 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
-        /* WebView friendly scroll container */
+        /* Outer Wrapper tailored for iframe / WebView */
         .studio-wrapper-outer {
             width: 100%;
             height: 100vh;
@@ -1098,7 +1097,6 @@
             overflow-x: hidden;
             box-sizing: border-box;
             padding: 45px 12px 20px 12px;
-            -webkit-overflow-scrolling: touch; /* iOS aur Android momentum scroll click response glitch fix */
         }
 
         .studio-wrapper-outer::-webkit-scrollbar {
@@ -1334,7 +1332,7 @@
             color: var(--white);
         }
 
-        /* Slider Controls - Handled specially for Webviews */
+        /* Slider Controls */
         .slider-wrapper {
             position: relative;
             display: flex;
@@ -1349,42 +1347,41 @@
             background: var(--card-bg);
             border: 1px solid #333;
             color: var(--gold);
-            width: 35px; /* Size increased slightly for touch */
-            height: 35px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             z-index: 5;
             flex-shrink: 0;
         }
 
+        .slider-btn:hover {
+            background: var(--gold);
+            color: black;
+        }
+
         .color-slider-container {
-            overflow-x: auto; /* Webview scroll allow karne ke liye auto kiya */
+            overflow-x: hidden;
             white-space: nowrap;
             scroll-behavior: smooth;
             width: 100%;
-            padding: 6px 0;
+            padding: 4px 0;
             margin: 0 4px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Hide Scrollbar for clean look */
-        .color-slider-container::-webkit-scrollbar {
-            display: none;
         }
 
         .color-dot {
             display: inline-block;
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            margin: 0 6px;
+            margin: 0 5px;
             cursor: pointer;
             border: 2px solid #222;
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
             box-shadow: inset 0 2px 4px rgba(255,255,255,0.15), 0 3px 6px rgba(0,0,0,0.4);
             box-sizing: border-box;
             vertical-align: middle;
@@ -1392,7 +1389,7 @@
 
         .color-dot:hover, .color-dot.active {
             border-color: var(--white);
-            transform: scale(1.15);
+            transform: scale(1.1);
             box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
 
@@ -1434,22 +1431,23 @@
 
         input, select {
             width: 100%;
-            padding: 14px 12px; /* Touch area increased */
+            padding: 12px;
             background: #090909;
             border: 1px solid #2d2d2d;
             color: white;
             border-radius: 5px;
             font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         select {
-            /* Webview drop down indicator bug fix */
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23D4AF37'><polygon points='0,0 10,0 5,5'/></svg>");
             background-repeat: no-repeat;
-            background-position: right 14px center;
+            background-position: right 12px center;
             padding-right: 35px;
             cursor: pointer;
         }
@@ -1457,12 +1455,12 @@
         select option {
             background: #111111;
             color: #ffffff;
-            padding: 10px;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: var(--gold);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
         }
 
         .order-btn {
@@ -1483,7 +1481,11 @@
             transition: 0.3s;
         }
 
-        /* Popups */
+        .order-btn:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Modals and Overlays */
         .luxury-popup-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -1510,8 +1512,14 @@
             text-align: center;
             max-width: 400px;
             width: 85%;
+            box-shadow: 0 15px 50px rgba(212, 175, 55, 0.15);
             transform: scale(0.8);
-            transition: transform 0.3s;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+        }
+
+        .luxury-popup-card.alert-card {
+            border-color: var(--error);
+            box-shadow: 0 15px 50px rgba(211, 47, 47, 0.15);
         }
 
         .luxury-popup-overlay.show .luxury-popup-card {
@@ -1522,19 +1530,31 @@
             font-size: 2.8rem;
             color: var(--gold);
             margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .alert-card .popup-icon {
+            color: var(--error);
+            text-shadow: 0 0 15px rgba(211, 47, 47, 0.4);
         }
 
         .popup-title {
             font-family: 'Cinzel', serif;
             font-size: 1.3rem;
+            letter-spacing: 2px;
             color: var(--gold);
             margin-bottom: 12px;
+        }
+
+        .alert-card .popup-title {
+            color: var(--error);
         }
 
         .popup-msg {
             font-size: 0.85rem;
             line-height: 1.6;
             color: #cccccc;
+            font-weight: 300;
         }
     </style>
 </head>
@@ -1724,14 +1744,14 @@
                 <div class="location-grid">
                     <div class="input-group">
                         <label>State (Rajya)</label>
-                        <select id="custState" onchange="loadDistricts()" onclick="void(0)">
+                        <select id="custState" onchange="loadDistricts()">
                             <option value="" disabled selected>Select State...</option>
                         </select>
                     </div>
 
                     <div class="input-group">
                         <label>District / City (Jila)</label>
-                        <select id="custCity" disabled onclick="void(0)">
+                        <select id="custCity" disabled>
                             <option value="" disabled selected>Select City/Jila...</option>
                         </select>
                     </div>
@@ -1856,13 +1876,12 @@
                 selections[selectionKey] = c.name;
                 document.getElementById(textId).innerText = "Selected: " + c.name;
             }
-            // WebView touch handler improvement
-            dot.addEventListener('click', function(e) {
+            dot.onclick = () => {
                 slider.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
                 dot.classList.add('active');
                 selections[selectionKey] = c.name;
                 document.getElementById(textId).innerText = "Selected: " + c.name;
-            });
+            };
             slider.appendChild(dot);
         });
     }
@@ -1871,10 +1890,17 @@
         initColorSlider('dialSlider', 'dialColor', 'selectedDialColorName', 0);
         initColorSlider('borderSlider', 'borderColor', 'selectedBorderColorName', 3);
         initLocations();
+        
+        // Android localStorage sync fallback setup
+        if (typeof initRealtimeSync === "undefined") {
+            window.initRealtimeSync = function() {
+                console.log("Realtime sync triggered from WebView client side.");
+            };
+        }
     };
 
     function slideColors(sliderId, direction) {
-        document.getElementById(sliderId).scrollLeft += (direction * 140);
+        document.getElementById(sliderId).scrollLeft += (direction * 130);
     }
 
     function selectOption(category, value, element) {
@@ -1887,6 +1913,11 @@
         document.getElementById('landingView').style.display = 'none';
         document.getElementById('topMeta').style.display = 'none';
         document.getElementById('mainConfigurator').style.display = 'block';
+        
+        // ⚡ NAYA OPTIONAL ENTRY: Customizer start hote hi trigger system check
+        if (window.AndroidBridge && window.AndroidBridge.loadRewardedAd) {
+            window.AndroidBridge.loadRewardedAd();
+        }
     }
 
     function triggerPopup(type, title, message) {
@@ -1906,8 +1937,14 @@
         }
 
         overlay.classList.add('show');
-        setTimeout(() => { overlay.classList.remove('show'); }, 2000);
+        setTimeout(() => { overlay.classList.remove('show'); }, 2500);
     }
+
+    // ⚡ INTERFACE FIX: Yeh function Android se call hokar UI par instant update dikhayega
+    window.onAdWatchedSuccess = function(adIndex) {
+        console.log("Reward verified from Android native wrapper client. Index reference:", adIndex);
+        triggerPopup('success', 'AD REWARD RECEIVED!', 'Bhai kamaal ho gaya! Video poori dekhne par coins database me bhej diye gaye hain.');
+    };
 
     function submitOrder() {
         const name = document.getElementById('custName').value.trim();
@@ -1927,6 +1964,12 @@
             return;
         }
 
+        // ⚡ NAYA WEBVIEW AD TRIGGER BRIDGE INTERFACE CONNECTIVITY
+        // Order complete submit hote hi pehle Android ki rewarded ad trigger karega!
+        if (window.AndroidBridge && window.AndroidBridge.showRewardedAd) {
+            window.AndroidBridge.showRewardedAd(1);
+        }
+
         const finalizedOrderPayload = {
             timestamp: new Date().toISOString(),
             ownerName: name,
@@ -1942,9 +1985,14 @@
             mechanismInsideLook: selections.insideLook
         };
 
+        console.log("Database Engine System Ready Payload:", finalizedOrderPayload);
+
         const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(selections.dialColor)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(selections.borderColor)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
         const adminNumber = "918209444808"; 
-        window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
+        
+        setTimeout(() => {
+            window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
+        }, 1000);
 
         triggerPopup('success', 'Order Received', 'We received your order! Our team will contact you by your number within 24 hours. Thank you for ordering.');
     }
@@ -1952,6 +2000,7 @@
 
 </body>
 </html>
+</div>
         <div id="frag-review" class="embed-fragment">
             <!DOCTYPE html>
 <html>
