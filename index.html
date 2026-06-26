@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- DESIGN SYSTEM (DARK & GOLD THEME) --- */
         :root {
             --bg-color: #050505;
             --gold-primary: #dfba6b;
@@ -23,574 +22,108 @@
             --success-green: #2ecc71;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body, html { width: 100%; height: 100%; background-color: var(--bg-color); color: var(--text-light); font-family: 'Montserrat', sans-serif; overflow: hidden; }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-color);
-            color: var(--text-light);
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-        }
-
-        /* --- SCREEN/FRAGMENT CONTAINER --- */
-        .fragment-container {
-            width: 100%;
-            height: 100%;
-            padding-top: 60px;     /* Top Bar Spacer */
-            padding-bottom: 65px;  /* Bottom Bar Spacer */
-            box-sizing: border-box;
-            overflow-y: auto;
-            position: relative;
-            transition: filter 0.3s ease;
-            -webkit-overflow-scrolling: touch;
-        }
-        
+        .fragment-container { width: 100%; height: 100%; padding-top: 60px; padding-bottom: 65px; box-sizing: border-box; overflow-y: auto; position: relative; transition: filter 0.3s ease; }
         .fragment-container::-webkit-scrollbar { display: none; }
-        .fragment-container { -ms-overflow-style: none; scrollbar-width: none; }
         .fragment-container.blurred { filter: blur(5px); pointer-events: none; }
 
-        /* 📱 TOP HEADER BAR */
-        .top-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: var(--nav-bg);
-            border-bottom: 1px solid var(--border-gold);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-sizing: border-box;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
+        .top-header { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: var(--nav-bg); border-bottom: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 1000; backdrop-filter: blur(10px); }
+        .menu-icon { color: var(--gold-primary); font-size: 22px; cursor: pointer; }
+        .brand-logo { font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold-primary); margin: 0 auto 0 15px; }
+        .coin-badge { display: flex; align-items: center; gap: 6px; background: rgba(223, 186, 107, 0.1); border: 1px solid var(--gold-primary); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 13px; }
+        .coin-logo { width: 18px; height: 18px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border-radius: 50%; color: #050505; text-align: center; font-size: 11px; }
 
-        .top-header .menu-icon {
-            color: var(--gold-primary);
-            font-size: 22px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        
-        .top-header .menu-icon:hover { color: #fff; }
-
-        .top-header .brand-logo {
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            color: var(--gold-primary);
-            margin: 0 auto 0 15px;
-        }
-
-        /* 🪙 PREMIUM GOLD COIN BADGE */
-        .coin-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(223, 186, 107, 0.1);
-            border: 1px solid var(--gold-primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 13px;
-            color: #fff;
-            box-shadow: 0 0 10px rgba(223, 186, 107, 0.2);
-            letter-spacing: 0.5px;
-        }
-
-        .coin-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 18px;
-            height: 18px;
-            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
-            color: #050505;
-            border-radius: 50%;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            font-size: 11px;
-        }
-
-        /* 🚪 SIDEBAR DRAWER MENU */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-            backdrop-filter: blur(4px);
-        }
-
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1999; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
         .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 290px;
-            height: 100%;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--gold-primary);
-            z-index: 2000;
-            transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
-            box-shadow: 5px 0 30px rgba(0,0,0,0.9);
-            padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-        }
-
+        .sidebar { position: fixed; top: 0; left: 0; width: 290px; height: 100%; background: var(--sidebar-bg); border-right: 1px solid var(--gold-primary); z-index: 2000; transform: translateX(-100%); transition: transform 0.4s; padding: 20px; }
         .sidebar.open { transform: translateX(0); }
-        .sidebar-close { align-self: flex-end; color: var(--text-muted); font-size: 20px; cursor: pointer; margin-bottom: 30px; }
-        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
-        .sidebar-item { margin-bottom: 25px; }
-        .sidebar-link { text-decoration: none; color: var(--text-light); font-size: 15px; font-weight: 500; letter-spacing: 1px; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; padding: 10px 5px; border-bottom: 1px solid rgba(255,255,255,0.02); cursor: pointer; }
-        .sidebar-link:hover { color: var(--gold-primary); padding-left: 10px; border-bottom-color: var(--gold-primary); }
-        .sidebar-link i { color: var(--gold-primary); font-size: 16px; width: 20px; text-align: center; }
+        .sidebar-link { text-decoration: none; color: white; display: flex; align-items: center; gap: 15px; padding: 15px 0; cursor: pointer; border-bottom: 1px solid #222; }
 
-        /* 📱 STICKY BOTTOM NAVIGATION BAR */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 65px;
-            background: var(--nav-bg);
-            border-top: 1px solid var(--gold-primary);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
-        }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--nav-bg); border-top: 1px solid var(--gold-primary); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-item { cursor: pointer; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; }
+        .nav-item.active { color: var(--gold-primary); }
 
-        .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.3s ease; text-align: center; flex: 1; height: 100%; padding: 4px 2px; gap: 4px; cursor: pointer; }
-        .nav-item i { font-size: 16px; color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; }
-        .nav-item.active, .nav-item:hover { color: var(--gold-primary); text-shadow: 0 0 8px rgba(223, 186, 107, 0.4); }
-        .nav-item.active i, .nav-item:hover i { color: var(--gold-primary); transform: translateY(-2px); }
-
-        .embed-fragment { display: none; width: 100%; height: 100%; box-sizing: border-box; padding: 20px; }
+        .embed-fragment { display: none; padding: 20px; }
         .embed-fragment.active-fragment { display: block; }
-
-        /* --- 🎁 DAILY REWARD PREMIUM GRID --- */
-        .reward-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 10px; }
-        .reward-container { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border-gold); border-radius: 16px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .timer-badge { background: rgba(223, 186, 107, 0.1); border: 1px solid var(--gold-primary); color: var(--gold-primary); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; display: inline-block; margin-bottom: 15px; }
-        .grid-7days { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
-        .day-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-gold); border-radius: 12px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
-        .day-box.day-7 { grid-column: span 3; flex-direction: row; justify-content: space-between; padding: 15px 25px; }
-        .day-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-        .coin-icon-box { width: 35px; height: 35px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #050505; font-weight: 700; font-size: 16px; }
-        .coin-amount { font-size: 13px; font-weight: 700; color: #fff; }
-        .day-box.current { border-color: var(--gold-primary); background: rgba(223, 186, 107, 0.05); }
-        .day-box.current .day-label { color: var(--gold-primary); }
-        .day-box.claimed { border-color: var(--success-green); background: rgba(46, 204, 113, 0.05); opacity: 0.6; }
-        .tick-mark { position: absolute; top: -5px; right: -5px; background: var(--success-green); color: #000; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: none; align-items: center; justify-content: center; font-weight: bold; }
-        .day-box.claimed .tick-mark { display: flex; }
-        .claim-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border: none; border-radius: 8px; color: #050505; font-weight: 700; font-size: 14px; text-transform: uppercase; cursor: pointer; }
-        .claim-btn:disabled { background: #222; color: var(--text-muted); border: 1px solid #333; cursor: not-allowed; }
-        .user-id-text { font-size: 10px; color: var(--gold-primary); letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
-
-        /* --- POPUP MODAL STYLES --- */
-        .daily-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(5px); }
-        .daily-popup-overlay.show { opacity: 1; pointer-events: auto; }
-        .daily-card { width: 85%; max-width: 320px; background: #111111; border: 2px solid var(--gold-primary); border-radius: 16px; padding: 30px 20px; text-align: center; }
-        .daily-icon { font-size: 45px; color: var(--gold-primary); margin-bottom: 15px; }
-        .daily-title { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: var(--gold-primary); margin-bottom: 10px; }
-        .daily-text { font-size: 13px; color: var(--text-light); margin-bottom: 25px; line-height: 1.6; }
-        .daily-btn { padding: 10px 25px; background: var(--gold-primary); border: none; color: #000; font-weight: 700; border-radius: 6px; cursor: pointer; }
+        .placeholder-text { border: 2px dashed var(--gold-primary); padding: 40px; color: var(--gold-primary); text-align: center; border-radius: 10px; margin-top: 20px; }
+        .claim-btn { width: 100%; padding: 14px; background: var(--gold-primary); border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
     <div class="sidebar" id="sidebarMenu">
-        <div class="sidebar-close" onclick="closeSidebar()">✕</div>
-        <ul class="sidebar-menu">
-            <li class="sidebar-item">
-                <a class="sidebar-link" onclick="switchFragment('reward')"><i class="fa-solid fa-gift"></i> Daily Reward</a>
-            </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" onclick="switchFragment('trade')"><i class="fa-solid fa-user-plus"></i> Refer & Earn</a>
-            </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" onclick="clickFreeReward()"><i class="fa-solid fa-circle-play"></i> Free Reward</a>
-            </li>
-            <li class="sidebar-item" style="border-top: 1px dashed rgba(223,186,107,0.2); margin: 15px 0;"></li>
-            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('privacy')"><i class="fa-solid fa-shield-halved"></i> Privacy and Policy</a></li>
-            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('journal')"><i class="fa-solid fa-book-open"></i> The Journal / Blog</a></li>
-            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('help')"><i class="fa-solid fa-circle-question"></i> Help Desk</a></li>
-        </ul>
+        <div onclick="closeSidebar()" style="color:white; cursor:pointer; margin-bottom:20px;">✕ Close</div>
+        <div class="sidebar-link" onclick="switchFragment('reward')"><i class="fa-solid fa-gift"></i> Daily Reward</div>
+        <div class="sidebar-link" onclick="switchFragment('trade')"><i class="fa-solid fa-user-plus"></i> Refer & Earn</div>
     </div>
 
     <div class="top-header">
         <div class="menu-icon" onclick="openSidebar()">☰</div>
         <div class="brand-logo">CHIEF</div>
-        <div class="coin-badge">
-            <div class="coin-logo">C</div>
-            <span id="coinBalance">0</span>
-        </div>
+        <div class="coin-badge"><div class="coin-logo">C</div><span id="coinBalance">0</span></div>
     </div>
 
     <div class="fragment-container" id="fragment-container">
-        
-        <div id="frag-home" class="embed-fragment active-fragment">
-            <h2 style="font-family:'Cinzel'; color:var(--gold-primary);">Welcome Chief</h2>
-            <p style="color:var(--text-muted); font-size:14px; margin-top:10px;">Select from menu or bottom bar to explore.</p>
-        </div>
-
+        <div id="frag-home" class="embed-fragment active-fragment"><div class="placeholder-text">Yaha pe home ka code aayega</div></div>
         <div id="frag-reward" class="embed-fragment">
-            <div class="reward-wrapper">
-                <div class="reward-container">
-                    <div class="user-id-text" id="dbUserDisplay">ID: Offline</div>
-                    <div id="timerContainer" style="display: none;">
-                        <div class="timer-badge"><i class="fa-solid fa-clock"></i> Next Reward: <span id="countdown">24:00:00</span></div>
-                    </div>
-                    <div class="grid-7days">
-                        <div class="day-box" id="box-day1"><div class="tick-mark">✓</div><span class="day-label">Day 1</span><div class="coin-icon-box">C</div><span class="coin-amount">10</span></div>
-                        <div class="day-box" id="box-day2"><div class="tick-mark">✓</div><span class="day-label">Day 2</span><div class="coin-icon-box">C</div><span class="coin-amount">20</span></div>
-                        <div class="day-box" id="box-day3"><div class="tick-mark">✓</div><span class="day-label">Day 3</span><div class="coin-icon-box">C</div><span class="coin-amount">50</span></div>
-                        <div class="day-box" id="box-day4"><div class="tick-mark">✓</div><span class="day-label">Day 4</span><div class="coin-icon-box">C</div><span class="coin-amount">100</span></div>
-                        <div class="day-box" id="box-day5"><div class="tick-mark">✓</div><span class="day-label">Day 5</span><div class="coin-icon-box">C</div><span class="coin-amount">200</span></div>
-                        <div class="day-box" id="box-day6"><div class="tick-mark">✓</div><span class="day-label">Day 6</span><div class="coin-icon-box">C</div><span class="coin-amount">400</span></div>
-                        <div class="day-box day-7" id="box-day7">
-                            <div class="tick-mark">✓</div>
-                            <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
-                                <span class="day-label" style="color:var(--gold-primary)">⚡ Jackpot</span>
-                                <span class="coin-amount">Day 7 Bonus</span>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <div class="coin-icon-box">C</div>
-                                <span class="coin-amount" style="color:var(--gold-primary);">800</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="claim-btn" id="mainClaimBtn" onclick="processClaim()" disabled>Loading Data...</button>
-                </div>
-            </div>
+            <button class="claim-btn" id="mainClaimBtn" onclick="processClaim()">Claim Daily Reward</button>
         </div>
-
         <div id="frag-trade" class="embed-fragment">
-            <div class="reward-wrapper">
-                <div class="reward-container" style="max-width: 380px;">
-                    <div class="daily-icon" style="color: var(--gold-primary); font-size: 38px; margin-bottom: 8px;"><i class="fa-solid fa-users"></i></div>
-                    <h2 style="font-family:'Cinzel'; color:var(--gold-primary); font-size: 20px; margin-bottom: 10px;">Refer & Earn</h2>
-                    <p style="color:var(--text-light); font-size:12px; margin-bottom: 20px; line-height: 1.5;">
-                        Send your refer code to other and get <strong style="color: var(--gold-primary);">200 Coins</strong>!
-                    </p>
-
-                    <div style="background: rgba(255,255,255,0.02); border: 1px dashed var(--border-gold); padding: 15px; border-radius: 12px; margin-bottom: 25px;">
-                        <span class="day-label" style="display:block; margin-bottom: 6px; font-size: 10px;">Your Refer Code</span>
-                        <span id="myReferCodeDisplay" style="font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 2px;">LOADING...</span>
-                    </div>
-
-                    <div id="inputReferSection" style="text-align: left;">
-                        <label class="day-label" style="display:block; margin-bottom: 6px; font-size: 11px;">Enter Refer Code</label>
-                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Enter other user refer code to get 50 coin</p>
-                        
-                        <input type="text" id="inputReferCode" placeholder="e.g. CHIEF1234" autocomplete="off" style="width:100%; padding:12px; background:#1a1a1a; border:1px solid #333; border-radius:8px; color:#fff; font-size: 14px; box-sizing:border-box; margin-bottom: 15px; text-transform: uppercase;">
-                        
-                        <button class="claim-btn" id="referApplyBtn" onclick="applyReferCode()">Apply Code</button>
-                    </div>
-                    
-                    <div id="alreadyReferredMsg" style="display:none; color: var(--success-green); font-size: 12px; font-weight: 600; background: rgba(46,204,113,0.05); padding: 12px; border-radius: 8px; border: 1px solid var(--success-green); text-align: center;">
-                        <i class="fa-solid fa-circle-check"></i> You have already used a refer code!
-                    </div>
-                </div>
-            </div>
+            <h2 style="color:var(--gold-primary)">Refer & Earn</h2>
+            <div id="myReferCodeDisplay" style="font-size:24px; color:white; margin:20px 0;">LOADING...</div>
+            <input type="text" id="inputReferCode" placeholder="Enter Code" style="width:100%; padding:10px; margin-bottom:10px;">
+            <button class="claim-btn" onclick="applyReferCode()">Apply Code</button>
         </div>
-
-        <div id="frag-about" class="embed-fragment"><h2>About Us</h2></div>
-        <div id="frag-order" class="embed-fragment"><h2>Your Orders</h2></div>
-        <div id="frag-history" class="embed-fragment"><h2>History Logs</h2></div>
-        <div id="frag-review" class="embed-fragment"><h2>Reviews</h2></div>
-        <div id="frag-privacy" class="embed-fragment"><h2>Privacy Policy</h2></div>
-        <div id="frag-journal" class="embed-fragment"><h2>Journal / Blog</h2></div>
-        <div id="frag-help" class="embed-fragment"><h2>Help Desk</h2></div>
-    </div>
-
-    <div class="daily-popup-overlay" id="dailyPopup">
-        <div class="daily-card">
-            <div class="daily-icon"><i class="fa-solid fa-circle-check"></i></div>
-            <div class="daily-title" id="popTitle">REWARD CLAIMED!</div>
-            <div class="daily-text" id="popText">...</div>
-            <button class="daily-btn" onclick="closePopup()">AWESOME</button>
-        </div>
+        <div id="frag-about" class="embed-fragment"><div class="placeholder-text">Yaha pe about ka code aayega</div></div>
+        <div id="frag-order" class="embed-fragment"><div class="placeholder-text">Yaha pe order ka code aayega</div></div>
+        <div id="frag-history" class="embed-fragment"><div class="placeholder-text">Yaha pe history ka code aayega</div></div>
+        <div id="frag-review" class="embed-fragment"><div class="placeholder-text">Yaha pe review ka code aayega</div></div>
+        <div id="frag-privacy" class="embed-fragment"><div class="placeholder-text">Yaha pe privacy policy ka code aayega</div></div>
+        <div id="frag-journal" class="embed-fragment"><div class="placeholder-text">Yaha pe journal ka code aayega</div></div>
+        <div id="frag-help" class="embed-fragment"><div class="placeholder-text">Yaha pe help desk ka code aayega</div></div>
     </div>
 
     <div class="bottom-nav">
-        <a id="btn-home" class="nav-item active" onclick="switchFragment('home')"><i class="fa-solid fa-house"></i><span class="nav-text">Home</span></a>
-        <a id="btn-about" class="nav-item" onclick="switchFragment('about')"><i class="fa-solid fa-circle-info"></i><span class="nav-text">About</span></a>
-        <a id="btn-order" class="nav-item" onclick="switchFragment('order')"><i class="fa-solid fa-cart-shopping"></i><span class="nav-text">Order</span></a>
-        <a id="btn-history" class="nav-item" onclick="switchFragment('history')"><i class="fa-solid fa-clock-rotate-left"></i><span class="nav-text">History</span></a>
-        <a id="btn-review" class="nav-item" onclick="switchFragment('review')"><i class="fa-solid fa-star"></i><span class="nav-text">Review</span></a>
-    </div>
-
-    <div class="daily-popup-overlay" id="dailyPopup">
-        <div class="daily-card">
-            <div class="daily-icon"><i class="fa-solid fa-circle-check"></i></div>
-            <div class="daily-title" id="popTitle">REWARD CLAIMED!</div>
-            <div class="daily-text" id="popText">...</div>
-            <button class="daily-btn" onclick="closePopup()">AWESOME</button>
-        </div>
+        <a class="nav-item active" onclick="switchFragment('home')"><i class="fa-solid fa-house"></i> Home</a>
+        <a class="nav-item" onclick="switchFragment('about')"><i class="fa-solid fa-circle-info"></i> About</a>
+        <a class="nav-item" onclick="switchFragment('order')"><i class="fa-solid fa-cart-shopping"></i> Order</a>
+        <a class="nav-item" onclick="switchFragment('history')"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
-            authDomain: "chief-login12.firebaseapp.com",
-            databaseURL: "https://chief-login12-default-rtdb.firebaseio.com",
-            projectId: "chief-login12",
-            storageBucket: "chief-login12.firebasestorage.app",
-            messagingSenderId: "334157325641",
-            appId: "1:334157325641:web:c9b2d4048105e71011e698",
-            measurementId: "G-CB9F743N3M"
-        };
-        
+        const firebaseConfig = { apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I", authDomain: "chief-login12.firebaseapp.com", databaseURL: "https://chief-login12-default-rtdb.firebaseio.com", projectId: "chief-login12", storageBucket: "chief-login12.firebasestorage.app", messagingSenderId: "334157325641", appId: "1:334157325641:web:c9b2d4048105e71011e698" };
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-    </script>
+        const db = firebase.database();
+        let currentUserId = localStorage.getItem('chief_user_id') || "USER_" + Math.floor(Math.random()*10000);
+        localStorage.setItem('chief_user_id', currentUserId);
 
-    <script>
-        const rewardsMap = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200, 6: 400, 7: 800 };
-        let timerInterval;
-        let currentUserId = "CHIEF_GUEST"; 
-        let globalCoins = 0;
-        let globalDay = 1;
-        let userRef = null; 
-        
-        // Refer and Earn global variables
-        let globalReferCode = "";
-        let globalReferredBy = "";
+        // 8-Digit unique code generation
+        function generateUniqueCode() { return "CHIEF" + Math.floor(10000000 + Math.random() * 90000000); }
 
-        function initRealtimeSync() {
-            let androidUser = localStorage.getItem('chief_user_id');
-            if (androidUser && androidUser !== "null" && androidUser !== "") {
-                currentUserId = androidUser;
-            }
-            
-            document.getElementById("dbUserDisplay").innerText = `ID: ${currentUserId}`;
-
-            if (userRef) {
-                userRef.off();
-            }
-
-            userRef = database.ref('users/' + currentUserId);
-            
-            userRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                
-                if (data) {
-                    globalCoins = data.coins || 0;
-                    globalDay = data.currentDay || 1;
-                    
-                    // --- 👥 REFER & EARN DATA FETCH & SYNC ---
-                    globalReferredBy = data.referredBy || "";
-                    
-                    if (data.referCode) {
-                        globalReferCode = data.referCode;
-                    } else {
-                        // Agar code nahi hai toh random unique code create karke save kar dega
-                        globalReferCode = "CHIEF" + Math.floor(1000 + Math.random() * 9000);
-                        database.ref('users/' + currentUserId).update({ referCode: globalReferCode });
-                    }
-                    
-                    document.getElementById("myReferCodeDisplay").innerText = globalReferCode;
-                    
-                    // Code apply ho chuka hai ya nahi check karega page refresh ke baad bhi
-                    if (globalReferredBy) {
-                        document.getElementById("inputReferSection").style.display = "none";
-                        document.getElementById("alreadyReferredMsg").style.display = "block";
-                    } else {
-                        document.getElementById("inputReferSection").style.display = "block";
-                        document.getElementById("alreadyReferredMsg").style.display = "none";
-                    }
-                    
-                    renderUI(globalDay, data.cooldownEnd || 0);
-                } else {
-                    // New User initialization
-                    let automaticCode = "CHIEF" + Math.floor(1000 + Math.random() * 9000);
-                    database.ref('users/' + currentUserId).set({
-                        coins: 0,
-                        currentDay: 1,
-                        cooldownEnd: 0,
-                        referCode: automaticCode,
-                        referredBy: ""
-                    });
-                }
-            });
-        }
-
-        function renderUI(currentDay, cooldownEnd) {
-            document.getElementById("coinBalance").innerText = globalCoins;
-
-            let now = Date.now();
-            clearInterval(timerInterval);
-
-            for (let i = 1; i <= 7; i++) {
-                let box = document.getElementById(`box-day${i}`);
-                if(box) box.classList.remove('claimed', 'current');
-            }
-            
-            for (let i = 1; i < currentDay; i++) {
-                let box = document.getElementById(`box-day${i}`);
-                if(box) box.classList.add('claimed');
-            }
-
-            if (cooldownEnd > now) {
-                let lastClaimedDay = currentDay - 1 === 0 ? 7 : currentDay - 1;
-                let activeBox = document.getElementById(`box-day${lastClaimedDay}`);
-                if(activeBox) activeBox.classList.add('claimed');
-
-                document.getElementById("mainClaimBtn").disabled = true;
-                document.getElementById("mainClaimBtn").innerText = "Locked";
-                document.getElementById("timerContainer").style.display = "block";
-                
-                startCountdown(cooldownEnd);
+        db.ref('users/' + currentUserId).on('value', (snap) => {
+            const data = snap.val() || {};
+            document.getElementById("coinBalance").innerText = data.coins || 0;
+            if (!data.referCode) {
+                db.ref('users/' + currentUserId).update({ referCode: generateUniqueCode(), coins: 0 });
             } else {
-                document.getElementById("timerContainer").style.display = "none";
-                let currentBox = document.getElementById(`box-day${currentDay}`);
-                if(currentBox) currentBox.classList.add('current');
-                
-                document.getElementById("mainClaimBtn").disabled = false;
-                document.getElementById("mainClaimBtn").innerText = `Claim Day ${currentDay} Reward`;
+                document.getElementById("myReferCodeDisplay").innerText = data.referCode;
             }
-        }
+        });
 
-        function processClaim() {
-            let now = Date.now();
-            let claimPrize = rewardsMap[globalDay];
-            let newBalance = globalCoins + claimPrize;
-
-            let nextDay = globalDay + 1;
-            if (nextDay > 7) nextDay = 1;
-
-            let nextCooldown = now + (24 * 60 * 60 * 1000); 
-
-            database.ref('users/' + currentUserId).update({
-                coins: newBalance,
-                currentDay: nextDay,
-                cooldownEnd: nextCooldown
-            }).then(() => {
-                document.getElementById("popTitle").innerText = "REWARD CLAIMED!";
-                document.getElementById("popText").innerHTML = `🎉 Successfully added <strong>${claimPrize} Coins</strong> to your profile!`;
-                document.getElementById("dailyPopup").classList.add("show");
-            }).catch((err) => {
-                alert("Database Update Error: " + err.message);
-            });
-        }
-
-        // --- ⚡ ASLI REFER SYSTEM LOGIC ---
-        function applyReferCode() {
-            let enteredCode = document.getElementById("inputReferCode").value.trim().toUpperCase();
-            if (!enteredCode) { alert("Please enter a code!"); return; }
-            if (enteredCode === globalReferCode) { alert("You cannot use your own refer code!"); return; }
-            if (globalReferredBy) { alert("You have already applied a code once!"); return; }
-
-            document.getElementById("referApplyBtn").disabled = true;
-            document.getElementById("referApplyBtn").innerText = "Checking...";
-
-            // Pure users node me dhoodo ye code kiska hai
-            database.ref('users').once('value', (snapshot) => {
-                let allUsers = snapshot.val();
-                let codeFound = false;
-                let ownerUsername = "";
-                let ownerCurrentCoins = 0;
-
-                for (let user in allUsers) {
-                    if (allUsers[user].referCode === enteredCode) {
-                        codeFound = true;
-                        ownerUsername = user; 
-                        ownerCurrentCoins = allUsers[user].coins || 0;
-                        break;
-                    }
-                }
-
-                if (codeFound) {
-                    // 1. Jisne code DALA usko 50 coins do aur save karo ki kisne refer kiya
-                    let myNewBalance = globalCoins + 50;
-                    database.ref('users/' + currentUserId).update({
-                        coins: myNewBalance,
-                        referredBy: ownerUsername
-                    }).then(() => {
-                        // 2. Jis bande KA code tha usko 200 coins bhej do
-                        let ownerNewBalance = ownerCurrentCoins + 200;
-                        database.ref('users/' + ownerUsername).update({
-                            coins: ownerNewBalance
-                        }).then(() => {
-                            document.getElementById("popTitle").innerText = "REFER SUCCESS!";
-                            document.getElementById("popText").innerHTML = `🎉 Code applied! You got <strong>50 Coins</strong> and ${ownerUsername} got <strong>200 Coins</strong>!`;
-                            document.getElementById("dailyPopup").classList.add("show");
-                            
-                            document.getElementById("inputReferSection").style.display = "none";
-                            document.getElementById("alreadyReferredMsg").style.display = "block";
-                        });
-                    });
-                } else {
-                    alert("Invalid Refer Code! Please check again.");
-                    document.getElementById("referApplyBtn").disabled = false;
-                    document.getElementById("referApplyBtn").innerText = "Apply Code";
-                }
-            });
-        }
-
-        function startCountdown(endTime) {
-            function loop() {
-                let diff = endTime - Date.now();
-                if (diff <= 0) { clearInterval(timerInterval); initRealtimeSync(); return; }
-                let hrs = Math.floor(diff / (1000 * 60 * 60));
-                let mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                let secs = Math.floor((diff % (1000 * 60)) / 1000);
-                document.getElementById("countdown").innerText = `${hrs<10?'0'+hrs:hrs}:${mins<10?'0'+mins:mins}:${secs<10?'0'+secs:secs}`;
-            }
-            loop();
-            timerInterval = setInterval(loop, 1000);
-        }
-
-        function openSidebar() { document.getElementById("sidebarMenu").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("open"); document.getElementById("fragment-container").classList.add("blurred"); }
-        function closeSidebar() { document.getElementById("sidebarMenu").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("open"); document.getElementById("fragment-container").classList.remove("blurred"); }
-        function closePopup() { document.getElementById("dailyPopup").classList.remove("show"); }
-
-        function switchFragment(fragId) {
+        function switchFragment(id) {
+            document.querySelectorAll('.embed-fragment').forEach(f => f.classList.remove('active-fragment'));
+            document.getElementById('frag-' + id).classList.add('active-fragment');
             closeSidebar();
-            document.querySelectorAll('.embed-fragment').forEach(frag => frag.classList.remove('active-fragment'));
-            document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => btn.classList.remove('active'));
-
-            const targetFrag = document.getElementById(`frag-${fragId}`);
-            if (targetFrag) targetFrag.classList.add('active-fragment');
-
-            const targetBtn = document.getElementById(`btn-${fragId}`);
-            if (targetBtn) targetBtn.classList.add('active');
         }
-
-        function clickFreeReward() { closeSidebar(); alert("Free Reward clicked!"); }
-
-        // Start Sync on Load
-        window.onload = function() {
-            initRealtimeSync();
-        };
+        function openSidebar() { document.getElementById("sidebarMenu").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("open"); }
+        function closeSidebar() { document.getElementById("sidebarMenu").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("open"); }
+        function processClaim() { alert("Claimed!"); }
+        function applyReferCode() { alert("Refer processing..."); }
     </script>
 </body>
 </html>
