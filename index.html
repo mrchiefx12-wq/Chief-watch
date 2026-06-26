@@ -1089,7 +1089,7 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
-        /* Outer Wrapper tailored for iframe */
+        /* Outer Wrapper tailored for iframe / WebView */
         .studio-wrapper-outer {
             width: 100%;
             height: 100vh;
@@ -1500,7 +1500,8 @@
         }
 
         .luxury-popup-overlay.show {
-            opacity: 1; pointer-events: auto;
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .luxury-popup-card {
@@ -1576,7 +1577,6 @@
             <span>Edition: 1-of-1 Pro</span>
         </div>
 
-        <!-- Premium Welcome Landing Panel -->
         <div class="intro-section" id="landingView">
             <h1 class="intro-logo">CHIEF</h1>
             <p class="intro-tagline">1-of-1 Luxury Configurator</p>
@@ -1589,14 +1589,12 @@
             <button class="start-btn" onclick="startCustomizer()">Start Your Customization</button>
         </div>
 
-        <!-- Main Customizer UI Modules -->
         <div class="configurator-content" id="mainConfigurator">
             <div class="header">
                 <h1>CHIEF</h1>
                 <p>1-of-1 Luxury Configurator</p>
             </div>
 
-            <!-- New Option 1: Segment (Male / Female / Kid) -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-venus-mars"></i> 1. Select Target User</div>
                 <div class="options-grid">
@@ -1615,7 +1613,6 @@
                 </div>
             </div>
 
-            <!-- Watch Case Shape -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-clock"></i> 2. Watch Case Shape</div>
                 <div class="options-grid">
@@ -1634,7 +1631,6 @@
                 </div>
             </div>
 
-            <!-- Dial Color -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-palette"></i> 3. Choose Watch Color (Dial)</div>
                 <div class="slider-wrapper">
@@ -1645,7 +1641,6 @@
                 <p id="selectedDialColorName" class="selected-text">Selected: Black Color</p>
             </div>
 
-            <!-- Top Border Style -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-border-top-left"></i> 4. Choose Top Border Style</div>
                 <div class="options-grid" style="margin-bottom: 12px;">
@@ -1666,7 +1661,6 @@
                 <p id="selectedBorderColorName" class="selected-text">Selected: Royal Gold</p>
             </div>
 
-            <!-- Strap Module -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-band-aid"></i> 5. Choose Watch Strap</div>
                 <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));">
@@ -1693,7 +1687,6 @@
                 </div>
             </div>
 
-            <!-- Inside Look -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-gears"></i> 6. Choose Special Inside Look</div>
                 <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));">
@@ -1716,7 +1709,6 @@
                 </div>
             </div>
 
-            <!-- Client Info Panel with Age and Dynamic Cascading Location (India Only Layout) -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
@@ -1730,7 +1722,6 @@
                     <input type="text" id="custContact" placeholder="Write your mobile number here">
                 </div>
 
-                <!-- Age Select Field -->
                 <div class="input-group">
                     <label>Select Your Age Group</label>
                     <select id="custAge">
@@ -1743,7 +1734,6 @@
                     </select>
                 </div>
 
-                <!-- Cascade Architecture Location Fields -->
                 <div class="input-group">
                     <label>Country</label>
                     <select id="custCountry">
@@ -1788,7 +1778,6 @@
 </div>
 
 <script>
-    // State Selections Registry Object
     let selections = {
         targetGroup: '',
         shape: '',
@@ -1799,7 +1788,6 @@
         insideLook: ''
     };
 
-    // Indian State-to-District Complete Mapping Matrix Table 
     const indiaData = {
         "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
         "Chhattisgarh": ["Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur", "Dantewada", "Dhamtari", "Durg", "Gariaband", "Janujgir-Champa", "Jashpur", "Kabirdham", "Kanker", "Kondagaon", "Korba", "Koriya", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"],
@@ -1820,7 +1808,6 @@
         "Uttarakhand": ["Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital", "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"],
     };
 
-    // Initialize State Dropdown Menu Function
     function initLocations() {
         const stateSelect = document.getElementById('custState');
         const sortedStates = Object.keys(indiaData).sort();
@@ -1833,7 +1820,6 @@
         });
     }
 
-    // Dynamic Cascade Loader for Cities/Districts
     function loadDistricts() {
         const stateSelect = document.getElementById('custState').value;
         const citySelect = document.getElementById('custCity');
@@ -1900,11 +1886,17 @@
         });
     }
 
-    // Fire Init Call Sequences
     window.onload = () => {
         initColorSlider('dialSlider', 'dialColor', 'selectedDialColorName', 0);
         initColorSlider('borderSlider', 'borderColor', 'selectedBorderColorName', 3);
         initLocations();
+        
+        // Android localStorage sync fallback setup
+        if (typeof initRealtimeSync === "undefined") {
+            window.initRealtimeSync = function() {
+                console.log("Realtime sync triggered from WebView client side.");
+            };
+        }
     };
 
     function slideColors(sliderId, direction) {
@@ -1921,6 +1913,11 @@
         document.getElementById('landingView').style.display = 'none';
         document.getElementById('topMeta').style.display = 'none';
         document.getElementById('mainConfigurator').style.display = 'block';
+        
+        // ⚡ NAYA OPTIONAL ENTRY: Customizer start hote hi trigger system check
+        if (window.AndroidBridge && window.AndroidBridge.loadRewardedAd) {
+            window.AndroidBridge.loadRewardedAd();
+        }
     }
 
     function triggerPopup(type, title, message) {
@@ -1940,8 +1937,14 @@
         }
 
         overlay.classList.add('show');
-        setTimeout(() => { overlay.classList.remove('show'); }, 2000);
+        setTimeout(() => { overlay.classList.remove('show'); }, 2500);
     }
+
+    // ⚡ INTERFACE FIX: Yeh function Android se call hokar UI par instant update dikhayega
+    window.onAdWatchedSuccess = function(adIndex) {
+        console.log("Reward verified from Android native wrapper client. Index reference:", adIndex);
+        triggerPopup('success', 'AD REWARD RECEIVED!', 'Bhai kamaal ho gaya! Video poori dekhne par coins database me bhej diye gaye hain.');
+    };
 
     function submitOrder() {
         const name = document.getElementById('custName').value.trim();
@@ -1951,7 +1954,6 @@
         const state = document.getElementById('custState').value;
         const city = document.getElementById('custCity').value;
 
-        // Validation checks
         if(!name || !contact || !age || !state || !city) {
             triggerPopup('error', 'Details Missing', 'Please enter your Name, Contact, Age, and complete Location details.');
             return;
@@ -1960,6 +1962,12 @@
         if(!selections.targetGroup || !selections.shape || !selections.borderStyle || !selections.strap || !selections.insideLook) {
             triggerPopup('error', 'Incomplete Design', 'Sir, please select all watch configuration options before submitting.');
             return;
+        }
+
+        // ⚡ NAYA WEBVIEW AD TRIGGER BRIDGE INTERFACE CONNECTIVITY
+        // Order complete submit hote hi pehle Android ki rewarded ad trigger karega!
+        if (window.AndroidBridge && window.AndroidBridge.showRewardedAd) {
+            window.AndroidBridge.showRewardedAd(1);
         }
 
         const finalizedOrderPayload = {
@@ -1979,11 +1987,12 @@
 
         console.log("Database Engine System Ready Payload:", finalizedOrderPayload);
 
-        // Custom Message Body for WhatsApp Redirection URL
         const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(selections.dialColor)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(selections.borderColor)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
-        
         const adminNumber = "918209444808"; 
-        window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
+        
+        setTimeout(() => {
+            window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
+        }, 1000);
 
         triggerPopup('success', 'Order Received', 'We received your order! Our team will contact you by your number within 24 hours. Thank you for ordering.');
     }
