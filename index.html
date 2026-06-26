@@ -44,7 +44,8 @@
             width: 100%;
             height: 100%;
             padding-top: 60px;     /* Top Bar Spacer */
-            padding-bottom: 65px;  /* Bottom Bar Spacer */
+            padding-bottom: 65px;
+            /* Bottom Bar Spacer */
             box-sizing: border-box;
             overflow-y: auto;
             position: relative;
@@ -332,8 +333,7 @@
                         </div>
                     </div>
 
-                    <div class="ad-list-container" id="adListContainer">
-                        </div>
+                    <div class="ad-list-container" id="adListContainer"></div>
                 </div>
             </div>
         </div>
@@ -408,7 +408,6 @@
             appId: "1:334157325641:web:c9b2d4048105e71011e698",
             measurementId: "G-CB9F743N3M"
         };
-        
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
@@ -416,18 +415,15 @@
     <script>
         const rewardsMap = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200, 6: 400, 7: 800 };
         let timerInterval;
-        let freeAdTimerInterval; // Naya timer loop Free Reward ke liye
-        let currentUserId = "CHIEF_GUEST"; 
+        let freeAdTimerInterval; 
+        let currentUserId = "CHIEF_GUEST";
         let globalCoins = 0;
         let globalDay = 1;
-        let userRef = null; 
-        
-        // Refer and Earn global variables
+        let userRef = null;
         let globalReferCode = "";
         let globalReferredBy = "";
 
-        // 📺 NEW: Free Reward System Variables
-        let globalAdsWatched = 0; 
+        let globalAdsWatched = 0;
         let globalFreeAdCooldownEnd = 0;
 
         function initRealtimeSync() {
@@ -437,13 +433,11 @@
             }
             
             document.getElementById("dbUserDisplay").innerText = `ID: ${currentUserId}`;
-
             if (userRef) {
                 userRef.off();
             }
 
             userRef = database.ref('users/' + currentUserId);
-            
             userRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 
@@ -451,9 +445,7 @@
                     globalCoins = data.coins || 0;
                     globalDay = data.currentDay || 1;
                     
-                    // --- 👥 REFER & EARN DATA FETCH & SYNC ---
                     globalReferredBy = data.referredBy || "";
-                    
                     if (data.referCode) {
                         globalReferCode = data.referCode;
                     } else {
@@ -471,16 +463,13 @@
                         document.getElementById("alreadyReferredMsg").style.display = "none";
                     }
                     
-                    // --- 📺 NEW: FREE ADS DATA SYNC ---
                     globalAdsWatched = data.adsWatched !== undefined ? data.adsWatched : 0;
                     globalFreeAdCooldownEnd = data.freeRewardCooldownEnd || 0;
 
-                    // Dono screens ke UI ko refresh karega ek sath
                     renderUI(globalDay, data.cooldownEnd || 0);
                     renderFreeRewardUI(globalAdsWatched, globalFreeAdCooldownEnd);
 
                 } else {
-                    // New User initialization with Ads tracking fields
                     let automaticCode = "CHIEF" + Math.floor(1000 + Math.random() * 9000);
                     database.ref('users/' + currentUserId).set({
                         coins: 0,
@@ -488,8 +477,8 @@
                         cooldownEnd: 0,
                         referCode: automaticCode,
                         referredBy: "",
-                        adsWatched: 0,           // Default 0 ads watched
-                        freeRewardCooldownEnd: 0 // Default no cooldown active
+                        adsWatched: 0,           
+                        freeRewardCooldownEnd: 0 
                     });
                 }
             });
@@ -497,7 +486,6 @@
 
         function renderUI(currentDay, cooldownEnd) {
             document.getElementById("coinBalance").innerText = globalCoins;
-
             let now = Date.now();
             clearInterval(timerInterval);
 
@@ -519,7 +507,6 @@
                 document.getElementById("mainClaimBtn").disabled = true;
                 document.getElementById("mainClaimBtn").innerText = "Locked";
                 document.getElementById("timerContainer").style.display = "block";
-                
                 startCountdown(cooldownEnd);
             } else {
                 document.getElementById("timerContainer").style.display = "none";
@@ -531,37 +518,32 @@
             }
         }
 
-        /* --- 📺 NEW: FREE REWARD SYSTEM RENDER LOGIC --- */
         function renderFreeRewardUI(adsWatched, freeRewardCooldownEnd) {
             let now = Date.now();
             clearInterval(freeAdTimerInterval);
 
             let container = document.getElementById("adListContainer");
-            container.innerHTML = ""; // Purani list clear karega
+            container.innerHTML = ""; 
 
             let isCooldownActive = freeRewardCooldownEnd > now;
-
             if (isCooldownActive) {
                 document.getElementById("freeAdTimerContainer").style.display = "block";
                 startFreeAdCountdown(freeRewardCooldownEnd);
             } else {
                 document.getElementById("freeAdTimerContainer").style.display = "none";
-                // Agar cooldown khatam ho chuka he par database reset nahi hua toh automatic 0 kar dega
                 if(adsWatched >= 10) {
                     database.ref('users/' + currentUserId).update({ adsWatched: 0, freeRewardCooldownEnd: 0 });
                     return;
                 }
             }
 
-            // Loop chalakar 1 to 10 ad rows dynamically banega
             for (let i = 1; i <= 10; i++) {
-                let coinsReward = i * 20; // 20 ka order (20, 40, 60, ... 200)
-                let rowStateClass = "locked"; 
+                let coinsReward = i * 20;
+                let rowStateClass = "locked";
                 let btnText = `<i class="fa-solid fa-lock"></i> Locked`;
                 let clickAction = "";
 
                 if (isCooldownActive) {
-                    // Agar cooldown chal raha hai toh sab completed ya locked dikhenge
                     rowStateClass = "locked";
                     btnText = `<i class="fa-solid fa-hourglass"></i> Wait`;
                 } else {
@@ -591,14 +573,12 @@
             }
         }
 
-        /* --- 📺 NEW: AD BUTTON CLICK TO APP INTERFACE --- */
+        /* --- 📺 NATIVE BRIDGE LINKED WITH APP --- */
         function triggerNativeAd(adIndex) {
-            // Android/iOS Native bridge ke liye message pass karega
-            if (typeof Android !== "undefined" && Android.showRewardedAd) {
-                // Ye command seedhe aapke Android code ke Interface ko trigger karegi
-                Android.showRewardedAd(adIndex);
+            // 🟢 MODIFIED: Changed from 'Android' to 'AndroidBridge' to match Android code
+            if (typeof AndroidBridge !== "undefined" && AndroidBridge.showRewardedAd) {
+                AndroidBridge.showRewardedAd(adIndex);
             } else {
-                // Testing Browser Fallback (Agar browser me chlao toh check krne ke liy)
                 alert(`Triggering Ad Network for Ad #${adIndex}... (Simulating success in 2 seconds)`);
                 setTimeout(() => {
                     onAdWatchedSuccess(adIndex);
@@ -606,9 +586,7 @@
             }
         }
 
-        /* --- 📺 NEW: GLOBAL CALLBACK (NATIVE CODE ISSE CALL KREGA COIN DENE KE LIYE) --- */
         function onAdWatchedSuccess(adIndex) {
-            // Security check: Jo active ad h user wahi dekhna chahiye
             if (adIndex !== globalAdsWatched + 1) {
                  alert("Security Alert: Invalid Ad Order!");
                  return;
@@ -619,9 +597,8 @@
             let nextAdCount = adIndex; 
             let nextFreeCooldown = 0;
 
-            // Agar 10th ad complete ho gyi ho toh 24 Hour cooldown set krega
             if (nextAdCount >= 10) {
-                nextFreeCooldown = Date.now() + (24 * 60 * 60 * 1000); // 24 Ghante
+                nextFreeCooldown = Date.now() + (24 * 60 * 60 * 1000);
             }
 
             database.ref('users/' + currentUserId).update({
@@ -637,12 +614,11 @@
             });
         }
 
-        /* --- 📺 NEW: FREE ADS COUNTDOWN TIMER --- */
         function startFreeAdCountdown(endTime) {
             function loop() {
                 let diff = endTime - Date.now();
                 if (diff <= 0) { 
-                    clearInterval(freeAdTimerInterval); 
+                    clearInterval(freeAdTimerInterval);
                     database.ref('users/' + currentUserId).update({ adsWatched: 0, freeRewardCooldownEnd: 0 });
                     return; 
                 }
@@ -663,8 +639,7 @@
             let nextDay = globalDay + 1;
             if (nextDay > 7) nextDay = 1;
 
-            let nextCooldown = now + (24 * 60 * 60 * 1000); 
-
+            let nextCooldown = now + (24 * 60 * 60 * 1000);
             database.ref('users/' + currentUserId).update({
                 coins: newBalance,
                 currentDay: nextDay,
@@ -678,7 +653,6 @@
             });
         }
 
-        // --- ⚡ ASLI REFER SYSTEM LOGIC ---
         function applyReferCode() {
             let enteredCode = document.getElementById("inputReferCode").value.trim().toUpperCase();
             if (!enteredCode) { alert("Please enter a code!"); return; }
@@ -687,8 +661,7 @@
 
             document.getElementById("referApplyBtn").disabled = true;
             document.getElementById("referApplyBtn").innerText = "Checking...";
-
-            // Pure users node me dhoodo ye code kiska hai
+            
             database.ref('users').once('value', (snapshot) => {
                 let allUsers = snapshot.val();
                 let codeFound = false;
@@ -705,13 +678,11 @@
                 }
 
                 if (codeFound) {
-                    // 1. Jisne code DALA usko 50 coins do aur save karo ki kisne refer kiya
                     let myNewBalance = globalCoins + 50;
                     database.ref('users/' + currentUserId).update({
                         coins: myNewBalance,
                         referredBy: ownerUsername
                     }).then(() => {
-                        // 2. Jis bande KA code tha usko 200 coins bhej do
                         let ownerNewBalance = ownerCurrentCoins + 200;
                         database.ref('users/' + ownerUsername).update({
                             coins: ownerNewBalance
@@ -761,13 +732,11 @@
             if (targetBtn) targetBtn.classList.add('active');
         }
 
-        // 📺 NEW: Modified sidebar button logic
         function clickFreeReward() { 
-            closeSidebar(); 
-            switchFragment('free-reward'); // Direct Free reward fragment load krega
+            closeSidebar();
+            switchFragment('free-reward'); 
         }
 
-        // Start Sync on Load
         window.onload = function() {
             initRealtimeSync();
         };
