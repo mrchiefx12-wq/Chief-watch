@@ -230,7 +230,7 @@
                 <a class="sidebar-link" onclick="switchFragment('reward')"><i class="fa-solid fa-gift"></i> Daily Reward</a>
             </li>
             <li class="sidebar-item">
-                <a class="sidebar-link" onclick="clickReferEarn()"><i class="fa-solid fa-user-plus"></i> Refer & Earn</a>
+                <a class="sidebar-link" onclick="switchFragment('trade')"><i class="fa-solid fa-user-plus"></i> Refer & Earn</a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link" onclick="clickFreeReward()"><i class="fa-solid fa-circle-play"></i> Free Reward</a>
@@ -238,8 +238,7 @@
             <li class="sidebar-item" style="border-top: 1px dashed rgba(223,186,107,0.2); margin: 15px 0;"></li>
             <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('privacy')"><i class="fa-solid fa-shield-halved"></i> Privacy and Policy</a></li>
             <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('journal')"><i class="fa-solid fa-book-open"></i> The Journal / Blog</a></li>
-            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('trade')"><i class="fa-solid fa-handshake"></i> Trade with Us</a></li>
-            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('help')"><i class="fa-solid fa-circle-question"></i> Help</a></li>
+            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('help')"><i class="fa-solid fa-circle-question"></i> Help Desk</a></li>
         </ul>
     </div>
 
@@ -290,13 +289,42 @@
             </div>
         </div>
 
+        <div id="frag-trade" class="embed-fragment">
+            <div class="reward-wrapper">
+                <div class="reward-container" style="max-width: 380px;">
+                    <div class="daily-icon" style="color: var(--gold-primary); font-size: 38px; margin-bottom: 8px;"><i class="fa-solid fa-users"></i></div>
+                    <h2 style="font-family:'Cinzel'; color:var(--gold-primary); font-size: 20px; margin-bottom: 10px;">Refer & Earn</h2>
+                    <p style="color:var(--text-light); font-size:12px; margin-bottom: 20px; line-height: 1.5;">
+                        Send your refer code to other and get <strong style="color: var(--gold-primary);">200 Coins</strong>!
+                    </p>
+
+                    <div style="background: rgba(255,255,255,0.02); border: 1px dashed var(--border-gold); padding: 15px; border-radius: 12px; margin-bottom: 25px;">
+                        <span class="day-label" style="display:block; margin-bottom: 6px; font-size: 10px;">Your Refer Code</span>
+                        <span id="myReferCodeDisplay" style="font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 2px;">LOADING...</span>
+                    </div>
+
+                    <div id="inputReferSection" style="text-align: left;">
+                        <label class="day-label" style="display:block; margin-bottom: 6px; font-size: 11px;">Enter Refer Code</label>
+                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Enter other user refer code to get 50 coin</p>
+                        
+                        <input type="text" id="inputReferCode" placeholder="e.g. CHIEF1234" autocomplete="off" style="width:100%; padding:12px; background:#1a1a1a; border:1px solid #333; border-radius:8px; color:#fff; font-size: 14px; box-sizing:border-box; margin-bottom: 15px; text-transform: uppercase;">
+                        
+                        <button class="claim-btn" id="referApplyBtn" onclick="applyReferCode()">Apply Code</button>
+                    </div>
+                    
+                    <div id="alreadyReferredMsg" style="display:none; color: var(--success-green); font-size: 12px; font-weight: 600; background: rgba(46,204,113,0.05); padding: 12px; border-radius: 8px; border: 1px solid var(--success-green); text-align: center;">
+                        <i class="fa-solid fa-circle-check"></i> You have already used a refer code!
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="frag-about" class="embed-fragment"><h2>About Us</h2></div>
         <div id="frag-order" class="embed-fragment"><h2>Your Orders</h2></div>
         <div id="frag-history" class="embed-fragment"><h2>History Logs</h2></div>
         <div id="frag-review" class="embed-fragment"><h2>Reviews</h2></div>
         <div id="frag-privacy" class="embed-fragment"><h2>Privacy Policy</h2></div>
         <div id="frag-journal" class="embed-fragment"><h2>Journal / Blog</h2></div>
-        <div id="frag-trade" class="embed-fragment"><h2>Trade Panel</h2></div>
         <div id="frag-help" class="embed-fragment"><h2>Help Desk</h2></div>
     </div>
 
@@ -315,6 +343,15 @@
         <a id="btn-order" class="nav-item" onclick="switchFragment('order')"><i class="fa-solid fa-cart-shopping"></i><span class="nav-text">Order</span></a>
         <a id="btn-history" class="nav-item" onclick="switchFragment('history')"><i class="fa-solid fa-clock-rotate-left"></i><span class="nav-text">History</span></a>
         <a id="btn-review" class="nav-item" onclick="switchFragment('review')"><i class="fa-solid fa-star"></i><span class="nav-text">Review</span></a>
+    </div>
+
+    <div class="daily-popup-overlay" id="dailyPopup">
+        <div class="daily-card">
+            <div class="daily-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="daily-title" id="popTitle">REWARD CLAIMED!</div>
+            <div class="daily-text" id="popText">...</div>
+            <button class="daily-btn" onclick="closePopup()">AWESOME</button>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -339,12 +376,15 @@
     <script>
         const rewardsMap = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200, 6: 400, 7: 800 };
         let timerInterval;
-        let currentUserId = "CHIEF_GUEST"; // Default username set kiya
+        let currentUserId = "CHIEF_GUEST"; 
         let globalCoins = 0;
         let globalDay = 1;
-        let userRef = null; // Firebase reference tracker
+        let userRef = null; 
+        
+        // Refer and Earn global variables
+        let globalReferCode = "";
+        let globalReferredBy = "";
 
-        // ⚡ ASLI FIX: Ye function Android dobara call kar sakta hai naye username ke saath
         function initRealtimeSync() {
             let androidUser = localStorage.getItem('chief_user_id');
             if (androidUser && androidUser !== "null" && androidUser !== "") {
@@ -353,12 +393,10 @@
             
             document.getElementById("dbUserDisplay").innerText = `ID: ${currentUserId}`;
 
-            // ⚠️ PURANE LISTENER KO REFRESH KARNA (Takraar rokne ke liye)
             if (userRef) {
                 userRef.off();
             }
 
-            // Naye database node (path) ko trigger karna e.g. users/micael
             userRef = database.ref('users/' + currentUserId);
             
             userRef.on('value', (snapshot) => {
@@ -367,13 +405,39 @@
                 if (data) {
                     globalCoins = data.coins || 0;
                     globalDay = data.currentDay || 1;
+                    
+                    // --- 👥 REFER & EARN DATA FETCH & SYNC ---
+                    globalReferredBy = data.referredBy || "";
+                    
+                    if (data.referCode) {
+                        globalReferCode = data.referCode;
+                    } else {
+                        // Agar code nahi hai toh random unique code create karke save kar dega
+                        globalReferCode = "CHIEF" + Math.floor(1000 + Math.random() * 9000);
+                        database.ref('users/' + currentUserId).update({ referCode: globalReferCode });
+                    }
+                    
+                    document.getElementById("myReferCodeDisplay").innerText = globalReferCode;
+                    
+                    // Code apply ho chuka hai ya nahi check karega page refresh ke baad bhi
+                    if (globalReferredBy) {
+                        document.getElementById("inputReferSection").style.display = "none";
+                        document.getElementById("alreadyReferredMsg").style.display = "block";
+                    } else {
+                        document.getElementById("inputReferSection").style.display = "block";
+                        document.getElementById("alreadyReferredMsg").style.display = "none";
+                    }
+                    
                     renderUI(globalDay, data.cooldownEnd || 0);
                 } else {
-                    // Agar database me is naam ka path pehle se nahi bana hai toh create karega
+                    // New User initialization
+                    let automaticCode = "CHIEF" + Math.floor(1000 + Math.random() * 9000);
                     database.ref('users/' + currentUserId).set({
                         coins: 0,
                         currentDay: 1,
-                        cooldownEnd: 0
+                        cooldownEnd: 0,
+                        referCode: automaticCode,
+                        referredBy: ""
                     });
                 }
             });
@@ -423,17 +487,72 @@
             let nextDay = globalDay + 1;
             if (nextDay > 7) nextDay = 1;
 
-            let nextCooldown = now + (24 * 60 * 60 * 1000); // 24 Hours Lock
+            let nextCooldown = now + (24 * 60 * 60 * 1000); 
 
             database.ref('users/' + currentUserId).update({
                 coins: newBalance,
                 currentDay: nextDay,
                 cooldownEnd: nextCooldown
             }).then(() => {
+                document.getElementById("popTitle").innerText = "REWARD CLAIMED!";
                 document.getElementById("popText").innerHTML = `🎉 Successfully added <strong>${claimPrize} Coins</strong> to your profile!`;
                 document.getElementById("dailyPopup").classList.add("show");
             }).catch((err) => {
                 alert("Database Update Error: " + err.message);
+            });
+        }
+
+        // --- ⚡ ASLI REFER SYSTEM LOGIC ---
+        function applyReferCode() {
+            let enteredCode = document.getElementById("inputReferCode").value.trim().toUpperCase();
+            if (!enteredCode) { alert("Please enter a code!"); return; }
+            if (enteredCode === globalReferCode) { alert("You cannot use your own refer code!"); return; }
+            if (globalReferredBy) { alert("You have already applied a code once!"); return; }
+
+            document.getElementById("referApplyBtn").disabled = true;
+            document.getElementById("referApplyBtn").innerText = "Checking...";
+
+            // Pure users node me dhoodo ye code kiska hai
+            database.ref('users').once('value', (snapshot) => {
+                let allUsers = snapshot.val();
+                let codeFound = false;
+                let ownerUsername = "";
+                let ownerCurrentCoins = 0;
+
+                for (let user in allUsers) {
+                    if (allUsers[user].referCode === enteredCode) {
+                        codeFound = true;
+                        ownerUsername = user; 
+                        ownerCurrentCoins = allUsers[user].coins || 0;
+                        break;
+                    }
+                }
+
+                if (codeFound) {
+                    // 1. Jisne code DALA usko 50 coins do aur save karo ki kisne refer kiya
+                    let myNewBalance = globalCoins + 50;
+                    database.ref('users/' + currentUserId).update({
+                        coins: myNewBalance,
+                        referredBy: ownerUsername
+                    }).then(() => {
+                        // 2. Jis bande KA code tha usko 200 coins bhej do
+                        let ownerNewBalance = ownerCurrentCoins + 200;
+                        database.ref('users/' + ownerUsername).update({
+                            coins: ownerNewBalance
+                        }).then(() => {
+                            document.getElementById("popTitle").innerText = "REFER SUCCESS!";
+                            document.getElementById("popText").innerHTML = `🎉 Code applied! You got <strong>50 Coins</strong> and ${ownerUsername} got <strong>200 Coins</strong>!`;
+                            document.getElementById("dailyPopup").classList.add("show");
+                            
+                            document.getElementById("inputReferSection").style.display = "none";
+                            document.getElementById("alreadyReferredMsg").style.display = "block";
+                        });
+                    });
+                } else {
+                    alert("Invalid Refer Code! Please check again.");
+                    document.getElementById("referApplyBtn").disabled = false;
+                    document.getElementById("referApplyBtn").innerText = "Apply Code";
+                }
             });
         }
 
@@ -466,7 +585,6 @@
             if (targetBtn) targetBtn.classList.add('active');
         }
 
-        function clickReferEarn() { closeSidebar(); alert("Refer & Earn clicked!"); }
         function clickFreeReward() { closeSidebar(); alert("Free Reward clicked!"); }
 
         // Start Sync on Load
