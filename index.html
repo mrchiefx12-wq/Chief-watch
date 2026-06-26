@@ -339,15 +339,28 @@
     <script>
         const rewardsMap = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200, 6: 400, 7: 800 };
         let timerInterval;
-        let currentUserId = "";
+        let currentUserId = "CHIEF_GUEST"; // Default username set kiya
         let globalCoins = 0;
         let globalDay = 1;
+        let userRef = null; // Firebase reference tracker
 
+        // ⚡ ASLI FIX: Ye function Android dobara call kar sakta hai naye username ke saath
         function initRealtimeSync() {
-            currentUserId = localStorage.getItem('chief_user_id') || 'CHIEF_GUEST';
+            let androidUser = localStorage.getItem('chief_user_id');
+            if (androidUser && androidUser !== "null" && androidUser !== "") {
+                currentUserId = androidUser;
+            }
+            
             document.getElementById("dbUserDisplay").innerText = `ID: ${currentUserId}`;
 
-            const userRef = database.ref('users/' + currentUserId);
+            // ⚠️ PURANE LISTENER KO REFRESH KARNA (Takraar rokne ke liye)
+            if (userRef) {
+                userRef.off();
+            }
+
+            // Naye database node (path) ko trigger karna e.g. users/micael
+            userRef = database.ref('users/' + currentUserId);
+            
             userRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 
@@ -356,6 +369,7 @@
                     globalDay = data.currentDay || 1;
                     renderUI(globalDay, data.cooldownEnd || 0);
                 } else {
+                    // Agar database me is naam ka path pehle se nahi bana hai toh create karega
                     database.ref('users/' + currentUserId).set({
                         coins: 0,
                         currentDay: 1,
