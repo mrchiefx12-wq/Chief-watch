@@ -1089,7 +1089,7 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
-        /* Outer Wrapper tailored for iframe / WebView */
+        /* Outer Wrapper tailored for iframe */
         .studio-wrapper-outer {
             width: 100%;
             height: 100vh;
@@ -1266,8 +1266,8 @@
             background: var(--gray);
             border: 1px solid #222222;
             border-radius: 10px;
-            padding: 18px 14px;
-            margin-bottom: 18px;
+            padding: 15px 12px;
+            margin-bottom: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
             box-sizing: border-box;
         }
@@ -1275,8 +1275,8 @@
         .section-title {
             font-family: 'Cinzel', serif;
             color: var(--gold);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -1325,93 +1325,22 @@
 
         .option-card.active i {
             color: var(--gold);
-            text-shadow: 0 0 8px rgba(212,175,55,0.4);
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
         }
         
         .option-card.active span {
             color: var(--white);
         }
 
-        /* Slider Controls */
-        .slider-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: #090909;
-            padding: 8px 4px;
-            border-radius: 6px;
-            border: 1px solid #222;
-        }
-
-        .slider-btn {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            color: var(--gold);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            z-index: 5;
-            flex-shrink: 0;
-        }
-
-        .slider-btn:hover {
-            background: var(--gold);
-            color: black;
-        }
-
-        .color-slider-container {
-            overflow-x: hidden;
-            white-space: nowrap;
-            scroll-behavior: smooth;
-            width: 100%;
-            padding: 4px 0;
-            margin: 0 4px;
-        }
-
-        .color-dot {
-            display: inline-block;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            margin: 0 5px;
-            cursor: pointer;
-            border: 2px solid #222;
-            transition: all 0.2s ease;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.15), 0 3px 6px rgba(0,0,0,0.4);
-            box-sizing: border-box;
-            vertical-align: middle;
-        }
-
-        .color-dot:hover, .color-dot.active {
-            border-color: var(--white);
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-
-        .selected-text {
-            text-align: center;
-            margin-top: 8px;
-            color: var(--gold);
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Inputs & Luxury Dropdowns */
+        /* Inputs Style */
         .input-group {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .location-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         @media(min-width: 400px) {
@@ -1422,42 +1351,30 @@
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-size: 0.7rem;
+            margin-bottom: 4px;
+            font-size: 0.65rem;
             color: #888;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        input, select {
+        input {
             width: 100%;
-            padding: 12px;
+            padding: 10px 12px;
             background: #090909;
             border: 1px solid #2d2d2d;
             color: white;
             border-radius: 5px;
             font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: 0.2s;
-            appearance: none;
             -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
-        select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23D4AF37'><polygon points='0,0 10,0 5,5'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 35px;
-            cursor: pointer;
-        }
-
-        select option {
-            background: #111111;
-            color: #ffffff;
-        }
-
-        input:focus, select:focus {
+        input:focus {
             outline: none;
             border-color: var(--gold);
             box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
@@ -1467,11 +1384,11 @@
             background: linear-gradient(45deg, var(--dark-gold), var(--gold));
             color: black;
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             border: none;
             border-radius: 5px;
             font-family: 'Cinzel', serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             letter-spacing: 3px;
@@ -1577,24 +1494,28 @@
             <span>Edition: 1-of-1 Pro</span>
         </div>
 
+        <!-- Premium Welcome Landing Panel -->
         <div class="intro-section" id="landingView">
             <h1 class="intro-logo">CHIEF</h1>
             <p class="intro-tagline">1-of-1 Luxury Configurator</p>
+      
             <ul class="intro-features">
                 <li><i class="fa-solid fa-crown"></i> Craft Your Ultimate Timepiece</li>
-                <li><i class="fa-solid fa-gem"></i> 100+ Premium Color Combinations</li>
+                <li><i class="fa-solid fa-gem"></i> Infinite Custom Colors (Type Anything)</li>
                 <li><i class="fa-solid fa-image"></i> Personalize with Custom Photo Dial</li>
                 <li><i class="fa-solid fa-bolt"></i> Direct VIP WhatsApp Registry</li>
             </ul>
             <button class="start-btn" onclick="startCustomizer()">Start Your Customization</button>
         </div>
 
+        <!-- Main Customizer UI Modules -->
         <div class="configurator-content" id="mainConfigurator">
             <div class="header">
                 <h1>CHIEF</h1>
                 <p>1-of-1 Luxury Configurator</p>
             </div>
 
+            <!-- Segment Selector -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-venus-mars"></i> 1. Select Target User</div>
                 <div class="options-grid">
@@ -1613,6 +1534,7 @@
                 </div>
             </div>
 
+            <!-- Watch Case Shape -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-clock"></i> 2. Watch Case Shape</div>
                 <div class="options-grid">
@@ -1631,19 +1553,19 @@
                 </div>
             </div>
 
+            <!-- Watch Color (Dial) - FIXED to Premium Typing Mode -->
             <div class="section-box">
-                <div class="section-title"><i class="fa-solid fa-palette"></i> 3. Choose Watch Color (Dial)</div>
-                <div class="slider-wrapper">
-                    <button class="slider-btn" onclick="slideColors('dialSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
-                    <div class="color-slider-container" id="dialSlider"></div>
-                    <button class="slider-btn" onclick="slideColors('dialSlider', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="section-title"><i class="fa-solid fa-palette"></i> 3. Type Watch Color (Dial)</div>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Enter Custom Dial Color Name</label>
+                    <input type="text" id="customDialColorInput" placeholder="Type Your Color">
                 </div>
-                <p id="selectedDialColorName" class="selected-text">Selected: Black Color</p>
             </div>
 
+            <!-- Top Border Style & Border Color Type Input -->
             <div class="section-box">
-                <div class="section-title"><i class="fa-solid fa-border-top-left"></i> 4. Choose Top Border Style</div>
-                <div class="options-grid" style="margin-bottom: 12px;">
+                <div class="section-title"><i class="fa-solid fa-border-top-left"></i> 4. Choose Top Border Style & Color</div>
+                <div class="options-grid" style="margin-bottom: 14px;">
                     <div class="option-card" onclick="selectOption('borderStyle', 'Plain Border', this)">
                         <i class="fa-solid fa-circle-notch"></i>
                         <span>Plain Border</span>
@@ -1653,14 +1575,13 @@
                         <span>Cut Design Border</span>
                     </div>
                 </div>
-                <div class="slider-wrapper">
-                    <button class="slider-btn" onclick="slideColors('borderSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
-                    <div class="color-slider-container" id="borderSlider"></div>
-                    <button class="slider-btn" onclick="slideColors('borderSlider', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Enter Custom Border Color Name</label>
+                    <input type="text" id="customBorderColorInput" placeholder="Type Your Color">
                 </div>
-                <p id="selectedBorderColorName" class="selected-text">Selected: Royal Gold</p>
             </div>
 
+            <!-- Strap Module -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-band-aid"></i> 5. Choose Watch Strap</div>
                 <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));">
@@ -1687,6 +1608,7 @@
                 </div>
             </div>
 
+            <!-- Inside Look -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-gears"></i> 6. Choose Special Inside Look</div>
                 <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));">
@@ -1709,6 +1631,7 @@
                 </div>
             </div>
 
+            <!-- Client Info Panel -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
@@ -1723,37 +1646,24 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Select Your Age Group</label>
-                    <select id="custAge">
-                        <option value="" disabled selected>Select age range...</option>
-                        <option value="Under 18">Under 18 Years</option>
-                        <option value="18-25">18 - 25 Years</option>
-                        <option value="26-35">26 - 35 Years</option>
-                        <option value="36-45">36 - 45 Years</option>
-                        <option value="46+">46+ Years</option>
-                    </select>
+                    <label>Your Age</label>
+                    <input type="text" id="custAge" placeholder="Write your age here">
                 </div>
 
                 <div class="input-group">
                     <label>Country</label>
-                    <select id="custCountry">
-                        <option value="India" selected>India</option>
-                    </select>
+                    <input type="text" id="custCountry" value="India" readonly style="color: #888; background: #050505;">
                 </div>
 
                 <div class="location-grid">
                     <div class="input-group">
                         <label>State (Rajya)</label>
-                        <select id="custState" onchange="loadDistricts()">
-                            <option value="" disabled selected>Select State...</option>
-                        </select>
+                        <input type="text" id="custState" placeholder="Write your state name">
                     </div>
 
                     <div class="input-group">
                         <label>District / City (Jila)</label>
-                        <select id="custCity" disabled>
-                            <option value="" disabled selected>Select City/Jila...</option>
-                        </select>
+                        <input type="text" id="custCity" placeholder="Write your city name">
                     </div>
                 </div>
             </div>
@@ -1762,7 +1672,7 @@
         </div>
 
         <div class="luxury-footer">
-            <p class="footer-tag">CHIEF Bespoke Horology</p>
+            <p class="footer-tag">CHIEF WATCH</p>
             <p class="footer-copy">© 2026 All Rights Reserved. Private Registry.</p>
         </div>
 
@@ -1781,127 +1691,10 @@
     let selections = {
         targetGroup: '',
         shape: '',
-        dialColor: 'Black Color',
         borderStyle: '',
-        borderColor: 'Royal Gold',
         strap: '',
         insideLook: ''
     };
-
-    const indiaData = {
-        "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
-        "Chhattisgarh": ["Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur", "Dantewada", "Dhamtari", "Durg", "Gariaband", "Janujgir-Champa", "Jashpur", "Kabirdham", "Kanker", "Kondagaon", "Korba", "Koriya", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"],
-        "Delhi": ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
-        "Goa": ["North Goa", "South Goa"],
-        "Gujarat": ["Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Devbhoomi Dwarka", "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kutch", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
-        "Haryana": ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Nuh", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
-        "Himachal Pradesh": ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Kullu", "Lahaul and Spiti", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
-        "Jammu and Kashmir": ["Anantnag", "Bandipora", "Baramulla", "Budgam", "Doda", "Ganderbal", "Jammu", "Kathua", "Kishtwar", "Kulgam", "Kupwara", "Mamba", "Poonch", "Pulwama", "Rajouri", "Ramban", "Reasi", "Samba", "Shopian", "Srinagar", "Udhampur"],
-        "Jharkhand": ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahibganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
-        "Karnataka": ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
-        "Madhya Pradesh": ["Agar Malwa", "Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhatarpur", "Chhindwara", "Damoh", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Raisen", "Rajgarh", "Ratlam", "Rewa", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
-        "Maharashtra": ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
-        "Punjab": ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Pathankot", "Patiala", "Rupnagar", "Sahibzada Ajit Singh Nagar", "Sangrur", "Shahid Bhagat Singh Nagar", "Sri Muktsar Sahib", "Tarn Taran"],
-        "Rajasthan": ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bharatpur", "Bhilwara", "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"],
-        "Telangana": ["Adilabad", "Bhadradri Kothagudem", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar Bhupalpally", "Jogulamba Gadwal", "Kamareddy", "Karimnagar", "Khammam", "Komaram Bheem Asifabad", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal-Malkajgiri", "Nagarkurnool", "Nalgonda", "Nirmal", "Nizamabad", "Peddapalli", "Rajanna Sircilla", "Rangareddy", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Wanaparthy", "Warangal Rural", "Warangal Urban", "Yadadri Bhuvanagiri"],
-        "Uttar Pradesh": ["Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kasganj", "Kaushambi", "Kheri", "Kushinagar", "Lalitpur", "Lucknow", "Maharajganj", "Mahoba", "Mainpuri", "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pilibhit", "Pratapgarh", "RaeBareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shamli", "Shravasti", "Siddharthnagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
-        "Uttarakhand": ["Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital", "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"],
-    };
-
-    function initLocations() {
-        const stateSelect = document.getElementById('custState');
-        const sortedStates = Object.keys(indiaData).sort();
-        
-        sortedStates.forEach(state => {
-            let opt = document.createElement('option');
-            opt.value = state;
-            opt.innerText = state;
-            stateSelect.appendChild(opt);
-        });
-    }
-
-    function loadDistricts() {
-        const stateSelect = document.getElementById('custState').value;
-        const citySelect = document.getElementById('custCity');
-        
-        citySelect.innerHTML = '<option value="" disabled selected>Select City/Jila...</option>';
-        citySelect.disabled = true;
-
-        if (indiaData[stateSelect]) {
-            citySelect.disabled = false;
-            const sortedDistricts = indiaData[stateSelect].sort();
-            sortedDistricts.forEach(district => {
-                let opt = document.createElement('option');
-                opt.value = district;
-                opt.innerText = district;
-                citySelect.appendChild(opt);
-            });
-        }
-    }
-
-    const baseColors = [
-        {name: "Black Color", code: "#000000"},
-        {name: "Gold Color", code: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728)"},
-        {name: "Green Color", code: "#004d20"},
-        {name: "Royal Gold", code: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)"},
-        {name: "Rose Gold Shimmer", code: "linear-gradient(135deg, #b76e79, #fddde6, #b76e79)"},
-        {name: "Platinum Silver", code: "linear-gradient(135deg, #f5f7fa, #b8c6db)"},
-        {name: "Emerald Sunburst", code: "linear-gradient(135deg, #004d20, #00ff6a)"},
-        {name: "Deep Ocean Blue", code: "linear-gradient(135deg, #001f3f, #0074D9)"},
-        {name: "Carbon Fiber Noir", code: "#1a1a1a"},
-        {name: "Polished Copper", code: "linear-gradient(135deg, #B87333, #f1a97a)"}
-    ];
-
-    const luxuryColors = [];
-    for(let i = 0; i < 100; i++) {
-        if(i < baseColors.length) {
-            luxuryColors.push(baseColors[i]);
-        } else {
-            let hue = (i * 19) % 360;
-            luxuryColors.push({
-                name: `Elite Premium Hue H-${hue}`,
-                code: `linear-gradient(135deg, hsl(${hue}, 60%, 40%), hsl(${(hue+40)%360}, 60%, 20%))`
-            });
-        }
-    }
-
-    function initColorSlider(sliderId, selectionKey, textId, defaultIndex) {
-        const slider = document.getElementById(sliderId);
-        luxuryColors.forEach((c, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'color-dot';
-            dot.style.background = c.code;
-            if(index === defaultIndex) {
-                dot.classList.add('active');
-                selections[selectionKey] = c.name;
-                document.getElementById(textId).innerText = "Selected: " + c.name;
-            }
-            dot.onclick = () => {
-                slider.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-                dot.classList.add('active');
-                selections[selectionKey] = c.name;
-                document.getElementById(textId).innerText = "Selected: " + c.name;
-            };
-            slider.appendChild(dot);
-        });
-    }
-
-    window.onload = () => {
-        initColorSlider('dialSlider', 'dialColor', 'selectedDialColorName', 0);
-        initColorSlider('borderSlider', 'borderColor', 'selectedBorderColorName', 3);
-        initLocations();
-        
-        // Android localStorage sync fallback setup
-        if (typeof initRealtimeSync === "undefined") {
-            window.initRealtimeSync = function() {
-                console.log("Realtime sync triggered from WebView client side.");
-            };
-        }
-    };
-
-    function slideColors(sliderId, direction) {
-        document.getElementById(sliderId).scrollLeft += (direction * 130);
-    }
 
     function selectOption(category, value, element) {
         selections[category] = value;
@@ -1913,11 +1706,6 @@
         document.getElementById('landingView').style.display = 'none';
         document.getElementById('topMeta').style.display = 'none';
         document.getElementById('mainConfigurator').style.display = 'block';
-        
-        // ⚡ NAYA OPTIONAL ENTRY: Customizer start hote hi trigger system check
-        if (window.AndroidBridge && window.AndroidBridge.loadRewardedAd) {
-            window.AndroidBridge.loadRewardedAd();
-        }
     }
 
     function triggerPopup(type, title, message) {
@@ -1927,7 +1715,6 @@
         
         document.getElementById('popupTitle').innerText = title;
         document.getElementById('popupMsg').innerText = message;
-
         if(type === 'error') {
             card.classList.add('alert-card');
             iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
@@ -1937,37 +1724,34 @@
         }
 
         overlay.classList.add('show');
-        setTimeout(() => { overlay.classList.remove('show'); }, 2500);
+        setTimeout(() => { overlay.classList.remove('show'); }, 2000);
     }
-
-    // ⚡ INTERFACE FIX: Yeh function Android se call hokar UI par instant update dikhayega
-    window.onAdWatchedSuccess = function(adIndex) {
-        console.log("Reward verified from Android native wrapper client. Index reference:", adIndex);
-        triggerPopup('success', 'AD REWARD RECEIVED!', 'Bhai kamaal ho gaya! Video poori dekhne par coins database me bhej diye gaye hain.');
-    };
 
     function submitOrder() {
         const name = document.getElementById('custName').value.trim();
         const contact = document.getElementById('custContact').value.trim();
-        const age = document.getElementById('custAge').value;
-        const country = document.getElementById('custCountry').value;
-        const state = document.getElementById('custState').value;
-        const city = document.getElementById('custCity').value;
+        const age = document.getElementById('custAge').value.trim();
+        const country = document.getElementById('custCountry').value.trim();
+        const state = document.getElementById('custState').value.trim();
+        const city = document.getElementById('custCity').value.trim();
+        
+        // Fetch typed colors dynamically
+        const dialColorTyped = document.getElementById('customDialColorInput').value.trim();
+        const borderColorTyped = document.getElementById('customBorderColorInput').value.trim();
 
         if(!name || !contact || !age || !state || !city) {
             triggerPopup('error', 'Details Missing', 'Please enter your Name, Contact, Age, and complete Location details.');
             return;
         }
 
-        if(!selections.targetGroup || !selections.shape || !selections.borderStyle || !selections.strap || !selections.insideLook) {
-            triggerPopup('error', 'Incomplete Design', 'Sir, please select all watch configuration options before submitting.');
+        if(!dialColorTyped || !borderColorTyped) {
+            triggerPopup('error', 'Colors Missing', 'Please type your custom Dial Color and Border Color.');
             return;
         }
 
-        // ⚡ NAYA WEBVIEW AD TRIGGER BRIDGE INTERFACE CONNECTIVITY
-        // Order complete submit hote hi pehle Android ki rewarded ad trigger karega!
-        if (window.AndroidBridge && window.AndroidBridge.showRewardedAd) {
-            window.AndroidBridge.showRewardedAd(1);
+        if(!selections.targetGroup || !selections.shape || !selections.borderStyle || !selections.strap || !selections.insideLook) {
+            triggerPopup('error', 'Incomplete Design', 'Sir, please select all watch configuration options before submitting.');
+            return;
         }
 
         const finalizedOrderPayload = {
@@ -1978,21 +1762,17 @@
             ownerLocation: `${city}, ${state}, ${country}`,
             targetSegment: selections.targetGroup,
             caseShape: selections.shape,
-            dialColor: selections.dialColor,
+            dialColor: dialColorTyped,
             topBorderStyle: selections.borderStyle,
-            topBorderColor: selections.borderColor,
+            topBorderColor: borderColorTyped,
             strapMaterial: selections.strap,
             mechanismInsideLook: selections.insideLook
         };
-
         console.log("Database Engine System Ready Payload:", finalizedOrderPayload);
 
-        const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(selections.dialColor)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(selections.borderColor)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
+        const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group/Age:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(dialColorTyped)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(borderColorTyped)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
         const adminNumber = "918209444808"; 
-        
-        setTimeout(() => {
-            window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
-        }, 1000);
+        window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
 
         triggerPopup('success', 'Order Received', 'We received your order! Our team will contact you by your number within 24 hours. Thank you for ordering.');
     }
