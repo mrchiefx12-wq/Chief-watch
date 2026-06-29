@@ -316,7 +316,7 @@
             height: 100%;
         }
 
-        /* 👑 नेचुरल स्क्रॉल रैपर (कोई बीच का स्पेस नहीं) */
+        /* 👑 नेचुरल स्क्रॉल रैपर */
         .scroll-wrapper {
             width: 100%;
             height: 100%;
@@ -333,7 +333,7 @@
             height: 0 !important;
         }
 
-        /* कंटेंट एरिया - नेचुरल फ्लो */
+        /* कंटेंट AREA */
         .content-container {
             width: 100%;
             max-width: 850px;
@@ -354,7 +354,7 @@
             text-align: center;
             position: relative;
             box-sizing: border-box;
-            margin-bottom: 40px; /* फुटर और कार्ड के बीच का परफेक्ट गैप */
+            margin-bottom: 40px;
         }
 
         .verification-card::before {
@@ -426,11 +426,72 @@
 
         .btn-verify:hover { opacity: 0.9; }
 
-        .result-container {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px dashed var(--border-gold);
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 0.95rem;
+            margin-top: 15px;
             display: none;
+        }
+
+        /* -----------------------------------------
+           ✨ LUXURY REGISTRY POPUP (MODAL)
+        ----------------------------------------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .luxury-popup {
+            background: linear-gradient(135deg, #101010 0%, #070707 100%);
+            border: 1px solid var(--gold-primary);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(223, 186, 107, 0.1);
+            width: 90%;
+            max-width: 550px;
+            padding: 40px 30px 30px 30px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .luxury-popup {
+            transform: scale(1);
+        }
+
+        /* 💫 Continuous Loop Shimmer Line with 3s Delay */
+        .luxury-popup::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(223, 186, 107, 0.2), transparent);
+            transform: skewX(-25deg);
+            pointer-events: none;
+        }
+
+        .modal-overlay.active .luxury-popup::after {
+            animation: shimmerEffect 4.5s ease-in-out infinite;
+        }
+
+        @keyframes shimmerEffect {
+            0% { left: -150%; }
+            33.33% { left: 150%; }
+            100% { left: 150%; }
         }
 
         .status-badge {
@@ -438,19 +499,19 @@
             font-size: 1.1rem;
             color: var(--gold-primary);
             letter-spacing: 1px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-weight: 700;
+            text-align: center;
         }
 
         .details-table {
             width: 100%;
-            max-width: 520px;
-            margin: 0 auto;
             border-collapse: collapse;
+            margin-bottom: 30px;
         }
 
         .details-table td {
-            padding: 12px 10px;
+            padding: 14px 10px;
             text-align: left;
             font-size: 0.95rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
@@ -459,11 +520,33 @@
         .details-table td.label { color: #777; width: 45%; font-weight: 300; }
         .details-table td.value { color: var(--text-light); font-weight: 600; text-align: right; }
 
-        .error-msg {
-            color: #ff6b6b;
-            font-size: 0.95rem;
-            margin-top: 15px;
-            display: none;
+        /* 👑 PREMIUM BOTTOM CENTER CLOSE BUTTON */
+        .popup-close-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-close-popup {
+            background: transparent;
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
+            padding: 10px 45px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+            position: relative;
+            z-index: 10005; /* WebView touch safety higher stack */
+        }
+
+        .btn-close-popup:hover {
+            background: var(--gold-primary);
+            color: #000000;
         }
 
         /* -----------------------------------------
@@ -565,7 +648,7 @@
             letter-spacing: 1px;
         }
 
-        /* 📱 RESPONSIVE RULES (MOBILE ONLY ADJUSTMENTS) */
+        /* 📱 RESPONSIVE RULES */
         @media (max-width: 768px) {
             .content-container { padding: 20px 10px 10px 10px; }
             .verification-card { padding: 30px 15px; margin-bottom: 25px; }
@@ -573,7 +656,8 @@
             .tagline { font-size: 0.85rem; }
             .search-box input { padding: 13px 10px; font-size: 0.9rem; }
             .btn-verify { width: 100%; padding: 13px; }
-            .details-table td { padding: 10px 5px; font-size: 0.85rem; }
+            .luxury-popup { padding: 30px 20px; }
+            .details-table td { padding: 12px 5px; font-size: 0.85rem; }
             
             .footer-section { padding: 35px 10px; }
             .brand-title { font-size: 21px; }
@@ -601,30 +685,36 @@
 
             <button class="btn-verify" onclick="verifyWatch()">Verify Identity</button>
 
-            <div class="result-container" id="resultSection">
-                <div class="status-badge">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
-                <table class="details-table">
-                    <tr>
-                        <td class="label">Timepiece Model</td>
-                        <td class="value" id="resModel">-</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Global Status</td>
-                        <td class="value" style="color: #dfba6b;">1 of 1 (Unique)</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Current Legal Owner</td>
-                        <td class="value" id="resOwner">-</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Registry Date</td>
-                        <td class="value" id="resDate">-</td>
-                    </tr>
-                </table>
-            </div>
-
             <div class="error-msg" id="errorSection">
                 ✕ INVALID CODE: Not found in global registry.
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="popupOverlay">
+        <div class="luxury-popup" id="popupContent">
+            <div class="status-badge">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
+            <table class="details-table">
+                <tr>
+                    <td class="label">Timepiece Model</td>
+                    <td class="value" id="resModel">-</td>
+                </tr>
+                <tr>
+                    <td class="label">Global Status</td>
+                    <td class="value" style="color: #dfba6b;">1 of 1 (Unique)</td>
+                </tr>
+                <tr>
+                    <td class="label">Current Legal Owner</td>
+                    <td class="value" id="resOwner">-</td>
+                </tr>
+                <tr>
+                    <td class="label">Registry Date</td>
+                    <td class="value" id="resDate">-</td>
+                </tr>
+            </table>
+
+            <div class="popup-close-container">
+                <button type="button" class="btn-close-popup" id="closeBtn">Close</button>
             </div>
         </div>
     </div>
@@ -685,10 +775,9 @@
 
         function verifyWatch() {
             const codeInput = document.getElementById("watchCode").value.trim().toUpperCase();
-            const resultSection = document.getElementById("resultSection");
+            const popupOverlay = document.getElementById("popupOverlay");
             const errorSection = document.getElementById("errorSection");
 
-            resultSection.style.display = "none";
             errorSection.style.display = "none";
 
             if (codeInput === "") { alert("Please enter a valid code."); return; }
@@ -698,11 +787,30 @@
                 document.getElementById("resModel").innerText = data.model;
                 document.getElementById("resOwner").innerText = data.owner;
                 document.getElementById("resDate").innerText = data.date;
-                resultSection.style.display = "block";
+                
+                popupOverlay.classList.add("active");
             } else {
                 errorSection.style.display = "block";
             }
         }
+
+        function closePopup() {
+            document.getElementById("popupOverlay").classList.remove("active");
+        }
+
+        // 1. Direct Close Button event (webview layer safe click handling)
+        document.getElementById("closeBtn").addEventListener("click", function(event) {
+            event.stopPropagation(); // Stops any click bubbling conflict inside webview client
+            closePopup();
+        });
+
+        // 2. Outside click handling (closes when clicking on overlay background)
+        document.getElementById("popupOverlay").addEventListener("click", function(event) {
+            const popupContent = document.getElementById("popupContent");
+            if (!popupContent.contains(event.target)) {
+                closePopup();
+            }
+        });
     </script>
 </body>
 </html>
