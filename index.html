@@ -1942,39 +1942,41 @@
 
         <div id="frag-history" class="embed-fragment">
             <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No History Yet - CHIEF</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* 🚫 कुरुप स्क्रॉलबार बंद */
   ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
-  * { box-sizing: border-box; -ms-overflow-style: none; scrollbar-width: none; }
+  
+  * { 
+    box-sizing: border-box; 
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
 
-  /* 🌍 मास्टर बॉडी - जो ऊपर की वाइट स्पेस को कवर करेगी */
-  body, html {
+  /* 🌍 मास्टर बॉडी - Perfect Screen Locking */
+  html, body {
     margin: 0 !important;
     padding: 0 !important;
-    height: 105% !important; 
-    width: 100%;
+    height: 100vh !important; /* vh use karne se screen ke exact center me aayega */
+    width: 100vw !important;
     background-color: #000000 !important; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Montserrat', sans-serif;
     overflow: hidden !important;
   }
 
-  /* 🛠️ गूगल साइट्स के टॉप वाइट बार को ऊपर खींचकर छुपाने का जुगाड़ */
+  /* 🛠️ गूगल साइट्स के टॉप वाइट बार को ऊपर खींचकर छुपाने और परफेक्ट सेंटर करने का ढांचा */
   .main-wrapper {
     width: 100%;
     height: 100%;
-    margin-top: -45px; 
-    padding: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Horizontally Center */
+    align-items: center;    /* Vertically Center */
     background-color: #000000;
+    padding: 20px;
   }
 
   /* 💎 प्रीमियम कार्ड डिज़ाइन */
@@ -2044,9 +2046,8 @@
     text-transform: uppercase;
   }
 
-  /* 📱 मोबाइल के लिए थोड़ा एडजस्टमेंट */
+  /* 📱 मोबाइल रिस्पॉन्सिविटी */
   @media (max-width: 768px) {
-    .main-wrapper { margin-top: -30px; }
     .premium-card { padding: 40px 20px; }
     .title { font-size: 22px; }
   }
