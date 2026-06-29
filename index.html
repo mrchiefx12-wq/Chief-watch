@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHIEF Watches</title>
+    <title>CHIEF Watches - Firebase Synced</title>
     
-    <!-- 1. EXTERNAL LINKS -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -15,11 +14,13 @@
             --bg-color: #050505;
             --gold-primary: #dfba6b;
             --gold-secondary: #9a7b36;
+            --card-bg: #111111;
             --text-light: #f5f5f5;
             --text-muted: #888888;
             --border-gold: rgba(223, 186, 107, 0.25);
             --nav-bg: rgba(10, 10, 10, 0.95);
             --sidebar-bg: #0d0d0d;
+            --success-green: #2ecc71;
         }
 
         * {
@@ -29,7 +30,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 👑 Global Body Fixes (Scrollbar hidden) */
         body, html {
             width: 100%;
             height: 100%;
@@ -44,7 +44,8 @@
             width: 100%;
             height: 100%;
             padding-top: 60px;     /* Top Bar Spacer */
-            padding-bottom: 65px;  /* Bottom Bar Spacer */
+            padding-bottom: 65px;
+            /* Bottom Bar Spacer */
             box-sizing: border-box;
             overflow-y: auto;
             position: relative;
@@ -52,20 +53,9 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .fragment-container::-webkit-scrollbar {
-            display: none;
-        }
-        /* Hide scrollbar for IE, Edge and Firefox */
-        .fragment-container {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-
-        .fragment-container.blurred {
-            filter: blur(5px);
-            pointer-events: none;
-        }
+        .fragment-container::-webkit-scrollbar { display: none; }
+        .fragment-container { -ms-overflow-style: none; scrollbar-width: none; }
+        .fragment-container.blurred { filter: blur(5px); pointer-events: none; }
 
         /* 📱 TOP HEADER BAR */
         .top-header {
@@ -92,9 +82,7 @@
             transition: color 0.2s;
         }
         
-        .top-header .menu-icon:hover {
-            color: #fff;
-        }
+        .top-header .menu-icon:hover { color: #fff; }
 
         .top-header .brand-logo {
             font-family: 'Cinzel', serif;
@@ -103,6 +91,36 @@
             letter-spacing: 4px;
             color: var(--gold-primary);
             margin: 0 auto 0 15px;
+        }
+
+        /* 🪙 PREMIUM GOLD COIN BADGE */
+        .coin-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(223, 186, 107, 0.1);
+            border: 1px solid var(--gold-primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(223, 186, 107, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .coin-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            color: #050505;
+            border-radius: 50%;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 11px;
         }
 
         /* 🚪 SIDEBAR DRAWER MENU */
@@ -120,10 +138,7 @@
             backdrop-filter: blur(4px);
         }
 
-        .sidebar-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
         .sidebar {
             position: fixed;
@@ -143,61 +158,13 @@
             flex-direction: column;
         }
 
-        .sidebar.open {
-            transform: translateX(0);
-        }
-
-        .sidebar-close {
-            align-self: flex-end;
-            color: var(--text-muted);
-            font-size: 20px;
-            cursor: pointer;
-            margin-bottom: 30px;
-            transition: color 0.2s;
-        }
-
-        .sidebar-close:hover {
-            color: var(--gold-primary);
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar-item {
-            margin-bottom: 25px;
-        }
-
-        .sidebar-link {
-            text-decoration: none;
-            color: var(--text-light);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-            padding: 10px 5px;
-            border-bottom: 1px solid rgba(255,255,255,0.02);
-            cursor: pointer;
-        }
-
-        .sidebar-link:hover {
-            color: var(--gold-primary);
-            padding-left: 10px;
-            border-bottom-color: var(--gold-primary);
-        }
-
-        .sidebar-link i {
-            color: var(--gold-primary);
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-close { align-self: flex-end; color: var(--text-muted); font-size: 20px; cursor: pointer; margin-bottom: 30px; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .sidebar-item { margin-bottom: 25px; }
+        .sidebar-link { text-decoration: none; color: var(--text-light); font-size: 15px; font-weight: 500; letter-spacing: 1px; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; padding: 10px 5px; border-bottom: 1px solid rgba(255,255,255,0.02); cursor: pointer; }
+        .sidebar-link:hover { color: var(--gold-primary); padding-left: 10px; border-bottom-color: var(--gold-primary); }
+        .sidebar-link i { color: var(--gold-primary); font-size: 16px; width: 20px; text-align: center; }
 
         /* 📱 STICKY BOTTOM NAVIGATION BAR */
         .bottom-nav {
@@ -211,102 +178,111 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            box-sizing: border-box;
             z-index: 1000;
             backdrop-filter: blur(10px);
             box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
         }
 
-        .nav-item {
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 9px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            text-align: center;
-            flex: 1;
-            height: 100%;
-            padding: 4px 2px;
-            gap: 4px;
-            cursor: pointer;
+        .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.3s ease; text-align: center; flex: 1; height: 100%; padding: 4px 2px; gap: 4px; cursor: pointer; }
+        .nav-item i { font-size: 16px; color: var(--text-muted); transition: color 0.3s ease, transform 0.3s ease; }
+        .nav-item.active, .nav-item:hover { color: var(--gold-primary); text-shadow: 0 0 8px rgba(223, 186, 107, 0.4); }
+        .nav-item.active i, .nav-item:hover i { color: var(--gold-primary); transform: translateY(-2px); }
+
+        .embed-fragment { display: none; width: 100%; height: 100%; box-sizing: border-box; padding: 20px; }
+        .embed-fragment.active-fragment { display: block; }
+
+        /* --- 🎁 DAILY REWARD PREMIUM GRID --- */
+        .reward-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 10px; }
+        .reward-container { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border-gold); border-radius: 16px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .timer-badge { background: rgba(223, 186, 107, 0.1); border: 1px solid var(--gold-primary); color: var(--gold-primary); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; display: inline-block; margin-bottom: 15px; }
+        .grid-7days { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+        .day-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-gold); border-radius: 12px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
+        .day-box.day-7 { grid-column: span 3; flex-direction: row; justify-content: space-between; padding: 15px 25px; }
+        .day-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+        .coin-icon-box { width: 35px; height: 35px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #050505; font-weight: 700; font-size: 16px; }
+        .coin-amount { font-size: 13px; font-weight: 700; color: #fff; }
+        .day-box.current { border-color: var(--gold-primary); background: rgba(223, 186, 107, 0.05); }
+        .day-box.current .day-label { color: var(--gold-primary); }
+        .day-box.claimed { border-color: var(--success-green); background: rgba(46, 204, 113, 0.05); opacity: 0.6; }
+        .tick-mark { position: absolute; top: -5px; right: -5px; background: var(--success-green); color: #000; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: none; align-items: center; justify-content: center; font-weight: bold; }
+        .day-box.claimed .tick-mark { display: flex; }
+        .claim-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); border: none; border-radius: 8px; color: #050505; font-weight: 700; font-size: 14px; text-transform: uppercase; cursor: pointer; }
+        .claim-btn:disabled { background: #222; color: var(--text-muted); border: 1px solid #333; cursor: not-allowed; }
+        .user-id-text { font-size: 10px; color: var(--gold-primary); letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
+
+        /* --- 📺 FREE REWARD (ADS) CUSTOM THEME STYLES --- */
+        .ad-list-container { width: 100%; display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+        .ad-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-gold); border-radius: 12px; padding: 12px 18px; transition: all 0.3s ease; position: relative; }
+        
+        /* State 1: Locked */
+        .ad-row.locked { opacity: 0.4; border-color: #222; pointer-events: none; }
+        .ad-row.locked .ad-btn { background: #222; color: var(--text-muted); border: 1px solid #333; }
+        
+        /* State 2: Current Active */
+        .ad-row.current { border-color: var(--gold-primary); background: rgba(223, 186, 107, 0.03); box-shadow: 0 0 10px rgba(223, 186, 107, 0.05); }
+        .ad-row.current .ad-btn { background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary)); color: #050505; animation: pulseGlow 2s infinite; }
+        
+        /* State 3: Completed */
+        .ad-row.completed { border-color: var(--success-green); background: rgba(46, 204, 113, 0.03); pointer-events: none; }
+        .ad-row.completed .ad-btn { background: rgba(46, 204, 113, 0.1); color: var(--success-green); border: 1px solid var(--success-green); }
+
+        .ad-info { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+        .ad-title { font-size: 13px; font-weight: 600; color: #fff; }
+        .ad-row.current .ad-title { color: var(--gold-primary); }
+        .ad-reward-tag { font-size: 11px; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+        .ad-reward-tag strong { color: var(--gold-primary); }
+        .ad-row.completed .ad-reward-tag strong { color: var(--success-green); }
+
+        .ad-btn { padding: 8px 16px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; min-width: 90px; text-align: center; transition: all 0.2s; }
+        
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px rgba(223, 186, 107, 0.2); }
+            50% { box-shadow: 0 0 15px rgba(223, 186, 107, 0.5); }
+            100% { box-shadow: 0 0 5px rgba(223, 186, 107, 0.2); }
         }
 
-        .nav-item i {
-            font-size: 16px;
-            color: var(--text-muted);
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-
-        .nav-item.active, .nav-item:hover {
-            color: var(--gold-primary);
-            text-shadow: 0 0 8px rgba(223, 186, 107, 0.4);
-        }
-
-        .nav-item.active i, .nav-item:hover i {
-            color: var(--gold-primary);
-            transform: translateY(-2px);
-        }
-
-        .nav-item .nav-text {
-            display: block;
-            line-height: 1.2;
-        }
-
-        @media (max-width: 768px) {
-            .nav-item { font-size: 8px; }
-            .nav-item i { font-size: 14px; }
-        }
-
-        /* --- FRAGMENT RENDER BOX SYSTEM --- */
-        .embed-fragment {
-            display: none;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-
-        .embed-fragment.active-fragment {
-            display: block;
-        }
+        /* --- POPUP MODAL STYLES --- */
+        .daily-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(5px); }
+        .daily-popup-overlay.show { opacity: 1; pointer-events: auto; }
+        .daily-card { width: 85%; max-width: 320px; background: #111111; border: 2px solid var(--gold-primary); border-radius: 16px; padding: 30px 20px; text-align: center; }
+        .daily-icon { font-size: 45px; color: var(--gold-primary); margin-bottom: 15px; }
+        .daily-title { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: var(--gold-primary); margin-bottom: 10px; }
+        .daily-text { font-size: 13px; color: var(--text-light); margin-bottom: 25px; line-height: 1.6; }
+        .daily-btn { padding: 10px 25px; background: var(--gold-primary); border: none; color: #000; font-weight: 700; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR DRAWER MENU -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
     <div class="sidebar" id="sidebarMenu">
         <div class="sidebar-close" onclick="closeSidebar()">✕</div>
         <ul class="sidebar-menu">
             <li class="sidebar-item">
-                <a class="sidebar-link" onclick="switchFragment('privacy')"><i class="fa-solid fa-shield-halved"></i> Privacy and Policy</a>
+                <a class="sidebar-link" onclick="switchFragment('reward')"><i class="fa-solid fa-gift"></i> Daily Reward</a>
             </li>
             <li class="sidebar-item">
-                <a class="sidebar-link" onclick="switchFragment('journal')"><i class="fa-solid fa-book-open"></i> The Journal / Blog</a>
+                <a class="sidebar-link" onclick="switchFragment('trade')"><i class="fa-solid fa-user-plus"></i> Refer & Earn</a>
             </li>
             <li class="sidebar-item">
-                <a class="sidebar-link" onclick="switchFragment('trade')"><i class="fa-solid fa-handshake"></i> Trade with Us</a>
+                <a class="sidebar-link" onclick="clickFreeReward()"><i class="fa-solid fa-circle-play"></i> Free Reward</a>
             </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" onclick="switchFragment('help')"><i class="fa-solid fa-circle-question"></i> Help</a>
-            </li>
+            <li class="sidebar-item" style="border-top: 1px dashed rgba(223,186,107,0.2); margin: 15px 0;"></li>
+            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('privacy')"><i class="fa-solid fa-shield-halved"></i> Privacy and Policy</a></li>
+            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('journal')"><i class="fa-solid fa-book-open"></i> The Journal / Blog</a></li>
+            <li class="sidebar-item"><a class="sidebar-link" onclick="switchFragment('help')"><i class="fa-solid fa-circle-question"></i> Help Desk</a></li>
         </ul>
     </div>
 
-    <!-- TOP BAR LOOK -->
     <div class="top-header">
         <div class="menu-icon" onclick="openSidebar()">☰</div>
         <div class="brand-logo">CHIEF</div>
-        <div style="width:22px;"></div> 
+        <div class="coin-badge">
+            <div class="coin-logo">C</div>
+            <span id="coinBalance">0</span>
+        </div>
     </div>
 
-    <!-- MAIN VIEWS WRAPPER -->
     <div class="fragment-container" id="fragment-container">
         
         <div id="frag-home" class="embed-fragment active-fragment">
@@ -613,7 +589,7 @@
     <div class="content-container">
         <div class="verification-card">
             <h1 class="logo">CHIEF</h1>
-            <div class="subtitle">Haute Horlogerie</div>
+            <div class="subtitle">digital verification</div>
             
             <div class="tagline">
                 Every CHIEF timepiece is a singular masterpiece—unique in the entire world. Enter your exclusive watch code below to verify its registry.
@@ -676,12 +652,12 @@
 
         <div class="footer-bottom">
             <div class="deals-text">
-                BEST DEALS TODAY — <a href="https://www.amazon.in" target="_blank">EXPLORE COLLECTION</a>
+                BEST DEALS TODAY — <a target="_blank">EXPLORE COLLECTION</a>
             </div>
 
             <div class="social-wrapper">
                 <span class="contact-us-label">CONTACT US</span>
-                <a href="https://www.instagram.com/chanadra_mohan?igsh=bDAyYmkxejV1MGE=" target="_blank" class="social-icon">
+                <a href="https://www.instagram.com/mr_chief_india?igsh=dWNqMjIzcWVlbXht=" target="_blank" class="social-icon">
                     <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram">
                 </a>
                 <a href="mailto:mrchiefx12@gmail.com" class="social-icon">
@@ -694,7 +670,7 @@
         </div>
 
         <div class="disclaimer-text">
-            Notice: This site is linked with Amazon. Not published officially by Mr-Chief-India.
+            Notice: This App is linked with Web. Not published officially.
         </div>
     </div>
 
@@ -730,6 +706,84 @@
     </script>
 </body>
 </html>
+        </div>
+
+        <div id="frag-reward" class="embed-fragment">
+            <div class="reward-wrapper">
+                <div class="reward-container">
+                    <div class="user-id-text" id="dbUserDisplay">ID: Offline</div>
+                    <div id="timerContainer" style="display: none;">
+                        <div class="timer-badge"><i class="fa-solid fa-clock"></i> Next Reward: <span id="countdown">24:00:00</span></div>
+                    </div>
+                    <div class="grid-7days">
+                        <div class="day-box" id="box-day1"><div class="tick-mark">✓</div><span class="day-label">Day 1</span><div class="coin-icon-box">C</div><span class="coin-amount">10</span></div>
+                        <div class="day-box" id="box-day2"><div class="tick-mark">✓</div><span class="day-label">Day 2</span><div class="coin-icon-box">C</div><span class="coin-amount">20</span></div>
+                        <div class="day-box" id="box-day3"><div class="tick-mark">✓</div><span class="day-label">Day 3</span><div class="coin-icon-box">C</div><span class="coin-amount">50</span></div>
+                        <div class="day-box" id="box-day4"><div class="tick-mark">✓</div><span class="day-label">Day 4</span><div class="coin-icon-box">C</div><span class="coin-amount">100</span></div>
+                        <div class="day-box" id="box-day5"><div class="tick-mark">✓</div><span class="day-label">Day 5</span><div class="coin-icon-box">C</div><span class="coin-amount">200</span></div>
+                        <div class="day-box" id="box-day6"><div class="tick-mark">✓</div><span class="day-label">Day 6</span><div class="coin-icon-box">C</div><span class="coin-amount">400</span></div>
+                        <div class="day-box day-7" id="box-day7">
+                            <div class="tick-mark">✓</div>
+                            <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
+                                <span class="day-label" style="color:var(--gold-primary)">⚡ Jackpot</span>
+                                <span class="coin-amount">Day 7 Bonus</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div class="coin-icon-box">C</div>
+                                <span class="coin-amount" style="color:var(--gold-primary);">800</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="claim-btn" id="mainClaimBtn" onclick="processClaim()" disabled>Loading Data...</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="frag-free-reward" class="embed-fragment">
+            <div class="reward-wrapper" style="min-height: auto; padding-top: 10px;">
+                <div class="reward-container" style="max-width: 440px; text-align: left;">
+                    <h2 style="font-family:'Cinzel'; color:var(--gold-primary); font-size: 20px; text-align: center; margin-bottom: 5px;">Free Rewards</h2>
+                    <p style="color:var(--text-muted); font-size:11px; text-align: center; margin-bottom: 15px;">Watch ads sequentially to claim premium rewards!</p>
+                    
+                    <div id="freeAdTimerContainer" style="display: none; text-align: center; margin-bottom: 15px;">
+                        <div class="timer-badge" style="background: rgba(223,186,107,0.1); color: var(--gold-primary); border: 1px solid var(--gold-primary); width: 100%; padding: 10px 0; border-radius: 8px;">
+                            <i class="fa-solid fa-hourglass-start"></i> Limit Reached! Next Ads in: <span id="freeAdCountdown" style="font-weight: 800;">24:00:00</span>
+                        </div>
+                    </div>
+
+                    <div class="ad-list-container" id="adListContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="frag-trade" class="embed-fragment">
+            <div class="reward-wrapper">
+                <div class="reward-container" style="max-width: 380px;">
+                    <div class="daily-icon" style="color: var(--gold-primary); font-size: 38px; margin-bottom: 8px;"><i class="fa-solid fa-users"></i></div>
+                    <h2 style="font-family:'Cinzel'; color:var(--gold-primary); font-size: 20px; margin-bottom: 10px;">Refer & Earn</h2>
+                    <p style="color:var(--text-light); font-size:12px; margin-bottom: 20px; line-height: 1.5;">
+                        Send your refer code to other and get <strong style="color: var(--gold-primary);">200 Coins</strong>!
+                    </p>
+
+                    <div style="background: rgba(255,255,255,0.02); border: 1px dashed var(--border-gold); padding: 15px; border-radius: 12px; margin-bottom: 25px;">
+                        <span class="day-label" style="display:block; margin-bottom: 6px; font-size: 10px;">Your Refer Code</span>
+                        <span id="myReferCodeDisplay" style="font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 2px;">LOADING...</span>
+                    </div>
+
+                    <div id="inputReferSection" style="text-align: left;">
+                        <label class="day-label" style="display:block; margin-bottom: 6px; font-size: 11px;">Enter Refer Code</label>
+                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Enter other user refer code to get 50 coin</p>
+                        
+                        <input type="text" id="inputReferCode" placeholder="e.g. CHIEF1234" autocomplete="off" style="width:100%; padding:12px; background:#1a1a1a; border:1px solid #333; border-radius:8px; color:#fff; font-size: 14px; box-sizing:border-box; margin-bottom: 15px; text-transform: uppercase;">
+                        
+                        <button class="claim-btn" id="referApplyBtn" onclick="applyReferCode()">Apply Code</button>
+                    </div>
+                    
+                    <div id="alreadyReferredMsg" style="display:none; color: var(--success-green); font-size: 12px; font-weight: 600; background: rgba(46,204,113,0.05); padding: 12px; border-radius: 8px; border: 1px solid var(--success-green); text-align: center;">
+                        <i class="fa-solid fa-circle-check"></i> You have already used a refer code!
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="frag-about" class="embed-fragment">
@@ -966,8 +1020,7 @@
 
 </body>
 </html>
-        </div>
-
+</div>
         <div id="frag-order" class="embed-fragment">
             <!DOCTYPE html>
 <html lang="en">
@@ -1213,8 +1266,8 @@
             background: var(--gray);
             border: 1px solid #222222;
             border-radius: 10px;
-            padding: 18px 14px;
-            margin-bottom: 18px;
+            padding: 15px 12px;
+            margin-bottom: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
             box-sizing: border-box;
         }
@@ -1222,8 +1275,8 @@
         .section-title {
             font-family: 'Cinzel', serif;
             color: var(--gold);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -1272,93 +1325,22 @@
 
         .option-card.active i {
             color: var(--gold);
-            text-shadow: 0 0 8px rgba(212,175,55,0.4);
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
         }
         
         .option-card.active span {
             color: var(--white);
         }
 
-        /* Slider Controls */
-        .slider-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: #090909;
-            padding: 8px 4px;
-            border-radius: 6px;
-            border: 1px solid #222;
-        }
-
-        .slider-btn {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            color: var(--gold);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            z-index: 5;
-            flex-shrink: 0;
-        }
-
-        .slider-btn:hover {
-            background: var(--gold);
-            color: black;
-        }
-
-        .color-slider-container {
-            overflow-x: hidden;
-            white-space: nowrap;
-            scroll-behavior: smooth;
-            width: 100%;
-            padding: 4px 0;
-            margin: 0 4px;
-        }
-
-        .color-dot {
-            display: inline-block;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            margin: 0 5px;
-            cursor: pointer;
-            border: 2px solid #222;
-            transition: all 0.2s ease;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.15), 0 3px 6px rgba(0,0,0,0.4);
-            box-sizing: border-box;
-            vertical-align: middle;
-        }
-
-        .color-dot:hover, .color-dot.active {
-            border-color: var(--white);
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-
-        .selected-text {
-            text-align: center;
-            margin-top: 8px;
-            color: var(--gold);
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Inputs & Luxury Dropdowns */
+        /* Inputs Style */
         .input-group {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .location-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         @media(min-width: 400px) {
@@ -1369,42 +1351,30 @@
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-size: 0.7rem;
+            margin-bottom: 4px;
+            font-size: 0.65rem;
             color: #888;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        input, select {
+        input {
             width: 100%;
-            padding: 12px;
+            padding: 10px 12px;
             background: #090909;
             border: 1px solid #2d2d2d;
             color: white;
             border-radius: 5px;
             font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: 0.2s;
-            appearance: none;
             -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
-        select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23D4AF37'><polygon points='0,0 10,0 5,5'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 35px;
-            cursor: pointer;
-        }
-
-        select option {
-            background: #111111;
-            color: #ffffff;
-        }
-
-        input:focus, select:focus {
+        input:focus {
             outline: none;
             border-color: var(--gold);
             box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
@@ -1414,11 +1384,11 @@
             background: linear-gradient(45deg, var(--dark-gold), var(--gold));
             color: black;
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             border: none;
             border-radius: 5px;
             font-family: 'Cinzel', serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             letter-spacing: 3px;
@@ -1447,7 +1417,8 @@
         }
 
         .luxury-popup-overlay.show {
-            opacity: 1; pointer-events: auto;
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .luxury-popup-card {
@@ -1527,9 +1498,10 @@
         <div class="intro-section" id="landingView">
             <h1 class="intro-logo">CHIEF</h1>
             <p class="intro-tagline">1-of-1 Luxury Configurator</p>
+      
             <ul class="intro-features">
                 <li><i class="fa-solid fa-crown"></i> Craft Your Ultimate Timepiece</li>
-                <li><i class="fa-solid fa-gem"></i> 100+ Premium Color Combinations</li>
+                <li><i class="fa-solid fa-gem"></i> Infinite Custom Colors (Type Anything)</li>
                 <li><i class="fa-solid fa-image"></i> Personalize with Custom Photo Dial</li>
                 <li><i class="fa-solid fa-bolt"></i> Direct VIP WhatsApp Registry</li>
             </ul>
@@ -1543,7 +1515,7 @@
                 <p>1-of-1 Luxury Configurator</p>
             </div>
 
-            <!-- New Option 1: Segment (Male / Female / Kid) -->
+            <!-- Segment Selector -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-venus-mars"></i> 1. Select Target User</div>
                 <div class="options-grid">
@@ -1581,21 +1553,19 @@
                 </div>
             </div>
 
-            <!-- Dial Color -->
+            <!-- Watch Color (Dial) - FIXED to Premium Typing Mode -->
             <div class="section-box">
-                <div class="section-title"><i class="fa-solid fa-palette"></i> 3. Choose Watch Color (Dial)</div>
-                <div class="slider-wrapper">
-                    <button class="slider-btn" onclick="slideColors('dialSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
-                    <div class="color-slider-container" id="dialSlider"></div>
-                    <button class="slider-btn" onclick="slideColors('dialSlider', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="section-title"><i class="fa-solid fa-palette"></i> 3. Type Watch Color (Dial)</div>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Enter Custom Dial Color Name</label>
+                    <input type="text" id="customDialColorInput" placeholder="Type Your Color">
                 </div>
-                <p id="selectedDialColorName" class="selected-text">Selected: Black Color</p>
             </div>
 
-            <!-- Top Border Style -->
+            <!-- Top Border Style & Border Color Type Input -->
             <div class="section-box">
-                <div class="section-title"><i class="fa-solid fa-border-top-left"></i> 4. Choose Top Border Style</div>
-                <div class="options-grid" style="margin-bottom: 12px;">
+                <div class="section-title"><i class="fa-solid fa-border-top-left"></i> 4. Choose Top Border Style & Color</div>
+                <div class="options-grid" style="margin-bottom: 14px;">
                     <div class="option-card" onclick="selectOption('borderStyle', 'Plain Border', this)">
                         <i class="fa-solid fa-circle-notch"></i>
                         <span>Plain Border</span>
@@ -1605,12 +1575,10 @@
                         <span>Cut Design Border</span>
                     </div>
                 </div>
-                <div class="slider-wrapper">
-                    <button class="slider-btn" onclick="slideColors('borderSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
-                    <div class="color-slider-container" id="borderSlider"></div>
-                    <button class="slider-btn" onclick="slideColors('borderSlider', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Enter Custom Border Color Name</label>
+                    <input type="text" id="customBorderColorInput" placeholder="Type Your Color">
                 </div>
-                <p id="selectedBorderColorName" class="selected-text">Selected: Royal Gold</p>
             </div>
 
             <!-- Strap Module -->
@@ -1663,7 +1631,7 @@
                 </div>
             </div>
 
-            <!-- Client Info Panel with Age and Dynamic Cascading Location (India Only Layout) -->
+            <!-- Client Info Panel -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
@@ -1677,40 +1645,25 @@
                     <input type="text" id="custContact" placeholder="Write your mobile number here">
                 </div>
 
-                <!-- Age Select Field -->
                 <div class="input-group">
-                    <label>Select Your Age Group</label>
-                    <select id="custAge">
-                        <option value="" disabled selected>Select age range...</option>
-                        <option value="Under 18">Under 18 Years</option>
-                        <option value="18-25">18 - 25 Years</option>
-                        <option value="26-35">26 - 35 Years</option>
-                        <option value="36-45">36 - 45 Years</option>
-                        <option value="46+">46+ Years</option>
-                    </select>
+                    <label>Your Age</label>
+                    <input type="text" id="custAge" placeholder="Write your age here">
                 </div>
 
-                <!-- Cascade Architecture Location Fields -->
                 <div class="input-group">
                     <label>Country</label>
-                    <select id="custCountry">
-                        <option value="India" selected>India</option>
-                    </select>
+                    <input type="text" id="custCountry" value="India" readonly style="color: #888; background: #050505;">
                 </div>
 
                 <div class="location-grid">
                     <div class="input-group">
                         <label>State (Rajya)</label>
-                        <select id="custState" onchange="loadDistricts()">
-                            <option value="" disabled selected>Select State...</option>
-                        </select>
+                        <input type="text" id="custState" placeholder="Write your state name">
                     </div>
 
                     <div class="input-group">
                         <label>District / City (Jila)</label>
-                        <select id="custCity" disabled>
-                            <option value="" disabled selected>Select City/Jila...</option>
-                        </select>
+                        <input type="text" id="custCity" placeholder="Write your city name">
                     </div>
                 </div>
             </div>
@@ -1719,7 +1672,7 @@
         </div>
 
         <div class="luxury-footer">
-            <p class="footer-tag">CHIEF Bespoke Horology</p>
+            <p class="footer-tag">CHIEF WATCH</p>
             <p class="footer-copy">© 2026 All Rights Reserved. Private Registry.</p>
         </div>
 
@@ -1735,128 +1688,13 @@
 </div>
 
 <script>
-    // State Selections Registry Object
     let selections = {
         targetGroup: '',
         shape: '',
-        dialColor: 'Black Color',
         borderStyle: '',
-        borderColor: 'Royal Gold',
         strap: '',
         insideLook: ''
     };
-
-    // Indian State-to-District Complete Mapping Matrix Table 
-    const indiaData = {
-        "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
-        "Chhattisgarh": ["Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur", "Dantewada", "Dhamtari", "Durg", "Gariaband", "Janujgir-Champa", "Jashpur", "Kabirdham", "Kanker", "Kondagaon", "Korba", "Koriya", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"],
-        "Delhi": ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
-        "Goa": ["North Goa", "South Goa"],
-        "Gujarat": ["Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Devbhoomi Dwarka", "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kutch", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
-        "Haryana": ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Nuh", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
-        "Himachal Pradesh": ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Kullu", "Lahaul and Spiti", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
-        "Jammu and Kashmir": ["Anantnag", "Bandipora", "Baramulla", "Budgam", "Doda", "Ganderbal", "Jammu", "Kathua", "Kishtwar", "Kulgam", "Kupwara", "Mamba", "Poonch", "Pulwama", "Rajouri", "Ramban", "Reasi", "Samba", "Shopian", "Srinagar", "Udhampur"],
-        "Jharkhand": ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahibganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
-        "Karnataka": ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
-        "Madhya Pradesh": ["Agar Malwa", "Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhatarpur", "Chhindwara", "Damoh", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Raisen", "Rajgarh", "Ratlam", "Rewa", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
-        "Maharashtra": ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
-        "Punjab": ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Pathankot", "Patiala", "Rupnagar", "Sahibzada Ajit Singh Nagar", "Sangrur", "Shahid Bhagat Singh Nagar", "Sri Muktsar Sahib", "Tarn Taran"],
-        "Rajasthan": ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bharatpur", "Bhilwara", "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"],
-        "Telangana": ["Adilabad", "Bhadradri Kothagudem", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar Bhupalpally", "Jogulamba Gadwal", "Kamareddy", "Karimnagar", "Khammam", "Komaram Bheem Asifabad", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal-Malkajgiri", "Nagarkurnool", "Nalgonda", "Nirmal", "Nizamabad", "Peddapalli", "Rajanna Sircilla", "Rangareddy", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Wanaparthy", "Warangal Rural", "Warangal Urban", "Yadadri Bhuvanagiri"],
-        "Uttar Pradesh": ["Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kasganj", "Kaushambi", "Kheri", "Kushinagar", "Lalitpur", "Lucknow", "Maharajganj", "Mahoba", "Mainpuri", "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pilibhit", "Pratapgarh", "RaeBareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shamli", "Shravasti", "Siddharthnagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
-        "Uttarakhand": ["Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital", "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"],
-    };
-
-    // Initialize State Dropdown Menu Function
-    function initLocations() {
-        const stateSelect = document.getElementById('custState');
-        const sortedStates = Object.keys(indiaData).sort();
-        
-        sortedStates.forEach(state => {
-            let opt = document.createElement('option');
-            opt.value = state;
-            opt.innerText = state;
-            stateSelect.appendChild(opt);
-        });
-    }
-
-    // Dynamic Cascade Loader for Cities/Districts
-    function loadDistricts() {
-        const stateSelect = document.getElementById('custState').value;
-        const citySelect = document.getElementById('custCity');
-        
-        citySelect.innerHTML = '<option value="" disabled selected>Select City/Jila...</option>';
-        citySelect.disabled = true;
-
-        if (indiaData[stateSelect]) {
-            citySelect.disabled = false;
-            const sortedDistricts = indiaData[stateSelect].sort();
-            sortedDistricts.forEach(district => {
-                let opt = document.createElement('option');
-                opt.value = district;
-                opt.innerText = district;
-                citySelect.appendChild(opt);
-            });
-        }
-    }
-
-    const baseColors = [
-        {name: "Black Color", code: "#000000"},
-        {name: "Gold Color", code: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728)"},
-        {name: "Green Color", code: "#004d20"},
-        {name: "Royal Gold", code: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)"},
-        {name: "Rose Gold Shimmer", code: "linear-gradient(135deg, #b76e79, #fddde6, #b76e79)"},
-        {name: "Platinum Silver", code: "linear-gradient(135deg, #f5f7fa, #b8c6db)"},
-        {name: "Emerald Sunburst", code: "linear-gradient(135deg, #004d20, #00ff6a)"},
-        {name: "Deep Ocean Blue", code: "linear-gradient(135deg, #001f3f, #0074D9)"},
-        {name: "Carbon Fiber Noir", code: "#1a1a1a"},
-        {name: "Polished Copper", code: "linear-gradient(135deg, #B87333, #f1a97a)"}
-    ];
-
-    const luxuryColors = [];
-    for(let i = 0; i < 100; i++) {
-        if(i < baseColors.length) {
-            luxuryColors.push(baseColors[i]);
-        } else {
-            let hue = (i * 19) % 360;
-            luxuryColors.push({
-                name: `Elite Premium Hue H-${hue}`,
-                code: `linear-gradient(135deg, hsl(${hue}, 60%, 40%), hsl(${(hue+40)%360}, 60%, 20%))`
-            });
-        }
-    }
-
-    function initColorSlider(sliderId, selectionKey, textId, defaultIndex) {
-        const slider = document.getElementById(sliderId);
-        luxuryColors.forEach((c, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'color-dot';
-            dot.style.background = c.code;
-            if(index === defaultIndex) {
-                dot.classList.add('active');
-                selections[selectionKey] = c.name;
-                document.getElementById(textId).innerText = "Selected: " + c.name;
-            }
-            dot.onclick = () => {
-                slider.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-                dot.classList.add('active');
-                selections[selectionKey] = c.name;
-                document.getElementById(textId).innerText = "Selected: " + c.name;
-            };
-            slider.appendChild(dot);
-        });
-    }
-
-    // Fire Init Call Sequences
-    window.onload = () => {
-        initColorSlider('dialSlider', 'dialColor', 'selectedDialColorName', 0);
-        initColorSlider('borderSlider', 'borderColor', 'selectedBorderColorName', 3);
-        initLocations();
-    };
-
-    function slideColors(sliderId, direction) {
-        document.getElementById(sliderId).scrollLeft += (direction * 130);
-    }
 
     function selectOption(category, value, element) {
         selections[category] = value;
@@ -1877,7 +1715,6 @@
         
         document.getElementById('popupTitle').innerText = title;
         document.getElementById('popupMsg').innerText = message;
-
         if(type === 'error') {
             card.classList.add('alert-card');
             iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
@@ -1893,14 +1730,22 @@
     function submitOrder() {
         const name = document.getElementById('custName').value.trim();
         const contact = document.getElementById('custContact').value.trim();
-        const age = document.getElementById('custAge').value;
-        const country = document.getElementById('custCountry').value;
-        const state = document.getElementById('custState').value;
-        const city = document.getElementById('custCity').value;
+        const age = document.getElementById('custAge').value.trim();
+        const country = document.getElementById('custCountry').value.trim();
+        const state = document.getElementById('custState').value.trim();
+        const city = document.getElementById('custCity').value.trim();
+        
+        // Fetch typed colors dynamically
+        const dialColorTyped = document.getElementById('customDialColorInput').value.trim();
+        const borderColorTyped = document.getElementById('customBorderColorInput').value.trim();
 
-        // Validation checks
         if(!name || !contact || !age || !state || !city) {
             triggerPopup('error', 'Details Missing', 'Please enter your Name, Contact, Age, and complete Location details.');
+            return;
+        }
+
+        if(!dialColorTyped || !borderColorTyped) {
+            triggerPopup('error', 'Colors Missing', 'Please type your custom Dial Color and Border Color.');
             return;
         }
 
@@ -1917,18 +1762,15 @@
             ownerLocation: `${city}, ${state}, ${country}`,
             targetSegment: selections.targetGroup,
             caseShape: selections.shape,
-            dialColor: selections.dialColor,
+            dialColor: dialColorTyped,
             topBorderStyle: selections.borderStyle,
-            topBorderColor: selections.borderColor,
+            topBorderColor: borderColorTyped,
             strapMaterial: selections.strap,
             mechanismInsideLook: selections.insideLook
         };
-
         console.log("Database Engine System Ready Payload:", finalizedOrderPayload);
 
-        // Custom Message Body for WhatsApp Redirection URL
-        const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(selections.dialColor)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(selections.borderColor)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
-        
+        const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group/Age:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(dialColorTyped)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(borderColorTyped)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
         const adminNumber = "918209444808"; 
         window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
 
@@ -1938,45 +1780,42 @@
 
 </body>
 </html>
-        </div>
-
+</div>
         <div id="frag-history" class="embed-fragment">
             <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>No History Yet - CHIEF</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* 🚫 कुरुप स्क्रॉलबार बंद */
   ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
-  
-  * { 
-    box-sizing: border-box; 
-    -ms-overflow-style: none; 
-    scrollbar-width: none; 
-  }
+  * { box-sizing: border-box; -ms-overflow-style: none; scrollbar-width: none; }
 
-  /* 🌍 मास्टर बॉडी - Perfect Screen Locking */
-  html, body {
+  /* 🌍 मास्टर बॉडी - जो ऊपर की वाइट स्पेस को कवर करेगी */
+  body, html {
     margin: 0 !important;
     padding: 0 !important;
-    height: 100vh !important; /* vh use karne se screen ke exact center me aayega */
-    width: 100vw !important;
+    height: 105% !important; 
+    width: 100%;
     background-color: #000000 !important; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
     overflow: hidden !important;
   }
 
-  /* 🛠️ गूगल साइट्स के टॉप वाइट बार को ऊपर खींचकर छुपाने और परफेक्ट सेंटर करने का ढांचा */
+  /* 🛠️ गूगल साइट्स के टॉप वाइट बार को ऊपर खींचकर छुपाने का जुगाड़ */
   .main-wrapper {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center; /* Horizontally Center */
-    align-items: center;    /* Vertically Center */
-    background-color: #000000;
+    margin-top: -45px; 
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
   }
 
   /* 💎 प्रीमियम कार्ड डिज़ाइन */
@@ -2046,8 +1885,9 @@
     text-transform: uppercase;
   }
 
-  /* 📱 मोबाइल रिस्पॉन्सिविटी */
+  /* 📱 मोबाइल के लिए थोड़ा एडजस्टमेंट */
   @media (max-width: 768px) {
+    .main-wrapper { margin-top: -30px; }
     .premium-card { padding: 40px 20px; }
     .title { font-size: 22px; }
   }
@@ -2064,7 +1904,7 @@
       Explore our collection to start your story.
     </div>
 
-    <a href="https://sites.google.com/view/mr-chief-india/home" 
+    <a href="https://mrchiefx12-wq.github.io/Chief-watch/" 
        target="_blank" 
        rel="noopener noreferrer"
        class="btn-gold">
@@ -2078,7 +1918,6 @@
 </body>
 </html>
         </div>
-
         <div id="frag-review" class="embed-fragment">
             <!DOCTYPE html>
 <html>
@@ -2318,6 +2157,7 @@
 
   // लोकल एरे जो स्क्रीन पर तुरंत डेटा हैंडल करेगा
   let liveReviewsList = [
+    // --- आपके पुराने 10 रिव्यूज ---
     { name: "Vikram Rathore", text: "The weight and the finish of the Royal Monarch are unmatched. Truly the gold standard." },
     { name: "Ananya Sharma", text: "Chief isn't just a watch, it's a statement. I wear my Imperial Dark to every board meeting." },
     { name: "Rohan Mehra", text: "Bought this as a gift for myself. The premium unboxing experience alone is worth it." },
@@ -2327,7 +2167,39 @@
     { name: "Aditya Verma", text: "Fast shipping and the quality is 10/10. Definitely buying the next edition." },
     { name: "Zoya Ahmed", text: "Elegant, timeless, and bold. It perfectly complements my style." },
     { name: "Arjun Singh", text: "Finally a brand that understands modern luxury. The Gold Standard indeed." },
-    { name: "Ishaan Gupta", text: "The attention to detail in the clasp and strap is remarkable. Pure class." }
+    { name: "Ishaan Gupta", text: "The attention to detail in the clasp and strap is remarkable. Pure class." },
+
+    // --- नए 40 रिव्यूज (टोटल 50) ---
+    { name: "Rajveer Bundela", text: "The matte black stealth finish is menacing yet sophisticated. Absolute engineering marvel." },
+    { name: "Kiara Advani", text: "Gifted the rose gold edition to my husband. The packaging feels like a royal inheritance." },
+    { name: "Devansh Singhania", text: "The automatic movement is buttery smooth. Keeps flawless time and gathers nonstop compliments." },
+    { name: "Riya Oberoi", text: "Minimalist, heavy, and commandingly beautiful. It redefines wrist presence entirely." },
+    { name: "Amanpreet Singh", text: "The sunburst dial under direct sunlight is an absolute sight to behold. Stunning craftsmanship." },
+    { name: "Karan Johar", text: "Bold aesthetics combined with unmatched comfort. It sits perfectly on the wrist." },
+    { name: "Sanya Malhotra", text: "Every single edge is polished to perfection. You can feel the elite luxury in its weight." },
+    { name: "Vivaan Goenka", text: "It easily competes with Swiss heritage brands costing five times more. Exceptional value." },
+    { name: "Alisha Birla", text: "The micro-adjustments on the strap show how much Chief cares about true watch enthusiasts." },
+    { name: "Hrithik Roshan", text: "Aggressive yet elegant lines. It adds an instant edge to sharp formal tailoring." },
+    { name: "Nikhil Kamath", text: "A rare combination of rugged durability and high-end luxury. Highly recommended." },
+    { name: "Tanya Scindia", text: "The sapphire crystal glass remains pristine after months of daily wear. Scratch resistant magic." },
+    { name: "Ranveer Shergill", text: "Unboxing this felt like entering an exclusive gentleman's club. The presentation is unmatched." },
+    { name: "Jahnvi Kapoor", text: "The luminous indices are incredibly sharp in the dark. Aesthetic and deeply functional." },
+    { name: "Aditi Rao", text: "Subtle luxury at its finest. It doesn't scream for attention, it commands it quietly." },
+    { name: "Manish Malhotra", text: "The dial layout is perfectly balanced. A masterpiece of contemporary horology." },
+    { name: "Kunal Shah", text: "A true collector's item. The serial numbering makes it feel intensely personal and rare." },
+    { name: "Tara Sutaria", text: "The premium leather strap smells of pure luxury and contours beautifully over time." },
+    { name: "Yashvardhan Rana", text: "The satisfying click of the rotating bezel tells you everything about the build quality." },
+    { name: "Ishita Bhalla", text: "Fastest delivery I've ever experienced for a high-end luxury piece. 5 stars all the way." },
+    { name: "Abhimanyu Dassani", text: "This watch has completely ruined my other timepieces. Nothing else feels this solid anymore." },
+    { name: "Mehak Chawla", text: "Elegant proportions that look striking on both slim and broader wrists. Versatile art." },
+    { name: "Gaurav Taneja", text: "Built like a tank but finished like a diamond. Perfect for a modern active lifestyle." },
+    { name: "Shreya Ghoshal", text: "The understated elegance of the silver dial goes seamlessly with everything I wear." },
+    { name: "Rishabh Pant", text: "Solid weight, premium clasp, and bulletproof construction. Truly elite." },
+    { name: "Kritika Kamra", text: "A design that transcends seasonal trends. This is going to be an heirloom piece." },
+    { name: "Varun Dhawan", text: "The chronograph buttons have a crisp, mechanical tactile response. Absolute perfection." },
+    { name: "Anushka Shetty", text: "Exquisite attention to the minor details on the crown logotype. Truly bespoke feeling." },
+    { name: "Sameer Verma", text: "From the boardroom straight to the evening lounge, it never feels out of place." },
+    
   ];
 
   const container = document.getElementById('review-list');
@@ -2412,12 +2284,11 @@
 
 </body>
 </html>
-        </div>
-
+</div>
         <div id="frag-privacy" class="embed-fragment">
             <div id="chief-legal-container">
   <style>
-    /* Google Sites Scroll Fix */
+    /* Google Sites & Webview Scroll Fix */
     :root {
       scrollbar-width: none;
       -ms-overflow-style: none;
@@ -2517,84 +2388,94 @@
 
   <div class="legal-header">
     <h1>Privacy Policy</h1>
-    <p>Last Updated: February 8, 2026</p>
+    <p>Last Updated: June 29, 2026</p>
   </div>
 
   <div class="legal-section">
-    <p>Welcome to <b>MR CHIEF INDIA</b>. We are committed to protecting the privacy and security of our discerning clientele. This Privacy Policy outlines how we collect, use, and safeguard your personal information when you visit our Site or engage with our services.</p>
+    <p>Welcome to <b>CHIEF</b>. We are committed to protecting the privacy and data security of our users. This Privacy Policy outlines how our mobile application (operating via a secure webview connection) handles your information when you access our platform, create an account, or engage with our digital registry services.</p>
   </div>
 
   <div class="legal-section">
     <h2>1. The Information We Collect</h2>
+    <p>We believe in absolute data minimization. We only collect the specific details required to manage your account and watch authentication:</p>
     <ul>
-      <li><b>Personal Identification Information:</b> Name, email, telephone number, shipping/billing addresses, and payment details during checkout.</li>
-      <li><b>Browsing & Technical Data:</b> IP address, browser type, device info, and interaction patterns via cookies.</li>
+      <li><b>Account Profile Information:</b> When you launch the application and set up an account, we collect your <b>Name</b> to establish and secure your profile.</li>
+      <li><b>Digital Watch Registry Data:</b> For patrons who purchase a CHIEF watch, we securely store details including your Name, the watch's Unique Registry Code, and the specific Watch Edition to maintain permanent, digital ownership records.</li>
+      <li><b>Reward System Balance:</b> We track the "Coins" earned and utilized through your in-app rewards activity.</li>
     </ul>
   </div>
 
   <div class="legal-section">
-    <h2>2. How We Utilize Your Data</h2>
-    <p>Your information is used exclusively to elevate your experience with MR CHIEF:</p>
+    <h2>2. Zero Device Permissions Policy</h2>
+    <p>To ensure your ultimate privacy, our mobile application **does not** request, access, or track any hardware permissions from your device. This includes but is not limited to: Location tracking, Camera, Microphone, Storage/Media, Contacts, or Device IDs.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>3. How We Utilize Your Data</h2>
+    <p>Your data is strictly utilized for core app features to optimize your brand experience:</p>
     <ul>
-      <li><b>Order Fulfillment:</b> Managing logistics and white-glove delivery.</li>
-      <li><b>Personalization:</b> Curating recommendations tailored to your aesthetic.</li>
-      <li><b>Security:</b> Fraud prevention and maintaining boutique integrity.</li>
+      <li><b>Digital Authenticity & Registry:</b> Keeping your watch registry securely saved so you can check and prove which watch belongs to whose name digitally.</li>
+      <li><b>In-App Loyalty Program:</b> Maintaining your permanent Coin balance so you can seamlessly earn rewards and redeem them for items in our store.</li>
+      <li><b>Profile Persistence:</b> Ensuring your account dashboard and watch purchase history remain safely saved for lifetime verification.</li>
     </ul>
   </div>
 
   <div class="legal-section">
-    <h2>3. Data Protection & Encryption</h2>
-    <p>Security is a cornerstone of our brand. We utilize Secure Socket Layer (SSL) encryption and PCI-DSS compliant gateways. Payment info is never stored directly on our servers.</p>
+    <h2>4. Order Integration via WhatsApp</h2>
+    <p>Our application utilizes a direct WhatsApp redirect for frictionless order processing. When you click the "Confirm Order" section within the app, you will be seamlessly directed to WhatsApp to complete your message manually. We do not automatically scrape or extract any external communication data or personal details from your WhatsApp application.</p>
   </div>
 
   <div class="legal-section">
-    <h2>4. Disclosure to Third Parties</h2>
-    <p>We do not sell or rent your information. We only share data with trusted partners (Logistics, Payment Processors, Analytics) to ensure operational excellence.</p>
+    <h2>5. Third-Party Sharing</h2>
+    <p>We respect your privacy. We do not sell, trade, rent, or lease your personal identification or watch registry details to third-party marketing companies, advertisers, or any outsiders.</p>
   </div>
 
   <div class="legal-section">
-    <h2>5. Your Rights & Choices</h2>
-    <p>You may request a copy of your data, ask for corrections, or request erasure of your personal account at any time via our concierge.</p>
+    <h2>6. User Rights & Fast Support</h2>
+    <p>Every user has the right to access their digital assets and profile safely. We provide direct and expedited concierge assistance. If you ever need help, profile corrections, or have any questions about your stored data, you can connect with us directly.</p>
   </div>
 
   <div class="contact-card">
-    <p><b>CONTACT OUR CONCIERGE</b></p>
-    <p>Email: mrchiefx12@gmail.com</p>
-    <p>Support: 9509515454</p>
-    <p>Phone: 820944480808</p>
+    <p><b>CONTACT OUR SUPPORT CONCIERGE</b></p>
+    <p>Email: mrchief12@gmail.com</p>
+    <p>Support Channel: Available via Instant WhatsApp Support in the App</p>
   </div>
 
   <div class="footer-brand">
-    &copy; 2026 MR CHIEF INDIA | LUXURY WITHOUT COMPROMISE
+    &copy; 2026 CHIEF | LUXURY WITHOUT COMPROMISE
   </div>
 </div>
-        </div>
-
+</div>
         <div id="frag-journal" class="embed-fragment">
             <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chief Journey Blog</title>
 <style>
   /* Hide Scrollbars */
   ::-webkit-scrollbar { display: none !important; }
   * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; }
 
-  body {
+  html, body {
     background-color: #050505;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   #chief-journal-container {
     width: 100%;
-    max-width: 800px; /* Desktop width limit */
+    max-width: 800px;
     background: #050505;
     color: #d1d1d1;
     font-family: 'Montserrat', sans-serif;
     padding: 20px;
+    margin: 0 auto;
+    position: relative;
   }
 
   .journal-card {
@@ -2602,6 +2483,33 @@
     padding: 40px 25px;
     border-radius: 8px;
     background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+    width: 100%;
+    position: relative;
+  }
+
+  /* Premium Floating Translate Button */
+  .translate-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: #d4af37;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .translate-btn:hover, .translate-btn:active {
+    background: #d4af37;
+    color: #050505;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
   }
 
   /* Gold Glow Header */
@@ -2613,6 +2521,7 @@
     display: block;
     margin-bottom: 15px;
     text-transform: uppercase;
+    margin-top: 15px; /* Added spacing for translate button on mobile */
   }
 
   .main-title {
@@ -2622,7 +2531,7 @@
     line-height: 1.3;
     letter-spacing: 1px;
     text-transform: uppercase;
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); /* Premium Glow */
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
     margin-bottom: 30px;
     border-bottom: 1px solid rgba(212, 175, 55, 0.2);
     padding-bottom: 20px;
@@ -2640,7 +2549,7 @@
     font-size: 14px;
     line-height: 1.8;
     color: #b0b0b0;
-    text-align: left; /* Mobile par left-aligned zyada clean lagta hai */
+    text-align: left; 
     font-weight: 300;
   }
 
@@ -2665,9 +2574,11 @@
 
   /* Mobile Specific Adjustments */
   @media (max-width: 600px) {
-    .main-title { font-size: 20px; }
-    .journal-card { padding: 30px 15px; }
+    .main-title { font-size: 20px; margin-top: 20px; }
+    .journal-card { padding: 40px 15px 30px 15px; }
     .body-text { font-size: 13.5px; }
+    #chief-journal-container { padding: 10px; }
+    .translate-btn { top: 15px; right: 15px; padding: 4px 10px; font-size: 10px; }
   }
 </style>
 </head>
@@ -2675,281 +2586,441 @@
 
 <div id="chief-journal-container">
   <div class="journal-card">
-    <span class="meta-info">The Journal | Volume I</span>
-    <h1 class="main-title">The Anatomy of Authority: More Than A Timepiece</h1>
+    
+    <!-- Translate Trigger -->
+    <button class="translate-btn" id="langBtn" onclick="toggleLanguage()">Translate</button>
 
-    <div class="body-text">
-      In the echelons of high society and the corridors of power, the word "Chief" is not merely a title—it is a frequency. It is a state of being. At Chief, our philosophy is rooted in the belief that the modern leader does not just inhabit a space; they define it. To wear a Chief timepiece is to carry a silent manifesto of ambition, precision, and unyielding standards on your wrist.
+    <span class="meta-info">The Journey Blog | Vol. I</span>
+    <h1 class="main-title" id="mainTitle">Day One to One Day: The Mindset Behind CHIEF</h1>
+
+    <!-- Dynamic Sections -->
+    <div class="body-text" id="sec1">
+      When I entered the 12th grade, after facing constant setbacks and rejections from every direction, I realized the ultimate truth of this world—people do not respect you for who you are; they respect your financial status and your wealth. As a brand owner, it might sound strange or blunt to admit this, but it is the absolute truth. At that definitive moment, I decided that I didn't just want to study blindly to survive; I wanted to build an ecosystem where I create real value and command my own financial destiny.
     </div>
 
-    <h2 class="section-heading">The Architecture of Time</h2>
-    <div class="body-text">
-      Time is the only true luxury. While the world is obsessed with the fast-paced nature of the digital age, the "Chief" understands the value of the analog soul. A watch is perhaps the most intimate object a person can own. It rests against your pulse, counting every heartbeat, marking every milestone.<br><br>
-      Our design process begins not with a sketch, but with an objective: to create an architectural masterpiece that fits beneath a shirt cuff. We utilize <span class="gold-accent">316L Surgical-Grade Stainless Steel</span>, chosen for its hypoallergenic properties and its ability to maintain a mirror-like luster through years of wear. The heart of each timepiece—the movement—is a marvel of horological engineering. Whether it is the sweeping grace of an automatic movement or the unwavering accuracy of our precision-tuned quartz, a Chief watch is built to be a reliable partner in your pursuit of greatness.
+    <h2 class="section-heading" id="head2">The Dark Phase of Trials</h2>
+    <div class="body-text" id="sec2">
+      I was originally a <span class="gold-accent">NEET Aspirant</span>, dedicating my hours to studies. However, observing the outside world through digital media, it became clear to me that earning money through a standard job is completely different from building long-term generational wealth through a legacy brand. I asked myself a simple question: If other billionaires are human beings born with the same potential, why can't I do it too?<br><br>
+      But saying it was effortless; executing it was an entirely different battle. I dove headfirst into content creation, risked stakes in the stock market, and spent an entire year experimenting everywhere—only to face absolute failure. During those dark hours, I came to understand that in today’s hyper-competitive and saturated market, surviving without a highly unique, disruptive vision is impossible.
     </div>
 
-    <h2 class="section-heading">The Aesthetics of Command</h2>
-    <div class="body-text">
-      Luxury is found in the details that most people overlook. It is in the anti-reflective coating of the <span class="gold-accent">Sapphire Crystal</span>, ensuring that even under the harsh glare of the boardroom lights, your vision remains clear. It is in the hand-stitched Italian Leather straps that soften and develop a unique patina over time, telling the story of the wearer's journey.<br><br>
-      A Chief watch does not scream for attention; it commands it. In an era of "loud" fashion, we choose the path of <span class="gold-accent">Quiet Luxury</span>. Our dials are balanced, our indices are sharp, and our silhouettes are timeless. We do not chase the fleeting trends of the season. Instead, we look toward the horizon, creating heirlooms that will be passed from one generation of leaders to the next.
+    <h2 class="section-heading" id="head3">The Turning Point & The Podcast</h2>
+    <div class="body-text" id="sec3">
+      Everything shifted when I watched a profound podcast by Raj Shamani, explicitly discussing <i>"How to create a thousand-crore brand."</i> I observed every minute with intense focus and noted down a vital truth: If you want to enter a crowded market and win, you must execute something so radically different that no one has ever dared to attempt it before.<br><br>
+      Leveraging my basic coding and development skills, I identified a massive gap. In today's market, even the highest-tier luxury watch brands suffer from advanced first-copies and replicas. Consumers pay premium prices but still risk holding a fake counterfeit. To eradicate this vulnerability forever, <span class="gold-accent">CHIEF</span> was born.
     </div>
 
-    <h2 class="section-heading">Defining the Modern Chief</h2>
-    <div class="body-text">
-      Who is the person behind the watch? The "Chief" of the 21st century is a global citizen. They are the entrepreneurs launching ventures at midnight, the creators redefining industries, and the mentors shaping the future. They understand that leadership is not about shouting orders; it is about the quiet confidence of knowing exactly where you stand.<br><br>
-      When you strap on a Chief, you are making a commitment to excellence. You are announcing to the world—and more importantly, to yourself—that you respect your time enough to measure it with the finest instrument possible.
+    <h2 class="section-heading" id="head4">The Innovation: Unreplicable Digital Twin</h2>
+    <div class="body-text" id="sec4">
+      I engineered a system where every single watch leaves our facility with a completely <span class="gold-accent">Unique Verification Code</span> permanently etched into its legacy. Anyone can try to replicate a physical design silhouette, but no one in the world can copy our secure digital registry database locked inside the mobile app!<br><br>
+      This digital authentication guarantees that every timepiece is truly **"Only One Piece in the World."** Owners can instantly log into our application to verify precisely under whose name the watch is officially registered.
     </div>
 
-    <h2 class="section-heading">The Legacy Continues</h2>
-    <div class="body-text">
-      As we look forward, <span class="gold-accent">Chief</span> remains dedicated to the art of horology. We invite you to explore our journal, where we will continue to share insights into craftsmanship, style, and the mindset of leadership. Because at the end of the day, a watch tells the time, but a <span class="gold-accent">Chief tells a story.</span>
+    <h2 class="section-heading" id="head5">Making Luxury 100% Worth It</h2>
+    <div class="body-text" id="sec5">
+      When I initially finalized the baseline price at ₹2,000, I stepped into the consumer's shoes and realized that for a student or an average individual, this might seem like a heavy premium. Therefore, I packed the offering with undeniable, top-tier assets to make it unconditionally worth every rupee:<br><br>
+      ★ Unique One-Piece Worldwide Guarantee<br>
+      ★ Bespoke Premium Luxury Packaging<br>
+      ★ Digital Ownership Certificate Card<br>
+      ★ 3 Times Completely Free Master Repairing Services<br>
+      ★ ₹200 Monthly Voucher (Fully customizable by yourself to redeem inside our store)<br>
+      ★ Custom Edition Design Adjustments built entirely to your taste<br>
+      ★ High-Priority Instant Support routing straight to WhatsApp
+    </div>
+
+    <h2 class="section-heading" id="head6">A Student’s Honest Manifestation</h2>
+    <div class="body-text" id="sec6">
+      I want to leave you with one final, transparent truth. I am writing every single word of this manifesto while still sitting in a **12th-grade classroom**. As of today, my brand hasn't taken over physical stores globally yet—but this is my vision, my unyielding focus, and my ultimate dream. I am fully committed to turning this **"Day One"** into **"One Day"**. Thank you for reading my origin story. As a parting thought, remember—<span class="gold-accent">NEVER GIVE UP!</span>
     </div>
 
     <div class="footer-wrap">
-      <div class="final-call">Own your time. Command your destiny. Wear the authority.</div>
+      <div class="final-call" id="footerCall">CHIEF: One Day, We Will Command The Horizon.</div>
     </div>
   </div>
 </div>
 
+<script>
+  // Language database hosting English and Hinglish content
+  const content = {
+    en: {
+      btn: "Translate",
+      title: "Day One to One Day: The Mindset Behind CHIEF",
+      sec1: "When I entered the 12th grade, after facing constant setbacks and rejections from every direction, I realized the ultimate truth of this world—people do not respect you for who you are; they respect your financial status and your wealth. As a brand owner, it might sound strange or blunt to admit this, but it is the absolute truth. At that definitive moment, I decided that I didn't just want to study blindly to survive; I wanted to build an ecosystem where I create real value and command my own financial destiny.",
+      head2: "The Dark Phase of Trials",
+      sec2: "I was originally a <span class='gold-accent'>NEET Aspirant</span>, dedicating my hours to studies. However, observing the outside world through digital media, it became clear to me that earning money through a standard job is completely different from building long-term generational wealth through a legacy brand. I asked myself a simple question: If other billionaires are human beings born with the same potential, why can't I do it too?<br><br>But saying it was effortless; executing it was an entirely different battle. I dove headfirst into content creation, risked stakes in the stock market, and spent an entire year experimenting everywhere—only to face absolute failure. During those dark hours, I came to understand that in today’s hyper-competitive and saturated market, surviving without a highly unique, disruptive vision is impossible.",
+      head3: "The Turning Point & The Podcast",
+      sec3: "Everything shifted when I watched a profound podcast by Raj Shamani, explicitly discussing <i>\"How to create a thousand-crore brand.\"</i> I observed every minute with intense focus and noted down a vital truth: If you want to enter a crowded market and win, you must execute something so radically different that no one has ever dared to attempt it before.<br><br>Leveraging my basic coding and development skills, I identified a massive gap. In today's market, even the highest-tier luxury watch brands suffer from advanced first-copies and replicas. Consumers pay premium prices but still risk holding a fake counterfeit. To eradicate this vulnerability forever, <span class='gold-accent'>CHIEF</span> was born.",
+      head4: "The Innovation: Unreplicable Digital Twin",
+      sec4: "I engineered a system where every single watch leaves our facility with a completely <span class='gold-accent'>Unique Verification Code</span> permanently etched into its legacy. Anyone can try to replicate a physical design silhouette, but no one in the world can copy our secure digital registry database locked inside the mobile app!<br><br>This digital authentication guarantees that every timepiece is truly **\"Only One Piece in the World.\"** Owners can instantly log into our application to verify precisely under whose name the watch is officially registered.",
+      head5: "Making Luxury 100% Worth It",
+      sec5: "When I initially finalized the baseline price at ₹2,000, I stepped into the consumer's shoes and realized that for a student or an average individual, this might seem like a heavy premium. Therefore, I packed the offering with undeniable, top-tier assets to make it unconditionally worth every rupee:<br><br>★ Unique One-Piece Worldwide Guarantee<br>★ Bespoke Premium Luxury Packaging<br>★ Digital Ownership Certificate Card<br>★ 3 Times Completely Free Master Repairing Services<br>★ ₹200 Monthly Voucher (Fully customizable by yourself to redeem inside our store)<br>★ Custom Edition Design Adjustments built entirely to your taste<br>★ High-Priority Instant Support routing straight to WhatsApp",
+      head6: "A Student’s Honest Manifestation",
+      sec6: "I want to leave you with one final, transparent truth. I am writing every single word of this manifesto while still sitting in a **12th-grade classroom**. As of today, my brand hasn't taken over physical stores globally yet—but this is my vision, my unyielding focus, and my ultimate dream. I am fully committed to turning this **\"Day One\"** into **\"One Day\"**. Thank you for reading my origin story. As a parting thought, remember—<span class='gold-accent'>NEVER GIVE UP!</span>",
+      footer: "CHIEF: One Day, We Will Command The Horizon."
+    },
+    hi: {
+      btn: "English",
+      title: "Day One to One Day: The Mindset Behind CHIEF",
+      sec1: "Jab main 12th class me aaya, toh har jagah se thokar khane ke baad mujhe duniya ka sabse bada sach samajh aaya—ki yahan log aapki nahi, aapke financial status aur paise ki izzat karte hain. As a brand owner ye sunne me thoda weird lag sakta hai, par yahi kadwa sach hai. At that moment, I decided that I don't just want to study to survive; I want to build a world where I create value and build an empire.",
+      head2: "The Dark Phase of Trials",
+      sec2: "Main ek <span class='gold-accent'>NEET Aspirant</span> tha, par internet par baki ki duniya ko dekh kar mujhe samajh aa gaya tha ki kisi job se sirf paisa kamana alag baat hai aur ek brand building se paisa banana bilkul alag baat hai. Maine socha ki agar duniya ke baaki billionaires bhi insaan hain, toh main kyun nahi?<br><br>Par kehna aasan tha aur karna mushkil. Maine content creation me haath aazmaya, share market try kiya, poora ek saal lagakar har jagah koshish ki par sirf failure mila. Us mushkil waqt me mujhe realize hua ki aaj ke hardcore competitive market me bina kisi solid aur unique idea ke tike rehna namumkin hai.",
+      head3: "The Turning Point & The Podcast",
+      sec3: "Ek din maine Raj Shamani ka ek podcast dekha jisme bataya gaya tha—<i>\"How to create a thousand-crore brand.\"</i> Maine use poora dekha aur ek gehra sach notice kiya: Agar market me sach me utarna hai, toh kuch aisa alag karna hoga jo aaj tak kisi ne na kiya ho.<br><br>Kyunki mere paas thodi coding skills thi, maine socha ki market me har ek luxury brand ki duplicate ya first-copy mil jati hai. Log mehnga khareedte hain par unhe fake mil jata hai. Bas isi problem ko solve karne ke liye janm hua <span class='gold-accent'>CHIEF</span> ka.",
+      head4: "The Innovation: Unreplicable Digital Twin",
+      sec4: "Maine faisla kiya ki main har ek watch ke peeche ek <span class='gold-accent'>Unique Verification Code</span> dunga. Kisi bhi watch ka physical design toh copy kiya ja sakta hai, par hamari app par locked secure registry code ko poore world me koi copy nahi kar sakta!<br><br>Ye code hamari watches ko poori duniya me **\"Only One Piece in the World\"** banata hai. Log app par jaakar verify kar sakte hain ki ye specific watch kiske naam par registered hai.",
+      head5: "Making Luxury 100% Worth It",
+      sec5: "Jab maine watches ki starting price ₹2,000 sochi, toh mujhe laga ki ek aam insan ya student ke liye ye mehnga lag sakta hai. Isliye maine is price ke andar aisi cheezein add ki jo ise unmatchable bana dein:<br><br>★ Unique One-Piece Guarantee<br>★ Premium Luxury Packaging<br>★ Digital Ownership Certificate<br>★ 3 Times Completely Free Repairing<br>★ ₹200 Monthly Voucher (Customizable by yourself)<br>★ Custom Edition Design Adjustments<br>★ Fast Support via WhatsApp",
+      head6: "A Student’s Honest Manifestation",
+      sec6: "Main aapse ek aur sach share karna chahta hoon. Main ye sab baatein tab likh raha hoon jab main khud abhi **12th class** me hoon. Maine abhi tak apna brand launched nahi kiya hai, par ye mera vision hai, mera dimaag hai aur mera ek bada sapna hai. Main apne is **\"Day One\"** ko ek din **\"One Day\"** me badal kar rahunga. Padhne ke liye dhanyawad aur jaate-jaate bas yahi kahunga—<span class='gold-accent'>NEVER GIVE UP!</span>",
+      footer: "CHIEF: One Day, We Will Command The Horizon."
+    }
+  };
+
+  let currentLang = "en";
+
+  function toggleLanguage() {
+    // Switch state
+    currentLang = currentLang === "en" ? "hi" : "en";
+    
+    // Update elements
+    document.getElementById("langBtn").innerText = content[currentLang].btn;
+    document.getElementById("mainTitle").innerText = content[currentLang].title;
+    document.getElementById("sec1").innerHTML = content[currentLang].sec1;
+    document.getElementById("head2").innerHTML = content[currentLang].head2;
+    document.getElementById("sec2").innerHTML = content[currentLang].sec2;
+    document.getElementById("head3").innerHTML = content[currentLang].head3;
+    document.getElementById("sec3").innerHTML = content[currentLang].sec3;
+    document.getElementById("head4").innerHTML = content[currentLang].head4;
+    document.getElementById("sec4").innerHTML = content[currentLang].sec4;
+    document.getElementById("head5").innerHTML = content[currentLang].head5;
+    document.getElementById("sec5").innerHTML = content[currentLang].sec5;
+    document.getElementById("sec6").innerHTML = content[currentLang].sec6;
+    document.getElementById("footerCall").innerText = content[currentLang].footer;
+  }
+</script>
+
 </body>
 </html>
-        </div>
-
-        <div id="frag-trade" class="embed-fragment">
+</div>
+        <div id="frag-help" class="embed-fragment">
             <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<meta charset="UTF-8">
+<!-- Web View Ke Liye Perfect Viewport -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<title>Chief Support Desk</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
 
-  ::-webkit-scrollbar { display: none; }
-  
-  html, body {
-    margin: 0; padding: 0;
-    overflow-x: hidden; 
-    background-color: #0c0c0c;
-    color: #ffffff;
-    font-family: 'Montserrat', sans-serif;
-    width: 100%;
-  }
+    /* 📱 Web View & App Optimization Reset */
+    html, body {
+        background-color: #050505 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Montserrat', sans-serif;
+        color: #cccccc;
+        width: 100%;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-overflow-scrolling: touch;
+    }
 
-  .container {
-    padding: 20px 10px;
-    box-sizing: border-box;
-    text-align: center;
-    width: 100%;
-  }
+    /* Scrollbar Chupane Ke Liye */
+    ::-webkit-scrollbar { display: none !important; width: 0 !important; }
+    * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-  .main-title-box {
-    text-align: left;
-    margin-bottom: 20px;
-    border-left: 3px solid #d4af37;
-    padding-left: 10px;
-  }
+    /* Shimmer Effect */
+    .shimmer-text {
+        background: linear-gradient(to right, #bf953f 20%, #fff 40%, #fff 60%, #b38728 80%);
+        background-size: 200% auto;
+        color: #d4af37;
+        background-clip: text;
+        text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 4s linear infinite;
+    }
 
-  .main-title-box h1 {
-    font-family: 'Cinzel', serif;
-    color: #d4af37;
-    font-size: 22px;
-    margin: 0;
-    letter-spacing: 1px;
-  }
+    @keyframes shine {
+        to { background-position: 200% center; }
+    }
 
-  .main-title-box p { color: #888; font-size: 10px; margin: 3px 0; }
+    .container {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        background: #050505;
+    }
 
-  .center-header { margin-bottom: 25px; }
-  .center-header h2 {
-    font-family: 'Cinzel', serif;
-    color: #d4af37;
-    font-size: 18px;
-    letter-spacing: 3px;
-    margin: 0;
-  }
+    h1 {
+        font-family: 'Cinzel', serif;
+        text-align: center;
+        font-size: clamp(1.4rem, 5.5vw, 2.2rem); 
+        letter-spacing: 4px;
+        margin-top: 10px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        padding-bottom: 15px;
+        font-weight: 700;
+    }
 
-  .card-grid {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 30px;
-    width: 100%;
-  }
+    h2 {
+        font-family: 'Cinzel', serif;
+        color: #d4af37;
+        border-left: 2px solid #d4af37;
+        padding-left: 12px;
+        margin-top: 35px;
+        margin-bottom: 12px;
+        font-size: clamp(1rem, 3.8vw, 1.2rem);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
 
-  .card {
-    background: rgba(20, 20, 20, 0.9);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    padding: 15px 5px;
-    flex: 1;
-    max-width: 110px;
-    position: relative;
-    box-sizing: border-box;
-    box-shadow: 0 0 15px rgba(191, 149, 63, 0.15);
-    animation: goldGlow 3s infinite alternate;
-  }
+    p {
+        line-height: 1.7;
+        font-size: 0.9rem;
+        color: #aaaaaa;
+        font-weight: 300;
+        margin-bottom: 20px;
+        text-align: justify;
+    }
 
-  @keyframes goldGlow {
-    0% { box-shadow: 0 0 5px rgba(191, 149, 63, 0.2); border-color: rgba(212, 175, 55, 0.3); }
-    100% { box-shadow: 0 0 20px rgba(191, 149, 63, 0.5); border-color: rgba(212, 175, 55, 0.8); }
-  }
+    /* Responsive Grid for All Options */
+    .grid-section {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+        margin: 25px 0;
+    }
 
-  .card::before {
-    content: "";
-    position: absolute;
-    top: -1px; left: 10%; width: 80%; height: 2px;
-    background: linear-gradient(90deg, transparent, #fcf6ba, transparent);
-    z-index: 1;
-  }
+    @media (min-width: 768px) {
+        .grid-section { grid-template-columns: 1fr 1fr; }
+        .container { padding: 50px 40px; }
+    }
 
-  .card h3 {
-    font-family: 'Cinzel', serif;
-    color: #d4af37;
-    font-size: 11px;
-    margin: 5px 0;
-  }
+    .normal-text-block h3 {
+        font-family: 'Cinzel', serif;
+        margin-top: 0;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
 
-  .card p { font-size: 8px; color: #777; line-height: 1.2; margin: 0; }
+    .normal-text-block p { margin-bottom: 0; font-size: 0.88rem; line-height: 1.6; }
 
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin-top: 15px;
-    margin-bottom: 30px;
-  }
+    .footer-contact {
+        text-align: center;
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
-  .btn-premium {
-    text-decoration: none;
-    background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%);
-    color: #000;
-    padding: 12px 0;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 1px;
-    border-radius: 2px;
-    width: 85%;
-    max-width: 300px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    text-transform: uppercase;
-    transition: 0.3s;
-  }
+    /* Glowing Trigger Button */
+    .gold-button {
+        display: inline-block;
+        width: 100%;
+        max-width: 300px;
+        padding: 15px 0;
+        background: transparent;
+        border: 1px solid #d4af37;
+        color: #fff;
+        letter-spacing: 2px;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        animation: glowing 2.5s infinite;
+        font-family: 'Cinzel', serif;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
 
-  .btn-premium:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
-  }
+    @keyframes glowing {
+        0% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.15); border-color: rgba(212, 175, 55, 0.4); }
+        50% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); border-color: rgba(212, 175, 55, 1); }
+        100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.15); border-color: rgba(212, 175, 55, 0.4); }
+    }
 
-  .contact-section {
-    margin-top: 20px;
-    border-top: 1px solid rgba(212, 175, 55, 0.2);
-    padding-top: 20px;
-  }
+    .gold-button:hover, .gold-button:active {
+        background: #d4af37;
+        color: #000;
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    }
 
-  .contact-title {
-    font-family: 'Cinzel', serif;
-    color: #d4af37;
-    font-size: 14px;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-  }
+    /* Pop-up Modal Styling */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
 
-  .social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin-bottom: 15px;
-  }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-  .social-icons a {
-    color: #ffffff;
-    font-size: 22px;
-    transition: 0.3s;
-    opacity: 0.8;
-  }
+    .support-modal {
+        background: linear-gradient(145deg, #0f0f0f, #050505);
+        border: 1px solid #d4af37;
+        padding: 35px 25px;
+        width: 88%;
+        max-width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.9), 0 0 25px rgba(212, 175, 55, 0.08);
+        text-align: center;
+        transform: scale(0.9) translateY(10px);
+        transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
 
-  .social-icons a:hover {
-    color: #d4af37;
-    transform: translateY(-3px);
-  }
+    .modal-overlay.active .support-modal { transform: scale(1) translateY(0); }
 
-  .notice-text {
-    font-size: 9px;
-    color: #555;
-    max-width: 300px;
-    margin: 0 auto;
-    line-height: 1.4;
-    padding-bottom: 10px;
-  }
+    .modal-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.15rem;
+        color: #dfba6b;
+        margin: 0 0 20px 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
 
-  @media (min-width: 600px) {
-    .button-group { flex-direction: row; justify-content: center; }
-    .btn-premium { width: 180px; }
-    .card { max-width: 200px; padding: 25px 15px; }
-    .card h3 { font-size: 14px; }
-    .card p { font-size: 10px; }
-    .contact-title { font-size: 16px; }
-  }
+    .email-box {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px dashed rgba(212, 175, 55, 0.4);
+        padding: 12px;
+        font-size: 1rem;
+        color: #fff;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        -webkit-user-select: all;
+        user-select: all; 
+    }
+
+    .modal-info-text {
+        font-size: 11px;
+        line-height: 1.7;
+        color: #888888;
+        letter-spacing: 1px;
+        margin: 0 0 25px 0;
+        text-transform: uppercase;
+    }
+
+    .btn-close-modal {
+        background: transparent;
+        color: #d4af37;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        padding: 10px 25px;
+        font-family: 'Cinzel', serif;
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: 0.3s;
+    }
+
+    .btn-close-modal:hover, .btn-close-modal:active {
+        background: rgba(212, 175, 55, 0.1);
+        border-color: #d4af37;
+    }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="main-title-box">
-    <h1>QUATOX</h1>
-    <p>World number one trading platform</p>
-  </div>
+    <h1 class="shimmer-text">CHIEF SUPPORT DESK</h1>
 
-  <div class="center-header">
-    <h2>THE CHIEF</h2>
-    <p style="font-size: 9px; color: #555; letter-spacing: 2px;">Trading Gold Standard</p>
-  </div>
+    <section>
+        <h2 class="shimmer-text">1. THE CHIEF PROMISE & EXPERIENCE</h2>
+        <p>Welcome to the premium support desk of CHIEF. We craft and support watches with ultimate precision. Our services are tailored to deliver luxury, trust, and absolute excellence to every watch owner.</p>
+    </section>
 
-  <div class="card-grid">
-    <div class="card">
-      <h3>QUATOX</h3>
-      <p>World #1 Platform</p>
+    <!-- Saari requirements ke detailed text blocks -->
+    <div class="grid-section">
+        <div class="normal-text-block">
+            <h3 class="shimmer-text" style="font-size: 1rem;">ONE PIECE IN THE WORLD</h3>
+            <p>Every single watch we design is a unique masterpiece. We promise absolute exclusivity—meaning your timepiece is crafted only once in the entire world.</p>
+        </div>
+        <div class="normal-text-block">
+            <h3 class="shimmer-text" style="font-size: 1rem;">DIGITAL OWNERSHIP VERIFICATION</h3>
+            <p>Secure ownership history at your fingertips. Your premium watch details, edition name, and unique code are locked digitally to verify real ownership.</p>
+        </div>
+        <div class="normal-text-block">
+            <h3 class="shimmer-text" style="font-size: 1rem;">3 TIME FREE REPAIRING</h3>
+            <p>Keep your timepiece ticking without worry. We provide 3 times completely free premium repairing services for internal mechanisms and defects.</p>
+        </div>
+        <div class="normal-text-block">
+            <h3 class="shimmer-text" style="font-size: 1rem;">200 RS MONTHLY VOUCHER</h3>
+            <p>As a loyal patron, you receive a 200 Rupees voucher every month inside the application ecosystem to buy or redeem premium items from our store.</p>
+        </div>
+        <div class="normal-text-block">
+            <h3 class="shimmer-text" style="font-size: 1rem;">CUSTOMISED BY YOURSELF</h3>
+            <p>Take complete control over your watch's look. Modify and style details tailored perfectly by yourself to match your unique luxury aesthetic.</p>
+        </div>
+        <div class="normal-text-block">
+            <h3 class="shimmer-text" style="font-size: 1rem;">AFFORDABLE PRICE</h3>
+            <p>We break the barrier of high pricing. Experience the grandeur of high-end custom watches and luxury craftsmanship at an incredibly affordable price.</p>
+        </div>
     </div>
-    <div class="card">
-      <h3>OANDA</h3>
-      <p>100% Secure Trade</p>
-    </div>
-    <div class="card">
-      <div style="color:#d4af37; font-size: 10px; margin-bottom: 5px;">★★★</div>
-      <p>Elite Execution</p>
-    </div>
-  </div>
 
-  <div class="footer-section">
-    <div class="button-group">
-      <a href="https://qxbroker.com/en" target="_blank" class="btn-premium">TRADE QUOTEX</a>
-      <a href="https://www.oanda.com/us-en/trading/" target="_blank" class="btn-premium">TRADE OANDA</a>
-    </div>
-  </div>
+    <section>
+        <h2 class="shimmer-text">2. FAST SUPPORT VIA WHATSAPP</h2>
+        <p>Need lightning-fast resolutions? Whenever you choose to place an order or require instant service, our system routes you directly to WhatsApp for real-time concierge assistance.</p>
+    </section>
 
-  <div class="contact-section">
-    <div class="contact-title">CONTECT US FOR PERMOTION</div>
-    <div class="social-icons">
-      <a href="https://www.instagram.com/chanadra_mohan?igsh=bDAyYmkxejV1MGE%3D" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="mailto:mrchiefx12@gmail.com"><i class="far fa-envelope"></i></a>
-      <a href="https://www.youtube.com/@mrchief-c?si=0qDQUJmI7umYpPGo" target="_blank"><i class="fab fa-youtube"></i></a>
+    <div class="footer-contact">
+        <h2 class="shimmer-text" style="margin-bottom: 20px; border-left: none; padding-left: 0; text-align: center;">NEED PRIVATE ASSISTANCE?</h2>
+        <button onclick="openSupportModal()" class="gold-button">Contact Chief Concierge</button>
     </div>
-    <p class="notice-text">
-      Notice: This site is linked with Official Trading Partners. Not published officially by Mr-Chief-India.
-    </p>
-  </div>
 </div>
+
+<!-- Premium Pop-up Modal (Wapas Add Kar Diya Gaya Hai) -->
+<div class="modal-overlay" id="supportModal">
+    <div class="support-modal">
+        <h3 class="modal-title">✦ Direct Concierge Mail ✦</h3>
+        
+        <div class="email-box">mrchiefx12@gmail.com</div>
+        
+        <p class="modal-info-text">
+            For any technical query, verification issue, or order support, please send an email to our desk. <br>
+            <span style="color: #d4af37; font-weight: 600;">We will provide a definitive solution within 24 hours.</span>
+        </p>
+        
+        <button class="btn-close-modal" onclick="closeSupportModal()">Close Desk</button>
+    </div>
+</div>
+
+<script>
+    function openSupportModal() {
+        document.getElementById('supportModal').classList.add('active');
+    }
+    function closeSupportModal() {
+        document.getElementById('supportModal').classList.remove('active');
+    }
+    
+    // Background par click karne se popup close hoga
+    document.getElementById('supportModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeSupportModal();
+        }
+    });
+</script>
 
 </body>
 </html>
-        </div>
-
-        <div id="frag-help" class="embed-fragment">
-            <!-- "Yahan se yahan tak apna code paste karein" -->
-            
-            <!-- "End of code" -->
         </div>
 
     </div>
@@ -3013,6 +3084,374 @@
                 targetBtn.classList.add('active');
             }
         }
+    </script>
+</body>
+</html></h2></div>
+    </div>
+
+    <div class="daily-popup-overlay" id="dailyPopup">
+        <div class="daily-card">
+            <div class="daily-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="daily-title" id="popTitle">REWARD CLAIMED!</div>
+            <div class="daily-text" id="popText">...</div>
+            <button class="daily-btn" onclick="closePopup()">AWESOME</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a id="btn-home" class="nav-item active" onclick="switchFragment('home')"><i class="fa-solid fa-house"></i><span class="nav-text">Home</span></a>
+        <a id="btn-about" class="nav-item" onclick="switchFragment('about')"><i class="fa-solid fa-circle-info"></i><span class="nav-text">About</span></a>
+        <a id="btn-order" class="nav-item" onclick="switchFragment('order')"><i class="fa-solid fa-cart-shopping"></i><span class="nav-text">Order</span></a>
+        <a id="btn-history" class="nav-item" onclick="switchFragment('history')"><i class="fa-solid fa-clock-rotate-left"></i><span class="nav-text">History</span></a>
+        <a id="btn-review" class="nav-item" onclick="switchFragment('review')"><i class="fa-solid fa-star"></i><span class="nav-text">Review</span></a>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
+            authDomain: "chief-login12.firebaseapp.com",
+            databaseURL: "https://chief-login12-default-rtdb.firebaseio.com",
+            projectId: "chief-login12",
+            storageBucket: "chief-login12.firebasestorage.app",
+            messagingSenderId: "334157325641",
+            appId: "1:334157325641:web:c9b2d4048105e71011e698",
+            measurementId: "G-CB9F743N3M"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+    </script>
+
+    <script>
+        const rewardsMap = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200, 6: 400, 7: 800 };
+        let timerInterval;
+        let freeAdTimerInterval; 
+        let currentUserId = "CHIEF_GUEST";
+        let globalCoins = 0;
+        let globalDay = 1;
+        let userRef = null;
+        let globalReferCode = "";
+        let globalReferredBy = "";
+
+        let globalAdsWatched = 0;
+        let globalFreeAdCooldownEnd = 0;
+
+        function initRealtimeSync() {
+            let androidUser = localStorage.getItem('chief_user_id');
+            if (androidUser && androidUser !== "null" && androidUser !== "") {
+                currentUserId = androidUser;
+            }
+            
+            document.getElementById("dbUserDisplay").innerText = `ID: ${currentUserId}`;
+            if (userRef) {
+                userRef.off();
+            }
+
+            userRef = database.ref('users/' + currentUserId);
+            userRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                if (data) {
+                    globalCoins = data.coins || 0;
+                    globalDay = data.currentDay || 1;
+                    
+                    globalReferredBy = data.referredBy || "";
+                    if (data.referCode) {
+                        globalReferCode = data.referCode;
+                    } else {
+                        globalReferCode = "CHIEF" + Math.floor(1000 + Math.random() * 9000);
+                        database.ref('users/' + currentUserId).update({ referCode: globalReferCode });
+                    }
+                    
+                    document.getElementById("myReferCodeDisplay").innerText = globalReferCode;
+                    
+                    if (globalReferredBy) {
+                        document.getElementById("inputReferSection").style.display = "none";
+                        document.getElementById("alreadyReferredMsg").style.display = "block";
+                    } else {
+                        document.getElementById("inputReferSection").style.display = "block";
+                        document.getElementById("alreadyReferredMsg").style.display = "none";
+                    }
+                    
+                    globalAdsWatched = data.adsWatched !== undefined ? data.adsWatched : 0;
+                    globalFreeAdCooldownEnd = data.freeRewardCooldownEnd || 0;
+
+                    renderUI(globalDay, data.cooldownEnd || 0);
+                    renderFreeRewardUI(globalAdsWatched, globalFreeAdCooldownEnd);
+
+                } else {
+                    let automaticCode = "CHIEF" + Math.floor(1000 + Math.random() * 9000);
+                    database.ref('users/' + currentUserId).set({
+                        coins: 0,
+                        currentDay: 1,
+                        cooldownEnd: 0,
+                        referCode: automaticCode,
+                        referredBy: "",
+                        adsWatched: 0,           
+                        freeRewardCooldownEnd: 0 
+                    });
+                }
+            });
+        }
+
+        function renderUI(currentDay, cooldownEnd) {
+            document.getElementById("coinBalance").innerText = globalCoins;
+            let now = Date.now();
+            clearInterval(timerInterval);
+
+            for (let i = 1; i <= 7; i++) {
+                let box = document.getElementById(`box-day${i}`);
+                if(box) box.classList.remove('claimed', 'current');
+            }
+            
+            for (let i = 1; i < currentDay; i++) {
+                let box = document.getElementById(`box-day${i}`);
+                if(box) box.classList.add('claimed');
+            }
+
+            if (cooldownEnd > now) {
+                let lastClaimedDay = currentDay - 1 === 0 ? 7 : currentDay - 1;
+                let activeBox = document.getElementById(`box-day${lastClaimedDay}`);
+                if(activeBox) activeBox.classList.add('claimed');
+
+                document.getElementById("mainClaimBtn").disabled = true;
+                document.getElementById("mainClaimBtn").innerText = "Locked";
+                document.getElementById("timerContainer").style.display = "block";
+                startCountdown(cooldownEnd);
+            } else {
+                document.getElementById("timerContainer").style.display = "none";
+                let currentBox = document.getElementById(`box-day${currentDay}`);
+                if(currentBox) currentBox.classList.add('current');
+                
+                document.getElementById("mainClaimBtn").disabled = false;
+                document.getElementById("mainClaimBtn").innerText = `Claim Day ${currentDay} Reward`;
+            }
+        }
+
+        function renderFreeRewardUI(adsWatched, freeRewardCooldownEnd) {
+            let now = Date.now();
+            clearInterval(freeAdTimerInterval);
+
+            let container = document.getElementById("adListContainer");
+            container.innerHTML = ""; 
+
+            let isCooldownActive = freeRewardCooldownEnd > now;
+            if (isCooldownActive) {
+                document.getElementById("freeAdTimerContainer").style.display = "block";
+                startFreeAdCountdown(freeRewardCooldownEnd);
+            } else {
+                document.getElementById("freeAdTimerContainer").style.display = "none";
+                if(adsWatched >= 10) {
+                    database.ref('users/' + currentUserId).update({ adsWatched: 0, freeRewardCooldownEnd: 0 });
+                    return;
+                }
+            }
+
+            for (let i = 1; i <= 10; i++) {
+                let coinsReward = i * 20;
+                let rowStateClass = "locked";
+                let btnText = `<i class="fa-solid fa-lock"></i> Locked`;
+                let clickAction = "";
+
+                if (isCooldownActive) {
+                    rowStateClass = "locked";
+                    btnText = `<i class="fa-solid fa-hourglass"></i> Wait`;
+                } else {
+                    if (i <= adsWatched) {
+                        rowStateClass = "completed";
+                        btnText = `<i class="fa-solid fa-circle-check"></i> Claimed`;
+                    } else if (i === adsWatched + 1) {
+                        rowStateClass = "current";
+                        btnText = `<i class="fa-solid fa-play"></i> Watch`;
+                        clickAction = `onclick="triggerNativeAd(${i})"`;
+                    } else {
+                        rowStateClass = "locked";
+                        btnText = `<i class="fa-solid fa-lock"></i> Locked`;
+                    }
+                }
+
+                let rowHTML = `
+                    <div class="ad-row ${rowStateClass}">
+                        <div class="ad-info">
+                            <span class="ad-title">🎁 Free Reward Task #${i}</span>
+                            <span class="ad-reward-tag"><i class="fa-solid fa-coins" style="color:var(--gold-primary)"></i> Reward: <strong>+${coinsReward} Coins</strong></span>
+                        </div>
+                        <button class="ad-btn" ${clickAction}>${btnText}</button>
+                    </div>
+                `;
+                container.innerHTML += rowHTML;
+            }
+        }
+
+        /* --- 📺 NATIVE BRIDGE LINKED WITH APP --- */
+        function triggerNativeAd(adIndex) {
+            // 🟢 MODIFIED: Changed from 'Android' to 'AndroidBridge' to match Android code
+            if (typeof AndroidBridge !== "undefined" && AndroidBridge.showRewardedAd) {
+                AndroidBridge.showRewardedAd(adIndex);
+            } else {
+                alert(`Triggering Ad Network for Ad #${adIndex}... (Simulating success in 2 seconds)`);
+                setTimeout(() => {
+                    onAdWatchedSuccess(adIndex);
+                }, 2000);
+            }
+        }
+
+        function onAdWatchedSuccess(adIndex) {
+            if (adIndex !== globalAdsWatched + 1) {
+                 alert("Security Alert: Invalid Ad Order!");
+                 return;
+            }
+
+            let adPrize = adIndex * 20;
+            let newBalance = globalCoins + adPrize;
+            let nextAdCount = adIndex; 
+            let nextFreeCooldown = 0;
+
+            if (nextAdCount >= 10) {
+                nextFreeCooldown = Date.now() + (24 * 60 * 60 * 1000);
+            }
+
+            database.ref('users/' + currentUserId).update({
+                coins: newBalance,
+                adsWatched: nextAdCount,
+                freeRewardCooldownEnd: nextFreeCooldown
+            }).then(() => {
+                document.getElementById("popTitle").innerText = "AD REWARD RECEIVED!";
+                document.getElementById("popText").innerHTML = `🎉 Thank you Chief! Added <strong>${adPrize} Coins</strong> for completing Ad #${adIndex}!`;
+                document.getElementById("dailyPopup").classList.add("show");
+            }).catch((err) => {
+                alert("Ad Sync Error: " + err.message);
+            });
+        }
+
+        function startFreeAdCountdown(endTime) {
+            function loop() {
+                let diff = endTime - Date.now();
+                if (diff <= 0) { 
+                    clearInterval(freeAdTimerInterval);
+                    database.ref('users/' + currentUserId).update({ adsWatched: 0, freeRewardCooldownEnd: 0 });
+                    return; 
+                }
+                let hrs = Math.floor(diff / (1000 * 60 * 60));
+                let mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                let secs = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById("freeAdCountdown").innerText = `${hrs<10?'0'+hrs:hrs}:${mins<10?'0'+mins:mins}:${secs<10?'0'+secs:secs}`;
+            }
+            loop();
+            freeAdTimerInterval = setInterval(loop, 1000);
+        }
+
+        function processClaim() {
+            let now = Date.now();
+            let claimPrize = rewardsMap[globalDay];
+            let newBalance = globalCoins + claimPrize;
+
+            let nextDay = globalDay + 1;
+            if (nextDay > 7) nextDay = 1;
+
+            let nextCooldown = now + (24 * 60 * 60 * 1000);
+            database.ref('users/' + currentUserId).update({
+                coins: newBalance,
+                currentDay: nextDay,
+                cooldownEnd: nextCooldown
+            }).then(() => {
+                document.getElementById("popTitle").innerText = "REWARD CLAIMED!";
+                document.getElementById("popText").innerHTML = `🎉 Successfully added <strong>${claimPrize} Coins</strong> to your profile!`;
+                document.getElementById("dailyPopup").classList.add("show");
+            }).catch((err) => {
+                alert("Database Update Error: " + err.message);
+            });
+        }
+
+        function applyReferCode() {
+            let enteredCode = document.getElementById("inputReferCode").value.trim().toUpperCase();
+            if (!enteredCode) { alert("Please enter a code!"); return; }
+            if (enteredCode === globalReferCode) { alert("You cannot use your own refer code!"); return; }
+            if (globalReferredBy) { alert("You have already applied a code once!"); return; }
+
+            document.getElementById("referApplyBtn").disabled = true;
+            document.getElementById("referApplyBtn").innerText = "Checking...";
+            
+            database.ref('users').once('value', (snapshot) => {
+                let allUsers = snapshot.val();
+                let codeFound = false;
+                let ownerUsername = "";
+                let ownerCurrentCoins = 0;
+
+                for (let user in allUsers) {
+                    if (allUsers[user].referCode === enteredCode) {
+                        codeFound = true;
+                        ownerUsername = user; 
+                        ownerCurrentCoins = allUsers[user].coins || 0;
+                        break;
+                    }
+                }
+
+                if (codeFound) {
+                    let myNewBalance = globalCoins + 50;
+                    database.ref('users/' + currentUserId).update({
+                        coins: myNewBalance,
+                        referredBy: ownerUsername
+                    }).then(() => {
+                        let ownerNewBalance = ownerCurrentCoins + 200;
+                        database.ref('users/' + ownerUsername).update({
+                            coins: ownerNewBalance
+                        }).then(() => {
+                            document.getElementById("popTitle").innerText = "REFER SUCCESS!";
+                            document.getElementById("popText").innerHTML = `🎉 Code applied! You got <strong>50 Coins</strong> and ${ownerUsername} got <strong>200 Coins</strong>!`;
+                            document.getElementById("dailyPopup").classList.add("show");
+                            
+                            document.getElementById("inputReferSection").style.display = "none";
+                            document.getElementById("alreadyReferredMsg").style.display = "block";
+                        });
+                    });
+                } else {
+                    alert("Invalid Refer Code! Please check again.");
+                    document.getElementById("referApplyBtn").disabled = false;
+                    document.getElementById("referApplyBtn").innerText = "Apply Code";
+                }
+            });
+        }
+
+        function startCountdown(endTime) {
+            function loop() {
+                let diff = endTime - Date.now();
+                if (diff <= 0) { clearInterval(timerInterval); initRealtimeSync(); return; }
+                let hrs = Math.floor(diff / (1000 * 60 * 60));
+                let mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                let secs = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById("countdown").innerText = `${hrs<10?'0'+hrs:hrs}:${mins<10?'0'+mins:mins}:${secs<10?'0'+secs:secs}`;
+            }
+            loop();
+            timerInterval = setInterval(loop, 1000);
+        }
+
+        function openSidebar() { document.getElementById("sidebarMenu").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("open"); document.getElementById("fragment-container").classList.add("blurred"); }
+        function closeSidebar() { document.getElementById("sidebarMenu").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("open"); document.getElementById("fragment-container").classList.remove("blurred"); }
+        function closePopup() { document.getElementById("dailyPopup").classList.remove("show"); }
+
+        function switchFragment(fragId) {
+            closeSidebar();
+            document.querySelectorAll('.embed-fragment').forEach(frag => frag.classList.remove('active-fragment'));
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => btn.classList.remove('active'));
+
+            const targetFrag = document.getElementById(`frag-${fragId}`);
+            if (targetFrag) targetFrag.classList.add('active-fragment');
+
+            const targetBtn = document.getElementById(`btn-${fragId}`);
+            if (targetBtn) targetBtn.classList.add('active');
+        }
+
+        function clickFreeReward() { 
+            closeSidebar();
+            switchFragment('free-reward'); 
+        }
+
+        window.onload = function() {
+            initRealtimeSync();
+        };
     </script>
 </body>
 </html>
