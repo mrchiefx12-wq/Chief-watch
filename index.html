@@ -3452,18 +3452,6 @@
         window.onload = function() {
             initRealtimeSync();
         };
-    <script>
-// यह फंक्शन Android के बैक बटन को कंट्रोल करेगा
-function goBackToHome() {
-    <div id="frag-home" class="embed-fragment active-fragment">
-    switchFragment('home'); 
-    
-    // Android को बताएं कि अब आप होम पर हैं
-    if (typeof AndroidBridge !== "undefined") {
-        AndroidBridge.setPageStatus(true);
-    }
-}
-</script>
-    
+    </script>
 </body>
 </html>
