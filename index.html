@@ -1918,370 +1918,161 @@
 </body>
 </html>
         </div>
-        <div id="frag-review" class="embed-fragment">
+        <div id="frag-voucher" class="embed-fragment">
             <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;600&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chief Voucher Premium - Shimmer Edition</title>
+    <style>
+        /* =========================
+           GLOBAL STYLES & THEME
+        ========================= */
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #050505; color: #e0e0e0;
+            height: 100%; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
-  ::-webkit-scrollbar { display: none; }
-  
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: #050505;
-    color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    text-align: center;
-    overflow: hidden; 
-    width: 100%;
-    height: 100%;
-  }
+        body { -ms-overflow-style: none; scrollbar-width: none; overflow-y: scroll; }
+        body::-webkit-scrollbar { display: none; }
 
-  #chief-society-wrapper {
-    padding: 40px 0;
-    width: 100%;
-    box-sizing: border-box;
-    position: relative;
-    height: 100%;
-  }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 50px; }
 
-  .society-header h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.8rem;
-    letter-spacing: 5px;
-    background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 5px;
-    font-weight: 700;
-  }
+        /* =========================
+           HEADER WITH GOLD SHIMMER
+        ========================= */
+        header { text-align: center; padding: 30px 0; }
+        h1.main-title {
+            font-size: 36px; font-weight: 900; letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0 0 10px 0;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.7);
+            animation: goldShimmer 3s infinite linear;
+        }
+        @keyframes goldShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
 
-  .society-header p {
-    color: #555;
-    font-size: 10px;
-    letter-spacing: 3px;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-  }
+        .subtitle { font-size: 16px; color: #999; letter-spacing: 2px; margin-top: -5px; font-weight: 300; text-transform: uppercase; }
 
-  .marquee-outer {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-    margin-bottom: 40px;
-  }
+        /* =========================
+           VOUCHER CARDS
+        ========================= */
+        .cards-container { display: flex; flex-direction: column; gap: 30px; padding: 30px 0; }
 
-  .reviews-container {
-    display: flex;
-    gap: 20px;
-    padding: 10px 0;
-    animation: scrollReviews 110s linear infinite;
-    width: max-content;
-  }
+        .voucher-card {
+            border-radius: 16px; padding: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+            position: relative; transition: transform 0.3s ease; display: flex;
+            flex-direction: column; overflow: hidden; z-index: 1;
+        }
 
-  .review-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(212, 175, 55, 0.15);
-    padding: 20px;
-    width: 270px;
-    border-radius: 4px;
-    text-align: left;
-    flex-shrink: 0;
-  }
+        /* SHIMMER EFFECT */
+        .voucher-card::after {
+            content: ''; position: absolute; top: -50%; left: -150%;
+            width: 300%; height: 200%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+            animation: shimmer 4s infinite linear; pointer-events: none; z-index: -1;
+        }
+        @keyframes shimmer { 0% { transform: rotate(-35deg) translateX(-100%); } 100% { transform: rotate(-35deg) translateX(100%); } }
 
-  .stars { color: #d4af37; font-size: 11px; margin-bottom: 10px; }
+        .card-header { font-size: 26px; font-weight: 800; color: var(--accent-color); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px; }
+        .card-list { list-style: none; padding: 0; margin: 0 0 30px 0; font-size: 16px; line-height: 2.0; color: #e0e0e0; }
+        .card-list li { position: relative; padding-left: 30px; font-weight: 500; }
+        .card-list li::before { content: "✦"; color: var(--accent-color); position: absolute; left: 0; font-size: 18px; }
 
-  .review-text {
-    font-size: 13px;
-    line-height: 1.5;
-    color: #ccc;
-    font-style: italic;
-    margin-bottom: 15px;
-    white-space: normal;
-  }
+        /* BUTTON WITH PULSE GLOW */
+        .buy-btn {
+            width: 100%; border: none; border-radius: 50px; padding: 20px;
+            font-size: 18px; font-weight: 800; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s; color: #000;
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.6); }
+            100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+        }
 
-  .reviewer-name {
-    font-family: 'Cinzel', serif;
-    font-size: 14px;
-    color: #d4af37;
-    font-weight: 700;
-  }
+        /* THEMES */
+        .silver-card { background: radial-gradient(circle at center, #2a2a2a 0%, #050505 100%); border: 1px solid #444; --accent-color: #E0E0E0; }
+        .silver-card .buy-btn { background: linear-gradient(to right, #E0E0E0, #A0A0A0); }
 
-  .verified-tag {
-    font-size: 9px;
-    color: #444;
-    text-transform: uppercase;
-    display: block;
-    margin-top: 5px;
-  }
+        .gold-card { background: radial-gradient(circle at center, #3d3310 0%, #050505 100%); border: 1px solid #665500; --accent-color: #D4AF37; }
+        .gold-card .buy-btn { background: linear-gradient(to right, #F1C40F, #B8860B); }
 
-  @keyframes scrollReviews {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+        .diamond-card { background: radial-gradient(circle at center, #102a30 0%, #050505 100%); border: 1px solid #005f73; --accent-color: #B9F2FF; }
+        .diamond-card .buy-btn { background: linear-gradient(to right, #81D4FA, #039BE5); }
 
-  .marquee-outer::before, .marquee-outer::after {
-    content: "";
-    position: absolute;
-    top: 0; width: 60px; height: 100%;
-    z-index: 2;
-  }
-  .marquee-outer::before { left: 0; background: linear-gradient(to right, #050505, transparent); }
-  .marquee-outer::after { right: 0; background: linear-gradient(to left, #050505, transparent); }
-
-  .cta-section { padding-bottom: 20px; }
-  .cta-text { font-size: 11px; color: #777; letter-spacing: 2px; margin-bottom: 15px; display: block; }
-  
-  .btn-add-review {
-    display: inline-block;
-    padding: 10px 30px;
-    background: transparent;
-    color: #fff;
-    text-decoration: none;
-    font-family: 'Cinzel', serif;
-    font-size: 13px;
-    border: 1px solid #d4af37;
-    transition: 0.3s;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-    cursor: pointer;
-  }
-
-  .btn-add-review:hover { background: #d4af37; color: #000; }
-
-  /* Premium Form Popup Styling */
-  .modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.4s ease;
-  }
-
-  .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
-  .review-modal {
-    background: linear-gradient(145deg, #121212, #050505);
-    border: 1px solid #d4af37;
-    padding: 35px 25px;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.8);
-    text-align: left;
-    transform: translateY(20px);
-    transition: all 0.4s ease;
-  }
-
-  .modal-overlay.active .review-modal { transform: translateY(0); }
-  .modal-title { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #dfba6b; margin-bottom: 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
-  .form-group { margin-bottom: 20px; }
-  .form-group label { font-size: 10px; color: #888; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px; }
-  
-  .form-group input, .form-group textarea {
-    width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(223, 186, 107, 0.25);
-    border-radius: 4px; padding: 12px; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13px; box-sizing: border-box;
-  }
-  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #d4af37; background: rgba(255,255,255,0.05); }
-
-  .modal-actions { display: flex; gap: 15px; margin-top: 25px; }
-  .btn-submit { flex: 1; background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728); color: #000; border: none; padding: 12px 0; font-weight: 700; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
-  .btn-cancel { flex: 1; background: transparent; color: #888; border: 1px solid #333; padding: 12px 0; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: 0.3s; }
-  .btn-cancel:hover { color: #fff; border-color: #666; }
-
-  /* Success Toast Alert */
-  .success-toast {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
-    background: #000; border: 1px solid #d4af37; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-    padding: 25px 40px; border-radius: 4px; z-index: 2000; opacity: 0; pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .success-toast.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  .toast-icon { color: #d4af37; font-size: 24px; margin-bottom: 10px; }
-  .toast-title { font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 3px; color: #fff; margin: 0; text-transform: uppercase; }
-</style>
+        /* NOTICE */
+        .notice-section { background-color: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 30px; margin-top: 50px; color: #a0a0a0; font-size: 14px; line-height: 1.8; }
+        .notice-section h3 { font-size: 16px; color: #fff; margin: 0 0 20px 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .notice-section ol { padding-left: 20px; margin: 0; }
+        .notice-section li { margin-bottom: 12px; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1 class="main-title">CHIEF VOUCHER</h1>
+            <p class="subtitle">Select Your Tier of Premium Access</p>
+        </header>
 
-<div id="chief-society-wrapper">
-  <div class="society-header">
-    <h2>THE CHIEF SOCIETY</h2>
-    <p>Voice of the Elite Collectors</p>
-  </div>
+        <div class="cards-container">
+            <div class="voucher-card silver-card">
+                <div class="card-header">SILVER</div>
+                <ul class="card-list">
+                    <li>50% discount on store items</li>
+                    <li>₹200 monthly store credit</li>
+                    <li>Credits valid for products only</li>
+                    <li>Non-withdrawable</li>
+                </ul>
+                <button class="buy-btn">PURCHASE SILVER - ₹ 200</button>
+            </div>
 
-  <div class="marquee-outer">
-    <div class="reviews-container" id="review-list"></div>
-  </div>
+            <div class="voucher-card gold-card">
+                <div class="card-header">GOLD</div>
+                <ul class="card-list">
+                    <li>50% discount on store items</li>
+                    <li>₹400 monthly store credit</li>
+                    <li>Credits valid for products only</li>
+                    <li>Non-withdrawable</li>
+                </ul>
+                <button class="buy-btn">PURCHASE GOLD - ₹ 400</button>
+            </div>
 
-  <div class="cta-section">
-    <span class="cta-text">To add your review, contact us</span>
-    <button onclick="openReviewModal()" class="btn-add-review">ADD REVIEW</button>
-  </div>
-</div>
+            <div class="voucher-card diamond-card">
+                <div class="card-header">DIAMOND</div>
+                <ul class="card-list">
+                    <li>50% discount on store items</li>
+                    <li>₹800 monthly store credit</li>
+                    <li>Credits valid for products only</li>
+                    <li>Non-withdrawable</li>
+                </ul>
+                <button class="buy-btn">PURCHASE DIAMOND - ₹ 800</button>
+            </div>
+        </div>
 
-<div class="modal-overlay" id="reviewModal">
-  <div class="review-modal">
-    <h3 class="modal-title">Submit Review</h3>
-    <div class="form-group">
-      <label>Your Elite Name</label>
-      <input type="text" id="custName" placeholder="Enter full name" autocomplete="off">
+        <div class="notice-section">
+            <h3>Terms & Conditions:</h3>
+            <ol>
+                <li><strong>Usage Limit:</strong> Voucher credits are exclusively for purchasing products within the Chief Store.</li>
+                <li><strong>Withdrawals:</strong> Voucher credits are non-withdrawable and cannot be converted into cash.</li>
+                <li><strong>Tier Limits:</strong> Each voucher tier provides a fixed monthly credit limit; please select the plan that suits your needs.</li>
+                <li><strong>Policy:</strong> Misuse of vouchers, sharing accounts, or attempting to bypass withdrawal restrictions will lead to immediate account suspension.</li>
+                <li><strong>Renewals:</strong> Monthly credits are automatically issued on the 1st of every month.</li>
+            </ol>
+        </div>
     </div>
-    <div class="form-group">
-      <label>Your Experience</label>
-      <textarea id="custText" rows="4" placeholder="Write your review here..."></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeReviewModal()">Cancel</button>
-      <button class="btn-submit" id="submitBtn" onclick="submitReview()">Submit Review</button>
-    </div>
-  </div>
-</div>
-
-<div class="success-toast" id="successToast">
-  <div class="toast-icon">✦</div>
-  <h4 class="toast-title">Review Submitted</h4>
-</div>
-
-<script>
-  // ⚠️ अपनी GOOGLE APPS SCRIPT WEB APP LINK यहाँ पेस्ट करें:
-  const SCRIPT_URL = "YOUR_GOOGLE_WEB_APP_URL_HERE";
-
-  // लोकल एरे जो स्क्रीन पर तुरंत डेटा हैंडल करेगा
-  let liveReviewsList = [
-    // --- आपके पुराने 10 रिव्यूज ---
-    { name: "Vikram Rathore", text: "The weight and the finish of the Royal Monarch are unmatched. Truly the gold standard." },
-    { name: "Ananya Sharma", text: "Chief isn't just a watch, it's a statement. I wear my Imperial Dark to every board meeting." },
-    { name: "Rohan Mehra", text: "Bought this as a gift for myself. The premium unboxing experience alone is worth it." },
-    { name: "Kabir Malhotra", text: "Exquisite craftsmanship. The way the dial catches the light is hypnotic." },
-    { name: "Siddharth Roy", text: "I've owned many luxury watches, but the Chief Society feels like a private club. Exclusive." },
-    { name: "Meera Kapoor", text: "Simply stunning. It feels much more expensive than it is. A masterpiece." },
-    { name: "Aditya Verma", text: "Fast shipping and the quality is 10/10. Definitely buying the next edition." },
-    { name: "Zoya Ahmed", text: "Elegant, timeless, and bold. It perfectly complements my style." },
-    { name: "Arjun Singh", text: "Finally a brand that understands modern luxury. The Gold Standard indeed." },
-    { name: "Ishaan Gupta", text: "The attention to detail in the clasp and strap is remarkable. Pure class." },
-
-    // --- नए 40 रिव्यूज (टोटल 50) ---
-    { name: "Rajveer Bundela", text: "The matte black stealth finish is menacing yet sophisticated. Absolute engineering marvel." },
-    { name: "Kiara Advani", text: "Gifted the rose gold edition to my husband. The packaging feels like a royal inheritance." },
-    { name: "Devansh Singhania", text: "The automatic movement is buttery smooth. Keeps flawless time and gathers nonstop compliments." },
-    { name: "Riya Oberoi", text: "Minimalist, heavy, and commandingly beautiful. It redefines wrist presence entirely." },
-    { name: "Amanpreet Singh", text: "The sunburst dial under direct sunlight is an absolute sight to behold. Stunning craftsmanship." },
-    { name: "Karan Johar", text: "Bold aesthetics combined with unmatched comfort. It sits perfectly on the wrist." },
-    { name: "Sanya Malhotra", text: "Every single edge is polished to perfection. You can feel the elite luxury in its weight." },
-    { name: "Vivaan Goenka", text: "It easily competes with Swiss heritage brands costing five times more. Exceptional value." },
-    { name: "Alisha Birla", text: "The micro-adjustments on the strap show how much Chief cares about true watch enthusiasts." },
-    { name: "Hrithik Roshan", text: "Aggressive yet elegant lines. It adds an instant edge to sharp formal tailoring." },
-    { name: "Nikhil Kamath", text: "A rare combination of rugged durability and high-end luxury. Highly recommended." },
-    { name: "Tanya Scindia", text: "The sapphire crystal glass remains pristine after months of daily wear. Scratch resistant magic." },
-    { name: "Ranveer Shergill", text: "Unboxing this felt like entering an exclusive gentleman's club. The presentation is unmatched." },
-    { name: "Jahnvi Kapoor", text: "The luminous indices are incredibly sharp in the dark. Aesthetic and deeply functional." },
-    { name: "Aditi Rao", text: "Subtle luxury at its finest. It doesn't scream for attention, it commands it quietly." },
-    { name: "Manish Malhotra", text: "The dial layout is perfectly balanced. A masterpiece of contemporary horology." },
-    { name: "Kunal Shah", text: "A true collector's item. The serial numbering makes it feel intensely personal and rare." },
-    { name: "Tara Sutaria", text: "The premium leather strap smells of pure luxury and contours beautifully over time." },
-    { name: "Yashvardhan Rana", text: "The satisfying click of the rotating bezel tells you everything about the build quality." },
-    { name: "Ishita Bhalla", text: "Fastest delivery I've ever experienced for a high-end luxury piece. 5 stars all the way." },
-    { name: "Abhimanyu Dassani", text: "This watch has completely ruined my other timepieces. Nothing else feels this solid anymore." },
-    { name: "Mehak Chawla", text: "Elegant proportions that look striking on both slim and broader wrists. Versatile art." },
-    { name: "Gaurav Taneja", text: "Built like a tank but finished like a diamond. Perfect for a modern active lifestyle." },
-    { name: "Shreya Ghoshal", text: "The understated elegance of the silver dial goes seamlessly with everything I wear." },
-    { name: "Rishabh Pant", text: "Solid weight, premium clasp, and bulletproof construction. Truly elite." },
-    { name: "Kritika Kamra", text: "A design that transcends seasonal trends. This is going to be an heirloom piece." },
-    { name: "Varun Dhawan", text: "The chronograph buttons have a crisp, mechanical tactile response. Absolute perfection." },
-    { name: "Anushka Shetty", text: "Exquisite attention to the minor details on the crown logotype. Truly bespoke feeling." },
-    { name: "Sameer Verma", text: "From the boardroom straight to the evening lounge, it never feels out of place." },
-    
-  ];
-
-  const container = document.getElementById('review-list');
-
-  // एनीमेशन में डेटा रेंडर करने की मास्टर मशीन
-  function renderMarquee(list) {
-    container.innerHTML = "";
-    [...list, ...list].forEach(r => {
-      const card = document.createElement('div');
-      card.className = 'review-card';
-      card.innerHTML = `<div class="stars">★★★★★</div><p class="review-text">"${r.text}"</p><span class="reviewer-name">${r.name}</span><span class="verified-tag">✓ Verified Member</span>`;
-      container.appendChild(card);
-    });
-  }
-
-  // 📥 गूगल शीट से पुराने रिव्यूज लोड करना (ताकि डिफ़ॉल्ट रिव्यूज के आगे वे भी दिखें)
-  function loadLiveReviews() {
-    if (SCRIPT_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") {
-      renderMarquee(liveReviewsList);
-      return;
-    }
-    
-    fetch(SCRIPT_URL)
-      .then(response => response.json())
-      .then(sheetData => {
-        if(sheetData && sheetData.length > 0) {
-          // शीट के डेटा को हमारे डिफ़ॉल्ट डेटा के साथ मिलाना (नया रिव्यू सबसे आगे आएगा)
-          liveReviewsList = [...sheetData.reverse(), ...liveReviewsList];
-        }
-        renderMarquee(liveReviewsList);
-      })
-      .catch(error => {
-        console.log("Error loading from sheet, playing local data.");
-        renderMarquee(liveReviewsList);
-      });
-  }
-
-  // स्टार्टिंग में लोड करें
-  loadLiveReviews();
-
-  function openReviewModal() { document.getElementById('reviewModal').classList.add('active'); }
-  function closeReviewModal() {
-    document.getElementById('reviewModal').classList.remove('active');
-    document.getElementById('custName').value = "";
-    document.getElementById('custText').value = "";
-  }
-
-  // 📤 सबमिट लॉजिक: जो तुरंत स्क्रीन पर डालेगा + बैकएंड में सेंड करेगा
-  function submitReview() {
-    const name = document.getElementById('custName').value.trim();
-    const text = document.getElementById('custText').value.trim();
-
-    if (name === "" || text === "") { alert("Please fill in both name and review text."); return; }
-
-    // 🔥 तुरंत स्क्रीन पर नया रिव्यू जोड़ो
-    liveReviewsList.unshift({ name: name, text: text });
-    renderMarquee(liveReviewsList);
-
-    // फॉर्म बंद करें
-    closeReviewModal();
-
-    // 🔔 2 सेकंड का सक्सेस अलर्ट दिखाओ
-    const toast = document.getElementById('successToast');
-    toast.classList.add('active');
-
-    setTimeout(() => {
-      toast.classList.remove('active');
-    }, 2000);
-
-    // 🚀 बैकग्राउंड में चुपचाप गूगल शीट में डेटा भेज दो
-    if (SCRIPT_URL !== "YOUR_GOOGLE_WEB_APP_URL_HERE") {
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name, text: text })
-      })
-      .catch(err => console.log("Background save error:", err));
-    }
-  }
-</script>
-
 </body>
 </html>
 </div>
@@ -3048,9 +2839,9 @@
             <i class="fa-solid fa-clock-rotate-left"></i>
             <span class="nav-text">History</span>
         </a>
-        <a id="btn-review" class="nav-item" onclick="switchFragment('review')">
+        <a id="btn-voucher" class="nav-item" onclick="switchFragment('voucher')">
             <i class="fa-solid fa-star"></i>
-            <span class="nav-text">Customer<br>Review</span>
+            <span class="nav-text">Customer<br>Voucher</span>
         </a>
     </div>
 
@@ -3108,7 +2899,7 @@
         <a id="btn-about" class="nav-item" onclick="switchFragment('about')"><i class="fa-solid fa-circle-info"></i><span class="nav-text">About</span></a>
         <a id="btn-order" class="nav-item" onclick="switchFragment('order')"><i class="fa-solid fa-cart-shopping"></i><span class="nav-text">Order</span></a>
         <a id="btn-history" class="nav-item" onclick="switchFragment('history')"><i class="fa-solid fa-clock-rotate-left"></i><span class="nav-text">History</span></a>
-        <a id="btn-review" class="nav-item" onclick="switchFragment('review')"><i class="fa-solid fa-star"></i><span class="nav-text">Review</span></a>
+        <a id="btn-voucher" class="nav-item" onclick="switchFragment('voucher')"><i class="fa-solid fa-star"></i><span class="nav-text">Voucher</span></a>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
