@@ -290,7 +290,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CHIEF - Executive Registry</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -304,42 +304,49 @@
             --border-gold: rgba(223, 186, 107, 0.25);
         }
 
-        /* 🚫 स्क्रॉलबार हटाओ और बैकग्राउंड फिक्स करो */
+        /* 🚫 स्क्रॉलबार हटाओ और बैकग्राउंड फिक्स करो (Har device ke liye scrollbar band) */
         html, body {
             background-color: var(--bg-color) !important;
             color: var(--text-light);
             font-family: 'Montserrat', sans-serif;
             margin: 0 !important;
             padding: 0 !important;
-            overflow: hidden !important; /* बाहरी कुरुप स्क्रॉलबार बंद */
             width: 100%;
             height: 100%;
+            overflow: hidden !important; /* Outer scroll disabled */
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* 👑 नेचुरल स्क्रॉल रैपर (कोई बीच का स्पेस नहीं) */
-        .scroll-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto; /* सिर्फ अंदरूनी स्मूथ स्क्रॉल */
-            box-sizing: border-box;
-            background-color: var(--bg-color);
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
+        /* Chrome, Safari, Opera aur browsers ke liye scrollbar hide */
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
         .scroll-wrapper::-webkit-scrollbar {
             display: none !important;
             width: 0 !important;
             height: 0 !important;
         }
 
-        /* कंटेंट एरिया - नेचुरल फ्लो */
+        /* 👑 नेचुरल स्क्रॉल रैपर (Scrollbar fully hidden but scrolling works smoothly) */
+        .scroll-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto; 
+            box-sizing: border-box;
+            background-color: var(--bg-color);
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* कंटेंट एरिया - नेचुरल फ्लो और ऑटो-अडजस्टमेंट */
         .content-container {
             width: 100%;
             max-width: 850px;
             margin: 0 auto;
-            padding: 40px 15px 20px 15px;
+            padding: 40px 20px 20px 20px;
             box-sizing: border-box;
+            flex: 1;
         }
 
         /* -----------------------------------------
@@ -350,11 +357,11 @@
             border: 1px solid var(--gold-primary);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
             border-radius: 4px;
-            padding: 40px 30px;
+            padding: 50px 30px;
             text-align: center;
             position: relative;
             box-sizing: border-box;
-            margin-bottom: 40px; /* फुटर और कार्ड के बीच का परफेक्ट गैप */
+            margin-bottom: 40px; 
         }
 
         .verification-card::before {
@@ -385,19 +392,24 @@
 
         .tagline {
             font-size: 0.92rem;
-            line-height: 1.6;
-            margin: 0 auto 25px auto;
+            line-height: 1.7;
+            margin: 0 auto 30px auto;
             max-width: 650px;
             font-weight: 300;
             color: #d5d5d5;
         }
 
-        .search-box { margin-bottom: 20px; }
+        .search-box { 
+            margin-bottom: 20px; 
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
 
         .search-box input {
             width: 100%;
             max-width: 450px;
-            padding: 15px 20px;
+            padding: 16px 20px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-gold);
             color: #ffffff;
@@ -406,29 +418,38 @@
             text-align: center;
             box-sizing: border-box;
             font-family: 'Montserrat', sans-serif;
+            border-radius: 4px;
         }
 
-        .search-box input:focus { outline: none; border-color: var(--gold-primary); }
+        .search-box input:focus { 
+            outline: none; 
+            border-color: var(--gold-primary); 
+            background: rgba(255, 255, 255, 0.04);
+        }
 
         .btn-verify {
             background: linear-gradient(135deg, var(--gold-secondary) 0%, var(--gold-primary) 100%);
             color: #000000;
             border: none;
-            padding: 15px 45px;
+            padding: 16px 45px;
             font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 700;
             letter-spacing: 2px;
             cursor: pointer;
             text-transform: uppercase;
             transition: opacity 0.2s;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 450px;
+            display: inline-block;
         }
 
         .btn-verify:hover { opacity: 0.9; }
 
         .result-container {
-            margin-top: 30px;
-            padding-top: 25px;
+            margin-top: 40px;
+            padding-top: 30px;
             border-top: 1px dashed var(--border-gold);
             display: none;
         }
@@ -438,7 +459,7 @@
             font-size: 1.1rem;
             color: var(--gold-primary);
             letter-spacing: 1px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-weight: 700;
         }
 
@@ -450,7 +471,7 @@
         }
 
         .details-table td {
-            padding: 12px 10px;
+            padding: 15px 10px;
             text-align: left;
             font-size: 0.95rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
@@ -462,12 +483,12 @@
         .error-msg {
             color: #ff6b6b;
             font-size: 0.95rem;
-            margin-top: 15px;
+            margin-top: 20px;
             display: none;
         }
 
         /* -----------------------------------------
-           FOOTER SECTION (NATURAL ATTACH)
+            FOOTER SECTION (NATURAL ATTACH)
         ----------------------------------------- */
         .footer-section {
             background: radial-gradient(circle at top, #141414 0%, #050505 100%);
@@ -476,6 +497,7 @@
             border-top: 1px solid #1a1a1a;
             box-sizing: border-box;
             width: 100%;
+            margin-top: auto; 
         }
 
         .brand-title {
@@ -565,20 +587,24 @@
             letter-spacing: 1px;
         }
 
-        /* 📱 RESPONSIVE RULES (MOBILE ONLY ADJUSTMENTS) */
+        /* 📱 RESPONSIVE RULES (SABHI PHONES ME SAME AUR PERFECT DIKHNE KE LIYE) */
         @media (max-width: 768px) {
-            .content-container { padding: 20px 10px 10px 10px; }
-            .verification-card { padding: 30px 15px; margin-bottom: 25px; }
-            .logo { font-size: 2.1rem; }
-            .tagline { font-size: 0.85rem; }
-            .search-box input { padding: 13px 10px; font-size: 0.9rem; }
-            .btn-verify { width: 100%; padding: 13px; }
-            .details-table td { padding: 10px 5px; font-size: 0.85rem; }
+            .content-container { padding: 25px 15px; }
+            .verification-card { padding: 35px 20px; margin-bottom: 30px; }
+            .logo { font-size: 2.2rem; letter-spacing: 6px; }
+            .subtitle { font-size: 0.8rem; letter-spacing: 3px; }
+            .tagline { font-size: 0.85rem; line-height: 1.6; margin-bottom: 25px; }
+            .search-box input { padding: 14px 15px; font-size: 0.95rem; }
+            .btn-verify { width: 100%; max-width: 100%; padding: 14px; font-size: 0.9rem; }
+            .details-table td { padding: 12px 5px; font-size: 0.85rem; }
             
-            .footer-section { padding: 35px 10px; }
-            .brand-title { font-size: 21px; }
-            .credit-card { width: 100%; padding: 12px; }
-            .footer-bottom { flex-direction: column; text-align: center; gap: 15px; }
+            .footer-section { padding: 40px 15px; }
+            .brand-title { font-size: 22px; }
+            .philosophy-box { font-size: 12px; margin-bottom: 25px; }
+            .credits-container { gap: 10px; margin-bottom: 30px; }
+            .credit-card { width: 100%; min-width: unset; padding: 12px; }
+            .footer-bottom { flex-direction: column; text-align: center; gap: 20px; }
+            .social-wrapper { flex-direction: row; justify-content: center; width: 100%; }
         }
     </style>
 </head>
@@ -791,7 +817,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
 
@@ -800,24 +826,37 @@
       margin: 0 !important;
       padding: 0 !important;
       background-color: #050505 !important;
-      overflow-x: hidden;
       width: 100%;
+      height: 100%;
       color: #e0e0e0;
       font-family: 'Montserrat', sans-serif;
       -webkit-font-smoothing: antialiased;
+      overflow: hidden !important; /* Outer scroll disabled to hide default scrollbars */
+      -webkit-overflow-scrolling: touch;
     }
 
-    ::-webkit-scrollbar { display: none !important; width: 0 !important; }
-    * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; }
+    /* Chrome, Safari, Opera aur browsers ke liye scrollbar band */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    #chief-about-wrapper::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
 
+    /* 👑 scroll wrapper me smooth scrolling aur scrollbar hide */
     #chief-about-wrapper {
       background: #050505;
-      padding: 40px 15px;
+      padding: 40px 20px;
       width: 100%;
-      min-height: 100vh;
+      height: 100%;
+      overflow-y: auto; /* Internal smooth scroll allowed */
+      box-sizing: border-box;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* Top margin maintaining scrollability */
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
     }
 
     .about-card {
@@ -830,6 +869,7 @@
       border-radius: 24px;
       box-shadow: 0 30px 70px rgba(0,0,0,0.9);
       text-align: center;
+      box-sizing: border-box;
     }
 
     /* Gold Badge Effect */
@@ -935,25 +975,36 @@
       opacity: 0.8;
     }
 
-    /* 📱 Responsive Fixing for Mobile Phones */
-    @media (max-width: 600px) {
+    /* * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; } */
+    * { box-sizing: border-box; }
+
+    /* 📱 Responsive Fixing for Mobile Phones (Optimal Auto-Adjust Settings) */
+    @media (max-width: 768px) {
       #chief-about-wrapper {
-        padding: 20px 10px;
+        padding: 25px 15px;
       }
       
       .about-card {
-        padding: 40px 20px;
+        padding: 35px 20px;
         border-radius: 16px;
+      }
+
+      .brand-badge {
+        font-size: 9px;
+        padding: 5px 18px;
+        margin-bottom: 20px;
       }
 
       .about-header h1 {
         font-size: 24px;
         letter-spacing: 4px;
+        margin-bottom: 10px;
       }
 
       .about-subtitle {
-        font-size: 12px;
+        font-size: 11px;
         margin-bottom: 25px;
+        letter-spacing: 1px;
       }
 
       .story-text {
@@ -961,15 +1012,37 @@
         line-height: 1.7;
         text-align: center;
         text-align-last: center;
+        margin-bottom: 25px;
       }
 
       .pillars-container {
-        grid-template-columns: 1fr; /* फोन पर एक के नीचे एक आ जाएगा */
+        grid-template-columns: 1fr; /* Phones me single column ho jayega taki space dbe na */
         gap: 15px;
+        margin-top: 25px;
       }
 
       .pillar-box {
-        padding: 15px;
+        padding: 16px;
+      }
+
+      .pillar-box h3 {
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+
+      .pillar-box p {
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      .signature-line {
+        margin-top: 35px;
+        padding-top: 20px;
+      }
+
+      .signature-text {
+        font-size: 10px;
+        letter-spacing: 3px;
       }
     }
   </style>
@@ -1042,16 +1115,27 @@
             --error: #D32F2F;
         }
 
+        /* 🚨 Global Reset & Scrollbar Hide (Pure page ke liye scrollbar band) */
         html, body {
-            background-color: var(--black);
+            background-color: var(--black) !important;
             color: var(--white);
             font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0 !important;
+            padding: 0 !important;
             width: 100%;
             height: 100%;
-            overflow: hidden !important;
+            overflow: hidden !important; /* Outer scroll disabled */
             -webkit-font-smoothing: antialiased;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Sabhi browsers ke liye scrollbar completely invisible */
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .studio-wrapper-outer::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
         }
 
         /* Continuous Scrolling Top Ticker */
@@ -1089,22 +1173,16 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
-        /* Outer Wrapper tailored for iframe */
+        /* 👑 Smooth Scroll Wrapper (Bina scrollbar ke smooth scrolling) */
         .studio-wrapper-outer {
             width: 100%;
-            height: 100vh;
-            overflow-y: auto;
+            height: 100%;
+            overflow-y: auto; /* Internal scrolling active */
             overflow-x: hidden;
             box-sizing: border-box;
-            padding: 45px 12px 20px 12px;
-        }
-
-        .studio-wrapper-outer::-webkit-scrollbar {
-            width: 4px;
-        }
-        .studio-wrapper-outer::-webkit-scrollbar-thumb {
-            background: var(--gold);
-            border-radius: 10px;
+            padding: 55px 15px 30px 15px; /* Added proper top padding for ticker */
+            -ms-overflow-style: none;  /* IE/Edge */
+            scrollbar-width: none;  /* Firefox */
         }
 
         .studio-container {
@@ -1473,6 +1551,120 @@
             color: #cccccc;
             font-weight: 300;
         }
+
+        /* 📱 RESPONSIVE AUTO-ADJUSTING FOR PHONES (No Oversized Elements) */
+        @media (max-width: 768px) {
+            .studio-wrapper-outer {
+                padding: 45px 12px 15px 12px; /* Ticker safe margin */
+            }
+
+            .intro-section {
+                padding: 30px 15px;
+                margin-bottom: 20px;
+            }
+
+            .intro-logo {
+                font-size: 2.3rem;
+                letter-spacing: 6px;
+            }
+
+            .intro-tagline {
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+
+            .intro-features {
+                max-width: 100%;
+                margin-bottom: 25px;
+            }
+
+            .intro-features li {
+                font-size: 0.72rem;
+                margin-bottom: 10px;
+            }
+
+            .start-btn {
+                width: 100%;
+                padding: 14px 20px;
+                font-size: 0.8rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+                letter-spacing: 5px;
+            }
+
+            .header p {
+                font-size: 0.65rem;
+                letter-spacing: 2px;
+            }
+
+            .section-box {
+                padding: 12px 10px;
+                margin-bottom: 12px;
+            }
+
+            .section-title {
+                font-size: 0.78rem;
+            }
+
+            .options-grid {
+                grid-template-columns: repeat(3, 1fr) !important; /* Perfect 3 column grid for mobile screens */
+                gap: 6px;
+            }
+
+            /* For target segment (only 3 options) */
+            .options-grid:has(.option-card:nth-child(3):last-child) {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+
+            /* For strap selections with 5 options */
+            .options-grid:has(.option-card:nth-child(5)) {
+                grid-template-columns: repeat(2, 1fr) !important; /* Grid breaks to 2x2 perfectly */
+            }
+
+            .option-card {
+                padding: 12px 5px;
+            }
+
+            .option-card i {
+                font-size: 1.2rem;
+                margin-bottom: 4px;
+            }
+
+            .option-card span {
+                font-size: 0.58rem;
+            }
+
+            input {
+                font-size: 0.75rem;
+                padding: 8px 10px;
+            }
+
+            label {
+                font-size: 0.58rem;
+            }
+
+            .order-btn {
+                padding: 12px;
+                font-size: 0.85rem;
+                letter-spacing: 2px;
+            }
+
+            .luxury-footer {
+                padding: 10px 0;
+            }
+
+            .footer-tag {
+                font-size: 0.55rem;
+                letter-spacing: 2px;
+            }
+
+            .footer-copy {
+                font-size: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1494,7 +1686,6 @@
             <span>Edition: 1-of-1 Pro</span>
         </div>
 
-        <!-- Premium Welcome Landing Panel -->
         <div class="intro-section" id="landingView">
             <h1 class="intro-logo">CHIEF</h1>
             <p class="intro-tagline">1-of-1 Luxury Configurator</p>
@@ -1508,14 +1699,12 @@
             <button class="start-btn" onclick="startCustomizer()">Start Your Customization</button>
         </div>
 
-        <!-- Main Customizer UI Modules -->
         <div class="configurator-content" id="mainConfigurator">
             <div class="header">
                 <h1>CHIEF</h1>
                 <p>1-of-1 Luxury Configurator</p>
             </div>
 
-            <!-- Segment Selector -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-venus-mars"></i> 1. Select Target User</div>
                 <div class="options-grid">
@@ -1534,7 +1723,6 @@
                 </div>
             </div>
 
-            <!-- Watch Case Shape -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-clock"></i> 2. Watch Case Shape</div>
                 <div class="options-grid">
@@ -1553,7 +1741,6 @@
                 </div>
             </div>
 
-            <!-- Watch Color (Dial) - FIXED to Premium Typing Mode -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-palette"></i> 3. Type Watch Color (Dial)</div>
                 <div class="input-group" style="margin-bottom: 0;">
@@ -1562,7 +1749,6 @@
                 </div>
             </div>
 
-            <!-- Top Border Style & Border Color Type Input -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-border-top-left"></i> 4. Choose Top Border Style & Color</div>
                 <div class="options-grid" style="margin-bottom: 14px;">
@@ -1581,10 +1767,9 @@
                 </div>
             </div>
 
-            <!-- Strap Module -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-band-aid"></i> 5. Choose Watch Strap</div>
-                <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));">
+                <div class="options-grid">
                     <div class="option-card" onclick="selectOption('strap', 'Leather Strap', this)">
                         <i class="fa-solid fa-shoe-prints"></i>
                         <span>Leather Strap</span>
@@ -1608,21 +1793,20 @@
                 </div>
             </div>
 
-            <!-- Inside Look -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-gears"></i> 6. Choose Special Inside Look</div>
-                <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));">
+                <div class="options-grid">
                     <div class="option-card" onclick="selectOption('insideLook', 'Open Machine Look', this)">
                         <i class="fa-solid fa-compass"></i>
-                        <span>Open Machine Look</span>
+                        <span>Open Machine</span>
                     </div>
                     <div class="option-card" onclick="selectOption('insideLook', 'Chrono Triple Dial', this)">
                         <i class="fa-solid fa-stopwatch"></i>
-                        <span>Chrono Triple Dial</span>
+                        <span>Chrono Dial</span>
                     </div>
                     <div class="option-card" onclick="selectOption('insideLook', 'Simple Clean Look', this)">
                         <i class="fa-solid fa-gem"></i>
-                        <span>Simple Clean Look</span>
+                        <span>Clean Look</span>
                     </div>
                     <div class="option-card" onclick="selectOption('insideLook', 'Custom Photo', this)">
                         <i class="fa-regular fa-image"></i>
@@ -1631,7 +1815,6 @@
                 </div>
             </div>
 
-            <!-- Client Info Panel -->
             <div class="section-box">
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
