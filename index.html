@@ -1925,29 +1925,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chief Voucher Premium</title>
-    
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; }
         body, html {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0; padding: 0;
+            font-family: sans-serif;
             background-color: #050505; color: #e0e0e0;
             width: 100%; overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
         .container { 
             width: 100%; 
-            max-width: 480px; 
+            max-width: 100%;
             margin: 0 auto; 
-            padding: 12px; 
+            padding: 10px; 
         }
 
-        /* HEADER & TYPOGRAPHY - MOBILE OPTIMIZED */
-        header { text-align: center; padding: 15px 0 10px 0; }
+        /* HEADER GOLD SHIMMER */
+        header { text-align: center; padding: 15px 0; }
         h1.main-title {
-            font-size: 20px; font-weight: 900; letter-spacing: 1.5px;
+            font-size: calc(18px + 1vw);
+            font-weight: 900; letter-spacing: 2px;
             text-transform: uppercase;
             background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
             background-size: 200% 100%;
@@ -1958,109 +1957,150 @@
         }
         @keyframes goldShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        .subtitle { font-size: 10px; color: #999; margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { font-size: 11px; color: #999; margin-top: -3px; text-transform: uppercase; }
 
-        .cards-container { display: flex; flex-direction: column; gap: 12px; padding: 5px 0; }
+        .cards-container { display: flex; flex-direction: column; gap: 15px; padding: 10px 0; }
 
-        /* VOUCHER CARD SHIMMER - COMPACT HEIGHTS FOR SMALL PHONES */
+        /* VOUCHER CARD SHIMMER */
         .voucher-card {
-            border-radius: 10px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-            position: relative; overflow: hidden; border: 1px solid #222;
+            border-radius: 12px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+            position: relative; overflow: hidden; border: 1px solid #333;
         }
-        
+        .voucher-card::after {
+            content: ''; position: absolute; top: -50%; left: -150%;
+            width: 300%; height: 200%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+            animation: shimmer 4s infinite linear; pointer-events: none; z-index: 0;
+        }
+        @keyframes shimmer { 0% { transform: rotate(-35deg) translateX(-100%); } 100% { transform: rotate(-35deg) translateX(100%); } }
+
         .card-content { position: relative; z-index: 1; }
         
         .card-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
-        .card-header { font-size: 15px; font-weight: 800; color: var(--accent-color); letter-spacing: 0.5px; }
+        .card-header { font-size: 17px; font-weight: 800; color: var(--accent-color); }
         
         .card-balance-badge {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--accent-color);
-            padding: 3px 8px; border-radius: 15px;
-            font-size: 10px; font-weight: bold; color: #fff;
-        }
-        .card-balance-badge span { color: var(--accent-color); font-size: 11px; }
-
-        .card-list { list-style: none; margin: 0 0 12px 0; font-size: 11px; line-height: 1.5; color: #b0b0b0; }
-        .card-list li { margin-bottom: 3px; padding-left: 15px; position: relative; }
-        .card-list li::before { content: "✦"; color: var(--accent-color); position: absolute; left: 0; font-size: 9px; }
-
-        .buy-btn {
-            width: 100%; border: none; border-radius: 20px; padding: 10px;
-            font-size: 12px; font-weight: 800; text-transform: uppercase;
-            cursor: pointer; color: #000; transition: transform 0.2s;
-        }
-        .buy-btn:active { transform: scale(0.98); }
-
-        /* THEMES - GOLD & BLACK SPIRIT */
-        .silver-card { background: linear-gradient(135deg, #111 0%, #161616 100%); --accent-color: #d1d1d1; }
-        .silver-card .buy-btn { background: linear-gradient(90deg, #e0e0e0, #a8a8a8); }
-        
-        .gold-card { background: linear-gradient(135deg, #141006 0%, #1c160a 100%); --accent-color: #ffd700; border-color: #443610; }
-        .gold-card .buy-btn { background: linear-gradient(90deg, #ffd700, #b8860b); font-weight: 900; }
-        
-        .diamond-card { background: linear-gradient(135deg, #07151a 0%, #0d222b 100%); --accent-color: #b9f2ff; }
-        .diamond-card .buy-btn { background: linear-gradient(90deg, #b9f2ff, #4ba3b5); }
-
-        /* UTR SYSTEM INTEGRATION CONTAINER */
-        .utr-container {
-            margin-top: 10px; padding: 10px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid #222; border-radius: 8px;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .utr-title { font-size: 11px; font-weight: bold; color: #ffd700; text-transform: uppercase; }
-        .utr-input-group { display: flex; gap: 6px; }
-        .utr-field {
-            flex: 1; background: #111; border: 1px solid #333;
-            border-radius: 6px; padding: 8px; font-size: 12px;
-            color: #fff; outline: none;
-        }
-        .utr-field:focus { border-color: #ffd700; }
-        .utr-submit-btn {
-            background: #ffd700; color: #000; border: none;
-            padding: 0 12px; border-radius: 6px; font-size: 11px;
-            font-weight: bold; cursor: pointer; text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 0.5px;
         }
 
+        .card-list { list-style: none; padding: 0; margin: 0 0 15px 0; font-size: 12px; line-height: 1.6; }
+        .card-list li { margin-bottom: 5px; padding-left: 20px; position: relative; }
+        .card-list li::before { content: "✦"; color: var(--accent-color); position: absolute; left: 0; }
+
+        .select-btn {
+            width: 100%; border: none; border-radius: 30px; padding: 12px;
+            font-size: 13px; font-weight: 800; text-transform: uppercase;
+            cursor: pointer; background: linear-gradient(to right, #444, #222); color: #fff;
+        }
+
+        /* THEMES */
+        .silver-card { background: #111; --accent-color: #E0E0E0; }
+        .gold-card { background: #1a1505; --accent-color: #D4AF37; }
+        .diamond-card { background: #051a22; --accent-color: #B9F2FF; }
+
+        /* Verification Panel */
+        .utr-panel {
+            margin-top: 15px; padding: 15px; background: #111;
+            border: 1px dashed #ffd700; border-radius: 12px;
+        }
+        .utr-panel h4 { font-size: 13px; color: #ffd700; margin-bottom: 8px; text-transform: uppercase; text-align: center; }
+        .utr-row { display: flex; gap: 8px; }
+        .utr-input {
+            flex: 1; background: #000; border: 1px solid #333; padding: 10px;
+            border-radius: 8px; color: #fff; font-size: 13px; outline: none;
+        }
+        .utr-btn {
+            background: linear-gradient(to right, #F1C40F, #B8860B); border: none;
+            padding: 0 15px; border-radius: 8px; color: #000; font-weight: bold; cursor: pointer; font-size: 12px;
+        }
+
+        /* Timer Styling */
         .voucher-timer {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 6px; padding: 8px; text-align: center;
-            font-size: 11px; font-weight: bold; color: #ffd700; margin-bottom: 10px; display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 15px;
+            display: none;
         }
 
+        /* Voucher Code Display */
         .voucher-code-container {
-            margin-top: 10px; padding: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--accent-color); border-radius: 6px; text-align: center;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed var(--accent-color);
+            border-radius: 8px;
+            text-align: center;
         }
-        .voucher-code-label { font-size: 9px; color: #888; text-transform: uppercase; margin-bottom: 3px; }
-        .voucher-code-value { font-size: 15px; font-family: monospace; font-weight: bold; color: #fff; letter-spacing: 1px; }
+        .voucher-code-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .voucher-code-value {
+            font-size: 17px;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #fff;
+        }
 
-        /* DETAILS RESPONSIVE TABLE */
+        /* Details Table Card */
         .details-table-card {
-            background: #0f0f0f; border: 1px solid #1a1a1a;
-            border-radius: 10px; padding: 12px; margin-top: 12px; display: none;
+            background: #111111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 15px;
+            display: none;
         }
         .details-title-row {
-            font-size: 13px; font-weight: bold; color: #ffd700;
-            margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 12px;
         }
-        .detail-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 11px; border-bottom: 1px solid #161616; }
-        .detail-row:last-child { border-bottom: none; }
-        .detail-label { color: #888; }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 12px;
+            border-bottom: 1px solid #1c1c1c;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label { color: #999; }
         .detail-val { color: #fff; font-weight: 500; }
 
-        .notice-section { padding: 12px 4px; margin-top: 15px; color: #666; font-size: 10px; line-height: 1.4; border-top: 1px solid #1a1a1a; }
-        .notice-section h3 { color: #aaa; margin-bottom: 6px; font-size: 11px; }
-        .notice-section ol { padding-left: 12px; }
-        .notice-section li { margin-bottom: 3px; }
+        .notice-section { padding: 15px; margin-top: 20px; color: #777; font-size: 11px; line-height: 1.4; border-top: 1px solid #222; }
+        .notice-section h3 { color: #fff; margin-bottom: 10px; font-size: 13px; }
+        .notice-section ol { padding-left: 15px; margin: 0; }
+        .notice-section li { margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -2078,15 +2118,16 @@
             <div class="voucher-card silver-card" id="card-silver">
                 <div class="card-content">
                     <div class="card-header-row">
-                        <div class="card-header">SILVER TIER</div>
+                        <div class="card-header">SILVER</div>
                         <div class="card-balance-badge" style="display: none;" id="bal-badge-silver">BAL: <span id="bal-val-silver">₹0</span></div>
                     </div>
                     <ul class="card-list">
                         <li>50% discount on store items</li>
                         <li>₹200 monthly store credit</li>
-                        <li>Valid for 12 months duration</li>
+                        <li>Valid for products only</li>
+                        <li>Non-withdrawable</li>
                     </ul>
-                    <button class="buy-btn" onclick="initiatePayment('silver', 200)">PURCHASE - ₹ 200</button>
+                    <button class="select-btn" onclick="selectTierPrompt('silver')">Choose Silver - ₹200</button>
                     
                     <div class="voucher-code-container" style="display: none;" id="code-silver">
                         <div class="voucher-code-label">Your Unique Voucher Code</div>
@@ -2098,15 +2139,16 @@
             <div class="voucher-card gold-card" id="card-gold">
                 <div class="card-content">
                     <div class="card-header-row">
-                        <div class="card-header">GOLD TIER</div>
+                        <div class="card-header">GOLD</div>
                         <div class="card-balance-badge" style="display: none;" id="bal-badge-gold">BAL: <span id="bal-val-gold">₹0</span></div>
                     </div>
                     <ul class="card-list">
                         <li>50% discount on store items</li>
                         <li>₹400 monthly store credit</li>
-                        <li>Valid for 10 months duration</li>
+                        <li>Valid for products only</li>
+                        <li>Non-withdrawable</li>
                     </ul>
-                    <button class="buy-btn" onclick="initiatePayment('gold', 400)">PURCHASE - ₹ 400</button>
+                    <button class="select-btn" onclick="selectTierPrompt('gold')">Choose Gold - ₹400</button>
 
                     <div class="voucher-code-container" style="display: none;" id="code-gold">
                         <div class="voucher-code-label">Your Unique Voucher Code</div>
@@ -2118,15 +2160,16 @@
             <div class="voucher-card diamond-card" id="card-diamond">
                 <div class="card-content">
                     <div class="card-header-row">
-                        <div class="card-header">DIAMOND TIER</div>
+                        <div class="card-header">DIAMOND</div>
                         <div class="card-balance-badge" style="display: none;" id="bal-badge-diamond">BAL: <span id="bal-val-diamond">₹0</span></div>
                     </div>
                     <ul class="card-list">
                         <li>50% discount on store items</li>
                         <li>₹800 monthly store credit</li>
-                        <li>Valid for 10 months duration</li>
+                        <li>Valid for products only</li>
+                        <li>Non-withdrawable</li>
                     </ul>
-                    <button class="buy-btn" onclick="initiatePayment('diamond', 800)">PURCHASE - ₹ 800</button>
+                    <button class="select-btn" onclick="selectTierPrompt('diamond')">Choose Diamond - ₹800</button>
 
                     <div class="voucher-code-container" style="display: none;" id="code-diamond">
                         <div class="voucher-code-label">Your Unique Voucher Code</div>
@@ -2136,43 +2179,60 @@
             </div>
         </div>
 
-        <div class="utr-container" id="utrVerificationBox">
-            <div class="utr-title">Manual / UPI UTR Verification</div>
-            <div class="utr-input-group">
-                <input type="text" class="utr-field" id="utrNumberInput" placeholder="Enter 12-digit UTR or Random Code">
-                <button class="utr-submit-btn" onclick="verifyManualPayment()">Verify</button>
+        <div class="utr-panel" id="manualUtrBox">
+            <h4 id="verif-title">Enter Verification / UTR Code</h4>
+            <div class="utr-row">
+                <input type="text" class="utr-input" id="utrFieldInput" placeholder="Enter code to activate tier...">
+                <button class="utr-btn" onclick="processManualUtrSubmit()">VERIFY</button>
             </div>
         </div>
 
         <div class="details-table-card" id="voucherDetailsCard">
-            <div class="details-title-row">💳 Membership Overview</div>
-            <div class="detail-row">
-                <div class="detail-label">Current Balance</div>
-                <div class="detail-val" id="det-current-balance" style="color: #2ecc71; font-weight: bold;">₹0</div>
+            <div class="details-title-row">
+                <span>💳</span> Chief Membership / Voucher
             </div>
             <div class="detail-row">
-                <div class="detail-label">Voucher Price</div>
+                <div class="detail-label">Current Available Balance</div>
+                <div class="detail-val" id="det-current-balance" style="font-weight: bold; color: #2ecc71; font-size: 14px;">₹0</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Voucher price</div>
                 <div class="detail-val" id="det-price">₹0</div>
             </div>
             <div class="detail-row">
-                <div class="detail-label">Monthly Credit</div>
+                <div class="detail-label">Instant discount</div>
+                <div class="detail-val">50% OFF</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Monthly credit</div>
                 <div class="detail-val" id="det-monthly">₹0</div>
             </div>
             <div class="detail-row">
-                <div class="detail-label">Duration</div>
+                <div class="detail-label">Credit duration</div>
                 <div class="detail-val" id="det-duration">0 months</div>
             </div>
             <div class="detail-row">
-                <div class="detail-label">Total Capability</div>
+                <div class="detail-label">Total possible credit</div>
                 <div class="detail-val" id="det-total">₹0</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Credit usable at</div>
+                <div class="detail-val">Chief store only</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Cash withdrawal</div>
+                <div class="detail-val">Not allowed</div>
             </div>
         </div>
 
         <div class="notice-section">
             <h3>Terms & Conditions:</h3>
             <ol>
-                <li>Credits are dedicated only to Chief Store product updates.</li>
-                <li>Manual UTR fields accept any alphanumeric input during standard demo mode.</li>
+                <li>Usage: Credits are for Chief Store products.</li>
+                <li>Withdrawals: Non-withdrawable and no cash conversion.</li>
+                <li>Limits: Fixed monthly credit per tier.</li>
+                <li>Policy: Misuse leads to permanent suspension.</li>
+                <li>Issuance: Credits issued on 1st of every month.</li>
             </ol>
         </div>
     </div>
@@ -2181,8 +2241,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-        // Scoped mapping inside Module context to bypass assignment blocks
-        const config = {
+        // Combined into strict isolated configuration block
+        const firebaseConfig = {
             apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
             authDomain: "chief-login12.firebaseapp.com",
             databaseURL: "https://chief-login12-default-rtdb.firebaseio.com",
@@ -2192,102 +2252,93 @@
             appId: "1:334157325641:web:c9b2d4048105e71011e698"
         };
 
-        const app = initializeApp(config);
-        const db = getDatabase(app);
-        
-        // Dynamically trace dynamic identity from parent login context 
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
         const urlParams = new URLSearchParams(window.location.search);
-        let activeUserNode = urlParams.get('uid');
+        let trackedUser = urlParams.get('uid');
 
-        if (!activeUserNode && typeof Android !== 'undefined' && typeof Android.getUserId === 'function') {
-            activeUserNode = Android.getUserId();
+        if (!trackedUser && typeof Android !== 'undefined' && typeof Android.getUserId === 'function') {
+            trackedUser = Android.getUserId();
+        }
+        if (!trackedUser || trackedUser.trim() === "") {
+            trackedUser = "CHIEF_GUEST"; // Target node matching
         }
 
-        if (!activeUserNode || activeUserNode.trim() === "") {
-            activeUserNode = "CHIEF_GUEST"; // Default matching parameters from image node
-        }
+        let preSelectedTier = "";
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadUserVoucherState();
+            get(child(ref(database), `users/${trackedUser}/activeVoucher`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    renderActiveVoucher(snapshot.val());
+                }
+            });
         });
 
-        function loadUserVoucherState() {
-            get(child(ref(db), `users/${activeUserNode}/activeVoucher`)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    renderVoucherData(snapshot.val());
-                }
+        window.selectTierPrompt = function(tier) {
+            preSelectedTier = tier;
+            document.getElementById('verif-title').innerText = "Verify activation for " + tier.toUpperCase();
+            document.getElementById('utrFieldInput').focus();
+            alert("Tier " + tier.toUpperCase() + " selected! Enter any verification code below to activate.");
+        };
+
+        window.processManualUtrSubmit = function() {
+            const inputVal = document.getElementById('utrFieldInput').value.trim();
+            if(!inputVal) {
+                alert("Please enter verification/UTR text!");
+                return;
+            }
+
+            let tier = preSelectedTier || "gold"; 
+            let amt = 400;
+
+            if(inputVal.toLowerCase().includes("silver") || tier === "silver") { tier = "silver"; amt = 200; }
+            else if(inputVal.toLowerCase().includes("diamond") || tier === "diamond") { tier = "diamond"; amt = 800; }
+
+            saveVoucherToFirebase(tier, amt, inputVal);
+            alert("Voucher activated successfully!");
+        };
+
+        function saveVoucherToFirebase(tier, amount, methodUtr) {
+            const vCode = "CHIEF-" + tier.substring(0,3).toUpperCase() + "-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            const pDate = Date.now();
+            let duration = (tier === 'silver') ? 12 : 10;
+
+            const data = {
+                tier: tier,
+                price: amount,
+                voucherCode: vCode,
+                purchaseDate: pDate,
+                currentBalance: amount, 
+                nextRefreshTime: pDate + (30 * 24 * 60 * 60 * 1000), 
+                monthsRemaining: duration,
+                utrReference: methodUtr
+            };
+
+            set(ref(database, `users/${trackedUser}/activeVoucher`), data).then(() => {
+                renderActiveVoucher(data);
             });
         }
 
-        window.initiatePayment = function(tier, amount) {
-            // Test Mode Fallback Sequence
-            saveVoucherToFirebaseDatabase(tier, amount, "RZP-AUTO-" + Date.now());
-        };
-
-        window.verifyManualPayment = function() {
-            const utrVal = document.getElementById('utrNumberInput').value.trim();
-            if(!utrVal) {
-                alert("Please enter a valid UTR value first!");
-                return;
-            }
-            
-            // Demo condition: Random assignment selection based on entry structure
-            let chosenTier = "gold";
-            let chosenPrice = 400;
-            
-            if(utrVal.toLowerCase().includes("silver")) {
-                chosenTier = "silver"; chosenPrice = 200;
-            } else if(utrVal.toLowerCase().includes("diamond")) {
-                chosenTier = "diamond"; chosenPrice = 800;
-            }
-
-            saveVoucherToFirebaseDatabase(chosenTier, chosenPrice, utrVal);
-            alert("Payment simulated successfully via UTR node!");
-        };
-
-        function saveVoucherToFirebaseDatabase(tier, amount, referenceCode) {
-            const generatedVoucherCode = "CHIEF-" + tier.substring(0,3).toUpperCase() + "-" + Math.random().toString(36).substr(2, 7).toUpperCase();
-            const timeStamp = Date.now();
-            
-            let validityMonths = 10;
-            if (tier === 'silver') validityMonths = 12;
-
-            const targetPayload = {
-                tier: tier,
-                price: amount,
-                voucherCode: generatedVoucherCode,
-                purchaseDate: timeStamp,
-                currentBalance: amount, // Direct dynamic balance load matching user profile criteria
-                nextRefreshTime: timeStamp + (30 * 24 * 60 * 60 * 1000),
-                monthsRemaining: validityMonths,
-                utrReference: referenceCode
-            };
-
-            set(ref(db, `users/${activeUserNode}/activeVoucher`), targetPayload)
-                .then(() => {
-                    renderVoucherData(targetPayload);
-                });
-        }
-
-        function renderVoucherData(voucherData) {
+        function renderActiveVoucher(voucherData) {
             const { tier, voucherCode, currentBalance, nextRefreshTime, price, monthsRemaining } = voucherData;
             
-            document.getElementById('tier-subtitle').innerText = "YOUR membership IS ACTIVE";
-            document.getElementById('utrVerificationBox').style.display = "none";
+            document.getElementById('tier-subtitle').innerText = "YOUR ACTIVE VOUCHER";
+            document.getElementById('manualUtrBox').style.display = "none";
 
             ['silver', 'gold', 'diamond'].forEach(t => {
-                const targetCard = document.getElementById(`card-${t}`);
+                const card = document.getElementById(`card-${t}`);
                 if (t === tier) {
-                    targetCard.style.display = "block";
-                    const actBtn = targetCard.querySelector('.buy-btn');
-                    if (actBtn) actBtn.style.display = "none";
+                    card.style.display = "block";
+                    const btn = card.querySelector('.select-btn');
+                    if (btn) btn.style.display = "none";
                     
                     document.getElementById(`bal-badge-${t}`).style.display = "block";
                     document.getElementById(`bal-val-${t}`).innerText = `₹${currentBalance}`;
                     document.getElementById(`code-${t}`).style.display = "block";
                     document.getElementById(`code-val-${t}`).innerText = voucherCode;
                 } else {
-                    targetCard.style.display = "none";
+                    card.style.display = "none";
                 }
             });
 
@@ -2295,36 +2346,32 @@
             document.getElementById('det-current-balance').innerText = `₹${currentBalance}`;
             document.getElementById('det-price').innerText = `₹${price}`;
 
-            let monthlyOffset = 200; let durationLabel = "12 months"; let totalCap = 2400;
-            if (tier === 'gold') { monthlyOffset = 400; durationLabel = "10 months"; totalCap = 4000; }
-            if (tier === 'diamond') { monthlyOffset = 800; durationLabel = "10 months"; totalCap = 8000; }
+            let monthlyCred = 200; let durationStr = "12 months only"; let totalPossible = 2400;
+            if (tier === 'gold') { monthlyCred = 400; durationStr = "10 months only"; totalPossible = 4000; }
+            if (tier === 'diamond') { monthlyCred = 800; durationStr = "10 months only"; totalPossible = 8000; }
 
-            document.getElementById('det-monthly').innerText = `₹${monthlyOffset}`;
-            document.getElementById('det-duration').innerText = durationLabel;
-            document.getElementById('det-total').innerText = `₹${totalCap}`;
-
+            document.getElementById('det-monthly').innerText = `₹${monthlyCred}`;
+            document.getElementById('det-duration').innerText = durationStr;
+            document.getElementById('det-total').innerText = `₹${totalPossible}`;
             document.getElementById('voucherTimer').style.display = "block";
 
-            const intervalReference = setInterval(() => {
-                const timeDiff = nextRefreshTime - Date.now();
-                if (timeDiff <= 0) {
-                    clearInterval(intervalReference);
+            const timerInterval = setInterval(() => {
+                const difference = nextRefreshTime - Date.now();
+                if (difference <= 0) {
+                    clearInterval(timerInterval);
                     if (monthsRemaining > 0) {
-                        const nextBalance = currentBalance + monthlyOffset;
-                        const futureRefresh = Date.now() + (30 * 24 * 60 * 60 * 1000);
-                        
-                        update(ref(db, `users/${activeUserNode}/activeVoucher`), {
-                            currentBalance: nextBalance,
-                            nextRefreshTime: futureRefresh,
-                            monthsRemaining: monthsRemaining - 1
+                        update(ref(database), {
+                            [`users/${trackedUser}/activeVoucher/currentBalance`]: currentBalance + monthlyCred,
+                            [`users/${trackedUser}/activeVoucher/nextRefreshTime`]: Date.now() + (30 * 24 * 60 * 60 * 1000),
+                            [`users/${trackedUser}/activeVoucher/monthsRemaining`]: monthsRemaining - 1
                         }).then(() => { location.reload(); });
                     }
                 } else {
-                    const d = Math.floor(timeDiff / 86400000);
-                    const h = Math.floor((timeDiff % 86400000) / 3600000);
-                    const m = Math.floor((timeDiff % 3600000) / 60000);
-                    const s = Math.floor((timeDiff % 60000) / 1000);
-                    document.getElementById('timerCountdown').innerText = `${d}d ${h}h ${m}m ${s}s`;
+                    const days = Math.floor(difference / 86400000);
+                    const hours = Math.floor((difference % 86400000) / 3600000);
+                    const minutes = Math.floor((difference % 3600000) / 60000);
+                    const seconds = Math.floor((difference % 60000) / 1000);
+                    document.getElementById('timerCountdown').innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
                 }
             }, 1000);
         }
