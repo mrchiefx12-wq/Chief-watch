@@ -2596,7 +2596,7 @@
         </div>
     </div>
 
-    <!-- MODAL LAYOUTS (EXACTLY LIKE REQUESTED POPUP IMAGE) -->
+    <!-- MODAL LAYOUTS -->
     <div class="cv-modal-overlay" id="paymentModal">
         <div class="cv-modal-card">
             <button class="cv-modal-close" id="closePaymentModalBtn">&times;</button>
@@ -2637,7 +2637,7 @@
         </div>
     </div>
 
-    <!-- MAIN ISOLATED CODE BLOCK SCRIPT (Zero Conflict) -->
+    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT (Dynamic Identity Sync) -->
     <script>
         (function() {
             var currentSelectedTier = "";
@@ -2646,6 +2646,8 @@
             var isApprovedWaitingForUserAction = false;
             var approvedVoucherBackupData = null;
             var db = null;
+            var firebaseInitialized = false;
+            var firebaseListenerRef = null;
 
             // 1. Firebase Setup Safely
             var firebaseConfig = {
@@ -2662,6 +2664,7 @@
                 if (typeof firebase !== 'undefined') {
                     firebase.initializeApp(firebaseConfig);
                     db = firebase.database();
+                    firebaseInitialized = true;
                     console.log("Voucher Fragment: Firebase OK.");
                 }
             } catch (e) {
@@ -2671,7 +2674,7 @@
             function fetchAndroidUserId() {
                 try {
                     var storedUid = localStorage.getItem('chief_user_id');
-                    if (storedUid && storedUid.trim() !== "" && storedUid !== "null") {
+                    if (storedUid && storedUid.trim() !== "" && storedUid !== "null" && storedUid !== "CHIEF_GUEST") {
                         return storedUid;
                     }
                     if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
@@ -2686,12 +2689,9 @@
                 return "CHIEF_GUEST"; 
             }
 
-            // Safe UI Event Attachments (Solves Click Issues in Fragments!)
+            // Safe UI Event Attachments
             document.addEventListener('DOMContentLoaded', function() {
-                userId = fetchAndroidUserId();
-                initListeners();
-                
-                // Purchase buttons safe attach
+                // Setup regular UI clicks
                 document.querySelectorAll('.cv-buy-btn').forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
                         var tier = this.getAttribute('data-tier');
@@ -2700,62 +2700,51 @@
                     });
                 });
 
-                // Close Button
                 var closeBtn = document.getElementById('closePaymentModalBtn');
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', closePaymentModal);
-                }
+                if (closeBtn) closeBtn.addEventListener('click', closePaymentModal);
 
-                // Verify Button
                 var verifyBtn = document.getElementById('verifyPaymentBtn');
-                if (verifyBtn) {
-                    verifyBtn.addEventListener('click', submitUtrDetails);
-                }
+                if (verifyBtn) verifyBtn.addEventListener('click', submitUtrDetails);
 
-                // Auto Pay UPI trigger
                 var autoPayBtn = document.getElementById('autoPayBtn');
-                if (autoPayBtn) {
-                    autoPayBtn.addEventListener('click', triggerAutoPay);
-                }
+                if (autoPayBtn) autoPayBtn.addEventListener('click', triggerAutoPay);
+
+                // Initial fall-back call
+                trySyncWithCorrectUser();
             });
 
-            function openPaymentModal(tier, amount) {
-                currentSelectedTier = tier;
-                currentSelectedAmount = amount;
-                
-                var modalTitle = document.getElementById('modalTitle');
-                var utrInput = document.getElementById('utrNumberInput');
-                var paymentModal = document.getElementById('paymentModal');
+            // GLOBAL METHOD FOR APP SYNC TIMING (MainActivity.java se call hoga)
+            window.initRealtimeSync = function() {
+                console.log("initRealtimeSync triggered from Android Bridge.");
+                trySyncWithCorrectUser();
+            };
 
-                if (modalTitle) modalTitle.innerText = "Pay ₹" + amount + " For Chief " + tier.toUpperCase();
-                if (utrInput) utrInput.value = "";
-                if (paymentModal) paymentModal.style.display = "flex";
+            function trySyncWithCorrectUser() {
+                var detectedId = fetchAndroidUserId();
+                
+                // Agar actual username mil gaya hai aur current user purana guest hi hai, toh data migration/switch karo
+                if (detectedId && detectedId !== "CHIEF_GUEST" && detectedId !== userId) {
+                    userId = detectedId;
+                    console.log("User successfully connected to workspace: " + userId);
+                    startFirebaseSync();
+                } else if (!firebaseListenerRef && detectedId === "CHIEF_GUEST") {
+                    userId = "CHIEF_GUEST";
+                    startFirebaseSync();
+                }
             }
 
-            function closePaymentModal() {
-                var paymentModal = document.getElementById('paymentModal');
-                if (paymentModal) paymentModal.style.display = "none";
-            }
-
-            function triggerAutoPay() {
-                var upiId = "michael-mahawar@fam"; 
-                var payeeName = "Chief Store";
-                var transactionNote = "Voucher-" + currentSelectedTier.toUpperCase() + "-" + userId;
+            function startFirebaseSync() {
+                if (!firebaseInitialized || !db || !userId) return;
                 
-                var upiUri = "upi://pay?pa=" + encodeURIComponent(upiId) + 
-                             "&pn=" + encodeURIComponent(payeeName) + 
-                             "&am=" + currentSelectedAmount + 
-                             "&cu=INR" + 
-                             "&tn=" + encodeURIComponent(transactionNote);
-                             
-                window.location.href = upiUri;
-            }
+                // Purane dynamic references ko flush karo sync conflicts hatane ke liye
+                if (firebaseListenerRef) {
+                    firebaseListenerRef.off();
+                }
 
-            function initListeners() {
-                if (!db || !userId) return;
+                console.log("Listening target instance path: users/" + userId);
+                firebaseListenerRef = db.ref("users/" + userId);
                 
-                var userRef = db.ref("users/" + userId);
-                userRef.on('value', function(snapshot) {
+                firebaseListenerRef.on('value', function(snapshot) {
                     if (snapshot.exists()) {
                         var userData = snapshot.val();
                         
@@ -2789,13 +2778,68 @@
                                 document.getElementById('waitingModal').style.display = "flex";
                             }
                         } else {
-                            if (!isApprovedWaitingForUserAction) {
-                                document.getElementById('waitingModal').style.display = "none";
-                                document.getElementById('successModal').style.display = "none";
-                            }
+                            resetToDefaultUI();
                         }
+                    } else {
+                        resetToDefaultUI();
                     }
                 });
+            }
+
+            function resetToDefaultUI() {
+                if (!isApprovedWaitingForUserAction) {
+                    document.getElementById('waitingModal').style.display = "none";
+                    document.getElementById('successModal').style.display = "none";
+                    document.getElementById('voucherDetailsCard').style.display = "none";
+                    document.getElementById('voucherTimer').style.display = "none";
+                    document.getElementById('tier-subtitle').innerText = "SELECT YOUR TIER";
+                    
+                    ['silver', 'gold', 'diamond'].forEach(function(t) {
+                        var card = document.getElementById("card-" + t);
+                        if(card) {
+                            card.style.display = "block";
+                            var btn = card.querySelector('.cv-buy-btn');
+                            if (btn) btn.style.display = "block";
+                            document.getElementById("bal-badge-" + t).style.display = "none";
+                            document.getElementById("code-" + t).style.display = "none";
+                        }
+                    });
+                }
+            }
+
+            function openPaymentModal(tier, amount) {
+                // Payment box khulne se pehle ek baar ID re-verify kar lo
+                trySyncWithCorrectUser();
+
+                currentSelectedTier = tier;
+                currentSelectedAmount = amount;
+                
+                var modalTitle = document.getElementById('modalTitle');
+                var utrInput = document.getElementById('utrNumberInput');
+                var paymentModal = document.getElementById('paymentModal');
+
+                if (modalTitle) modalTitle.innerText = "Pay ₹" + amount + " For Chief " + tier.toUpperCase();
+                if (utrInput) utrInput.value = "";
+                if (paymentModal) paymentModal.style.display = "flex";
+            }
+
+            function closePaymentModal() {
+                var paymentModal = document.getElementById('paymentModal');
+                if (paymentModal) paymentModal.style.display = "none";
+            }
+
+            function triggerAutoPay() {
+                var upiId = "michael-mahawar@fam"; 
+                var payeeName = "Chief Store";
+                var transactionNote = "Voucher-" + currentSelectedTier.toUpperCase() + "-" + userId;
+                
+                var upiUri = "upi://pay?pa=" + encodeURIComponent(upiId) + 
+                             "&pn=" + encodeURIComponent(payeeName) + 
+                             "&am=" + currentSelectedAmount + 
+                             "&cu=INR" + 
+                             "&tn=" + encodeURIComponent(transactionNote);
+                             
+                window.location.href = upiUri;
             }
 
             document.getElementById('cancelPaymentBtn').addEventListener('click', function() {
@@ -2823,8 +2867,7 @@
 
             function submitUtrDetails() {
                 if (!db) { 
-                    alert("Testing offline mode.");
-                    closePaymentModal();
+                    alert("Firebase link unavailable.");
                     return; 
                 }
                 var utrVal = document.getElementById('utrNumberInput').value.trim();
