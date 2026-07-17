@@ -2230,8 +2230,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-        // Tumhare image_e3b8a8.png se exact config fetch ki hai
-        const firebaseConfig = {
+              firebaseConfig = {
             apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
             authDomain: "chief-login12.firebaseapp.com",
             databaseURL: "https://chief-login12-default-rtdb.firebaseio.com",
@@ -2245,22 +2244,26 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        // Default target user is now "Michael" (Image 3 ke standard node ke mutabik)
-        let userId = "Michael"; 
+        // 🌟 STRATEGY: WebView ke URL Query string ya dynamic parameter se ID direct pick karega
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentUsername = urlParams.get('uid'); 
+
+        // Agar URL me uid nahi bheja, toh automatic check karega Android interface method
+        if (!currentUsername && typeof Android !== 'undefined' && typeof Android.getUserId === 'function') {
+            currentUsername = Android.getUserId();
+        }
+
+        // Fallback testing default taaki bina app ke test karte samay blank na ho
+        if (!currentUsername || currentUsername.trim() === "") {
+            currentUsername = "CHIEF_GUEST"; 
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Android bridge se real logged-in name track karne ke liye check laga hai
-            if (typeof Android !== 'undefined' && typeof Android.getUserId === 'function') {
-                const androidUid = Android.getUserId();
-                if (androidUid && androidUid.trim() !== "") {
-                    userId = androidUid; // Automatic Michael ya login account node name select ho jayega
-                }
-            }
             loadUserVoucher();
         });
 
         function loadUserVoucher() {
-            get(child(ref(db), `users/${userId}/activeVoucher`)).then((snapshot) => {
+            get(child(ref(db), `users/${currentUsername}/activeVoucher`)).then((snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     renderActiveVoucher(data);
@@ -2311,12 +2314,12 @@
                 monthsRemaining: duration
             };
 
-            // Direct target user node (users/Michael/activeVoucher) me save karega
-            set(ref(db, `users/${userId}/activeVoucher`), voucherData)
+            // EXACT FIX: users/CHIEF_GUEST/activeVoucher ya users/Michael/activeVoucher me direct update hoga
+            set(ref(db, `users/${currentUsername}/activeVoucher`), voucherData)
                 .then(() => {
                     renderActiveVoucher(voucherData);
                 }).catch((err) => {
-                    alert("Error saving data to " + userId + ": " + err.message);
+                    alert("Error target node: " + currentUsername + " -> " + err.message);
                 });
         }
 
@@ -2375,7 +2378,7 @@
                             monthsRemaining: updatedMonths
                         };
 
-                        update(ref(db, `users/${userId}/activeVoucher`), newUpdate).then(() => {
+                        update(ref(db, `users/${currentUsername}/activeVoucher`), newUpdate).then(() => {
                             voucherData.currentBalance = updatedBalance;
                             voucherData.nextRefreshTime = newRefreshTime;
                             voucherData.monthsRemaining = updatedMonths;
