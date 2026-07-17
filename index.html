@@ -1669,7 +1669,6 @@
 </head>
 <body>
 
-
 <div class="studio-wrapper-outer">
     <div class="studio-container">
         
@@ -2301,7 +2300,7 @@
         .cv-notice-section ol { padding-left: 15px; margin: 0; }
         .cv-notice-section li { margin-bottom: 6px; }
 
-        /* MODALS (MOBILE-FIRST & EXACT MATCH TO UI IMAGE) */
+        /* MODALS (MOBILE-FIRST) */
         .cv-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); z-index: 10000;
@@ -2337,7 +2336,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* PERFECTLY MATCHED QR FRAME */
         .cv-modal-qr-container {
             width: 180px; 
             height: 180px; 
@@ -2363,7 +2361,6 @@
             line-height: 1.4; margin-bottom: 14px; padding: 0 4px;
         }
         
-        /* EXACT UI ASKING INPUT & BUTTONS styling */
         .cv-utr-input {
             width: 100%; background: #141414; 
             border: 1px solid rgba(214, 175, 55, 0.3);
@@ -2415,7 +2412,7 @@
     <div class="cv-container">
         <header class="cv-header">
             <h1 class="cv-main-title">CHIEF VOUCHER</h1>
-            <p class="cv-subtitle" id="tier-subtitle">SELECT YOUR TIER</p>
+            <p class="cv-subtitle" id="tier-subtitle">SELECT YOUR VOUCHER</p>
         </header>
 
         <div class="cv-voucher-timer" id="voucherTimer">
@@ -2427,7 +2424,7 @@
             <div class="cv-voucher-card cv-silver-card" id="card-silver">
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
-                        <div class="cv-card-header">SILVER</div>
+                        <div class="cv-card-header">SILVER VOUCHER</div>
                         <div class="cv-card-balance-badge" style="display: none;" id="bal-badge-silver">
                             <span class="cv-card-balance-label">Available Balance</span>
                             <span class="cv-card-balance-value" id="bal-val-silver">₹0</span>
@@ -2439,7 +2436,7 @@
                         <li>Valid for products only</li>
                         <li>Non-withdrawable</li>
                     </ul>
-                    <button class="cv-buy-btn" data-tier="silver" data-amount="200">PURCHASE - ₹ 200</button>
+                    <button class="cv-buy-btn" data-tier="silver" data-amount="200">BUY ₹200</button>
                     
                     <div class="cv-voucher-code-container" style="display: none;" id="code-silver">
                         <div class="cv-voucher-code-label">Your Unique Voucher Code</div>
@@ -2452,7 +2449,7 @@
             <div class="cv-voucher-card cv-gold-card" id="card-gold">
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
-                        <div class="cv-card-header">GOLD</div>
+                        <div class="cv-card-header">GOLD VOUCHER</div>
                         <div class="cv-card-balance-badge" style="display: none;" id="bal-badge-gold">
                             <span class="cv-card-balance-label">Available Balance</span>
                             <span class="cv-card-balance-value" id="bal-val-gold">₹0</span>
@@ -2464,7 +2461,7 @@
                         <li>Valid for products only</li>
                         <li>Non-withdrawable</li>
                     </ul>
-                    <button class="cv-buy-btn" data-tier="gold" data-amount="400">PURCHASE - ₹ 400</button>
+                    <button class="cv-buy-btn" data-tier="gold" data-amount="400">BUY ₹400</button>
 
                     <div class="cv-voucher-code-container" style="display: none;" id="code-gold">
                         <div class="cv-voucher-code-label">Your Unique Voucher Code</div>
@@ -2477,7 +2474,7 @@
             <div class="cv-voucher-card cv-diamond-card" id="card-diamond">
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
-                        <div class="cv-card-header">DIAMOND</div>
+                        <div class="cv-card-header">DIAMOND VOUCHER</div>
                         <div class="cv-card-balance-badge" style="display: none;" id="bal-badge-diamond">
                             <span class="cv-card-balance-label">Available Balance</span>
                             <span class="cv-card-balance-value" id="bal-val-diamond">₹0</span>
@@ -2489,7 +2486,7 @@
                         <li>Valid for products only</li>
                         <li>Non-withdrawable</li>
                     </ul>
-                    <button class="cv-buy-btn" data-tier="diamond" data-amount="800">PURCHASE - ₹ 800</button>
+                    <button class="cv-buy-btn" data-tier="diamond" data-amount="800">BUY ₹800</button>
 
                     <div class="cv-voucher-code-container" style="display: none;" id="code-diamond">
                         <div class="cv-voucher-code-label">Your Unique Voucher Code</div>
@@ -2542,11 +2539,14 @@
         <div class="cv-notice-section">
             <h3>Terms & Conditions:</h3>
             <ol>
-                <li>Usage: Credits are for Chief Store products.</li>
-                <li>Withdrawals: Non-withdrawable and no cash conversion.</li>
-                <li>Limits: Fixed monthly credit per tier.</li>
-                <li>Policy: Misuse leads to permanent suspension.</li>
-                <li>Issuance: Credits issued on 1st of every month / interval refresh.</li>
+                <li>Use: Credit Money can only be used at the Chief Store.</li>
+                <li>Withdraw: Credit Money is non-withdrawable and cannot be converted into cash.</li>
+                <li>Monthly Credit: Credit Money is added to your voucher every month.</li>
+                <li>Credit Money: Use it to buy products only from the Chief Store.</li>
+                <li>Voucher: Products bought with a voucher are not eligible for another voucher.</li>
+                <li>Discount: 50% OFF can be used on one product only.</li>
+                <li>Policy: By using a Chief Voucher, you agree to the Chief Voucher Terms & Conditions.</li>
+                </li>
             </ol>
         </div>
     </div>
@@ -2592,19 +2592,18 @@
         </div>
     </div>
 
-    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT (Dynamic Identity Sync) -->
+    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT (CRITICAL ACCOUNT FIX) -->
     <script>
         (function() {
             var currentSelectedTier = "";
             var currentSelectedAmount = 0;
-            var userId = "CHIEF_GUEST"; 
+            var userId = null; // Sabse pehle null rakhenge taaki jab tak true identity na mile tab tak sync na ho
             var isApprovedWaitingForUserAction = false;
             var approvedVoucherBackupData = null;
             var db = null;
             var firebaseInitialized = false;
             var firebaseListenerRef = null;
 
-            // 1. Firebase Setup Safely
             var firebaseConfig = {
                 "apiKey": "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
                 "authDomain": "chief-login12.firebaseapp.com",
@@ -2620,33 +2619,70 @@
                     firebase.initializeApp(firebaseConfig);
                     db = firebase.database();
                     firebaseInitialized = true;
-                    console.log("Voucher Fragment: Firebase OK.");
+                    console.log("Voucher Fragment: Firebase Connected.");
                 }
             } catch (e) {
                 console.warn("Voucher Fragment Firebase Error:", e);
             }
 
-            function fetchAndroidUserId() {
-                try {
-                    var storedUid = localStorage.getItem('chief_user_id');
-                    if (storedUid && storedUid.trim() !== "" && storedUid !== "null" && storedUid !== "CHIEF_GUEST") {
-                        return storedUid;
-                    }
-                    if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
-                        var bridgeUid = window.AndroidBridge.getUserId();
-                        if (bridgeUid && bridgeUid.trim() !== "") {
-                            return bridgeUid;
+            // CRITICAL RE-ENGINEERED SYNC ENGINE: Ab har user ka alag data chalega!
+            window.initRealtimeSync = function(androidUserId) {
+                console.log("initRealtimeSync received account ID: " + androidUserId);
+                
+                var resolvedId = "CHIEF_GUEST";
+                
+                if (androidUserId && androidUserId.trim() !== "" && androidUserId !== "null" && androidUserId !== "undefined") {
+                    resolvedId = androidUserId.trim();
+                    localStorage.setItem('chief_user_id', resolvedId);
+                } else {
+                    // Fallback to Bridge check if direct injection misses
+                    try {
+                        if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
+                            var bridgeUid = window.AndroidBridge.getUserId();
+                            if (bridgeUid && bridgeUid.trim() !== "") {
+                                resolvedId = bridgeUid.trim();
+                                localStorage.setItem('chief_user_id', resolvedId);
+                            }
+                        } else {
+                            var localUid = localStorage.getItem('chief_user_id');
+                            if (localUid && localUid.trim() !== "" && localUid !== "null") {
+                                resolvedId = localUid.trim();
+                            }
                         }
+                    } catch (e) {
+                        console.log("Bridge lookup failed: ", e);
                     }
-                } catch (e) {
-                    console.log("Error reading bridge/storage: ", e);
                 }
-                return "CHIEF_GUEST"; 
+                
+                // Account isolation switch: path target rules update
+                if (resolvedId !== userId) {
+                    userId = resolvedId;
+                    console.log("Isolated scope activated for node: users/" + userId);
+                    startFirebaseSync();
+                }
+            };
+
+            function triggerInitialHandshake() {
+                // Pehle check karo local token me purana valid user data save hai kya
+                var localUid = localStorage.getItem('chief_user_id');
+                if (localUid && localUid !== "CHIEF_GUEST" && localUid !== "null") {
+                    window.initRealtimeSync(localUid);
+                } else {
+                    try {
+                        if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
+                            var bridgeUid = window.AndroidBridge.getUserId();
+                            if (bridgeUid && bridgeUid.trim() !== "") {
+                                window.initRealtimeSync(bridgeUid);
+                                return;
+                            }
+                        }
+                    } catch(e){}
+                    // Agar bilkul data nahi hai, tabhi guest use hoga default mode me
+                    window.initRealtimeSync("CHIEF_GUEST");
+                }
             }
 
-            // Safe UI Event Attachments
             document.addEventListener('DOMContentLoaded', function() {
-                // Setup regular UI clicks
                 document.querySelectorAll('.cv-buy-btn').forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
                         var tier = this.getAttribute('data-tier');
@@ -2664,39 +2700,18 @@
                 var autoPayBtn = document.getElementById('autoPayBtn');
                 if (autoPayBtn) autoPayBtn.addEventListener('click', triggerAutoPay);
 
-                // Initial fall-back call
-                trySyncWithCorrectUser();
+                // Handshake processing start
+                triggerInitialHandshake();
             });
-
-            // GLOBAL METHOD FOR APP SYNC TIMING (MainActivity.java se call hoga)
-            window.initRealtimeSync = function() {
-                console.log("initRealtimeSync triggered from Android Bridge.");
-                trySyncWithCorrectUser();
-            };
-
-            function trySyncWithCorrectUser() {
-                var detectedId = fetchAndroidUserId();
-                
-                // Agar actual username mil gaya hai aur current user purana guest hi hai, toh data migration/switch karo
-                if (detectedId && detectedId !== "CHIEF_GUEST" && detectedId !== userId) {
-                    userId = detectedId;
-                    console.log("User successfully connected to workspace: " + userId);
-                    startFirebaseSync();
-                } else if (!firebaseListenerRef && detectedId === "CHIEF_GUEST") {
-                    userId = "CHIEF_GUEST";
-                    startFirebaseSync();
-                }
-            }
 
             function startFirebaseSync() {
                 if (!firebaseInitialized || !db || !userId) return;
                 
-                // Purane dynamic references ko flush karo sync conflicts hatane ke liye
                 if (firebaseListenerRef) {
                     firebaseListenerRef.off();
                 }
 
-                console.log("Listening target instance path: users/" + userId);
+                console.log("Realtime syncing to unique path -> users/" + userId);
                 firebaseListenerRef = db.ref("users/" + userId);
                 
                 firebaseListenerRef.on('value', function(snapshot) {
@@ -2747,7 +2762,7 @@
                     document.getElementById('successModal').style.display = "none";
                     document.getElementById('voucherDetailsCard').style.display = "none";
                     document.getElementById('voucherTimer').style.display = "none";
-                    document.getElementById('tier-subtitle').innerText = "SELECT YOUR TIER";
+                    document.getElementById('tier-subtitle').innerText = "SELECT YOUR VOUCHER";
                     
                     ['silver', 'gold', 'diamond'].forEach(function(t) {
                         var card = document.getElementById("card-" + t);
@@ -2763,8 +2778,7 @@
             }
 
             function openPaymentModal(tier, amount) {
-                // Payment box khulne se pehle ek baar ID re-verify kar lo
-                trySyncWithCorrectUser();
+                triggerInitialHandshake();
 
                 currentSelectedTier = tier;
                 currentSelectedAmount = amount;
@@ -2786,7 +2800,7 @@
             function triggerAutoPay() {
                 var upiId = "michael-mahawar@fam"; 
                 var payeeName = "Chief Store";
-                var transactionNote = "Voucher-" + currentSelectedTier.toUpperCase() + "-" + userId;
+                var transactionNote = "Voucher-" + currentSelectedTier.toUpperCase() + "-" + (userId ? userId : "GUEST");
                 
                 var upiUri = "upi://pay?pa=" + encodeURIComponent(upiId) + 
                              "&pn=" + encodeURIComponent(payeeName) + 
@@ -2798,7 +2812,7 @@
             }
 
             document.getElementById('cancelPaymentBtn').addEventListener('click', function() {
-                if(!db) return;
+                if(!db || !userId) return;
                 if(confirm("Are you sure you want to cancel this payment request?")) {
                     db.ref("users/" + userId + "/pendingRequest").remove().then(function() {
                         document.getElementById('waitingModal').style.display = "none";
@@ -2807,7 +2821,7 @@
             });
 
             document.getElementById('goToVoucherBtn').addEventListener('click', function() {
-                if (!db) return;
+                if (!db || !userId) return;
                 if (approvedVoucherBackupData) {
                     db.ref("users/" + userId + "/activeVoucher").set(approvedVoucherBackupData).then(function() {
                         db.ref("users/" + userId + "/pendingRequest").remove().then(function() {
@@ -2821,8 +2835,8 @@
             });
 
             function submitUtrDetails() {
-                if (!db) { 
-                    alert("Firebase link unavailable.");
+                if (!db || !userId) { 
+                    alert("Identity sync under process or Firebase missing.");
                     return; 
                 }
                 var utrVal = document.getElementById('utrNumberInput').value.trim();
@@ -2910,7 +2924,7 @@
                     if (difference <= 0) {
                         clearInterval(window.voucherTimerInterval);
                         
-                        if (monthsRemaining > 0 && db) {
+                        if (monthsRemaining > 0 && db && userId) {
                             var updatedBalance = currentBalance + monthlyCred;
                             var newRefreshTime = Date.now() + (30 * 24 * 60 * 60 * 1000);
                             var updatedMonths = monthsRemaining - 1;
@@ -3939,7 +3953,7 @@
                 let rowHTML = `
                     <div class="ad-row ${rowStateClass}">
                         <div class="ad-info">
-                            <span class="ad-title">🎁 Free Reward Task #${i}</span>
+                            <span class="ad-title">🎁 Free Reward Task ${i}</span>
                             <span class="ad-reward-tag"><i class="fa-solid fa-coins" style="color:var(--gold-primary)"></i> Reward: <strong>+${coinsReward} Coins</strong></span>
                         </div>
                         <button class="ad-btn" ${clickAction}>${btnText}</button>
