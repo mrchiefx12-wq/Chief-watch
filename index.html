@@ -1669,6 +1669,14 @@
 </head>
 <body>
 
+<div class="ticker-wrap">
+    <div class="ticker">
+        <span>Make your only one piece watch in the world</span>
+        <span>Make your only one piece watch in the world</span>
+        <span>Make your only one piece watch in the world</span>
+        <span>Make your only one piece watch in the world</span>
+    </div>
+</div>
 
 <div class="studio-wrapper-outer">
     <div class="studio-container">
@@ -1958,33 +1966,20 @@
 </div>
         <div id="frag-history" class="embed-fragment">
             <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>CHIEF - No History Yet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* 🚫 Scrollbar Disabled globally for a clean UI */
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar,
-  .main-wrapper::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
+  /* 🚫 कुरुप स्क्रॉलबार बंद */
+  ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+  * { box-sizing: border-box; -ms-overflow-style: none; scrollbar-width: none; }
 
-  * { 
-    box-sizing: border-box; 
-    -ms-overflow-style: none; 
-    scrollbar-width: none; 
-  }
-
-  /* 🌍 Master Body - Fits perfectly on all viewports */
+  /* 🌍 मास्टर बॉडी - जो ऊपर की वाइट स्पेस को कवर करेगी */
   body, html {
     margin: 0 !important;
     padding: 0 !important;
-    height: 100% !important; 
+    height: 105% !important; 
     width: 100%;
     background-color: #000000 !important; 
     display: flex;
@@ -1992,124 +1987,92 @@
     align-items: center;
     font-family: 'Montserrat', sans-serif;
     overflow: hidden !important;
-    -webkit-font-smoothing: antialiased;
   }
 
-  /* 🛠️ Wrapper tailored to push away top bars on frames/google sites smoothly */
+  /* 🛠️ गूगल साइट्स के टॉप वाइट बार को ऊपर खींचकर छुपाने का जुगाड़ */
   .main-wrapper {
     width: 100%;
     height: 100%;
-    margin-top: -30px; /* Safe shift to hide embed headers */
-    padding: 15px;
+    margin-top: -45px; 
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #000000;
   }
 
-  /* 💎 Premium Card Design */
+  /* 💎 प्रीमियम कार्ड डिज़ाइन */
   .premium-card {
     width: 100%;
-    max-width: 380px;
+    max-width: 400px;
     background: linear-gradient(145deg, #121212, #050505);
-    border: 1px solid rgba(212, 175, 55, 0.35); 
+    border: 1px solid rgba(212, 175, 55, 0.4); 
     border-radius: 16px;
-    padding: 45px 25px;
+    padding: 50px 25px;
     text-align: center;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.1);
     position: relative;
-    transition: all 0.3s ease;
   }
 
   .title {
-    font-size: 24px;
+    font-size: 26px;
     color: #fff;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 12px;
-    text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
   }
 
   .description {
     color: #999;
-    font-size: 12.5px;
+    font-size: 13px;
     line-height: 1.6;
-    margin-bottom: 35px;
+    margin-bottom: 40px;
     letter-spacing: 0.5px;
   }
 
-  /* ✨ Liquid Gold Glow Button */
+  /* ✨ लिक्विड गोल्ड ग्लो बटन */
   .btn-gold {
-    display: block;
-    width: 90%;
-    margin: 0 auto;
+    display: inline-block;
+    width: 85%;
     text-decoration: none;
     color: #000;
     background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728);
-    padding: 16px 0;
+    padding: 18px 0;
     font-weight: 800;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
     border-radius: 4px;
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-    transition: all 0.2s ease-in-out;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    transition: all 0.3s ease;
     cursor: pointer;
     border: none;
   }
 
   .btn-gold:hover {
     filter: brightness(1.1);
-    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
   }
 
   .btn-gold:active {
-    transform: scale(0.96);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    transform: scale(0.94);
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.7);
   }
 
   .footer-brand {
     margin-top: 35px;
-    color: #555;
-    font-size: 8.5px;
-    letter-spacing: 5px;
+    color: #444;
+    font-size: 9px;
+    letter-spacing: 6px;
     text-transform: uppercase;
   }
 
-  /* 📱 Auto Adjusting for Small Screen Mobile Devices */
-  @media (max-width: 480px) {
-    .main-wrapper { 
-      margin-top: -20px; 
-    }
-    
-    .premium-card { 
-      padding: 35px 20px; 
-      max-width: 92%;
-    }
-
-    .title { 
-      font-size: 20px; 
-      letter-spacing: 1.5px;
-    }
-
-    .description {
-      font-size: 11.5px;
-      margin-bottom: 28px;
-    }
-
-    .btn-gold {
-      padding: 14px 0;
-      font-size: 10px;
-      letter-spacing: 2px;
-      width: 100%;
-    }
-
-    .footer-brand {
-      margin-top: 25px;
-      font-size: 7.5px;
-      letter-spacing: 4px;
-    }
+  /* 📱 मोबाइल के लिए थोड़ा एडजस्टमेंट */
+  @media (max-width: 768px) {
+    .main-wrapper { margin-top: -30px; }
+    .premium-card { padding: 40px 20px; }
+    .title { font-size: 22px; }
   }
 </style>
 </head>
@@ -2346,7 +2309,7 @@
         .cv-notice-section ol { padding-left: 15px; margin: 0; }
         .cv-notice-section li { margin-bottom: 6px; }
 
-        /* MODALS (MOBILE-FIRST) */
+        /* MODALS (MOBILE-FIRST & EXACT MATCH TO UI IMAGE) */
         .cv-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); z-index: 10000;
@@ -2382,6 +2345,7 @@
             letter-spacing: 0.5px;
         }
         
+        /* PERFECTLY MATCHED QR FRAME */
         .cv-modal-qr-container {
             width: 180px; 
             height: 180px; 
@@ -2407,6 +2371,7 @@
             line-height: 1.4; margin-bottom: 14px; padding: 0 4px;
         }
         
+        /* EXACT UI ASKING INPUT & BUTTONS styling */
         .cv-utr-input {
             width: 100%; background: #141414; 
             border: 1px solid rgba(214, 175, 55, 0.3);
@@ -2635,7 +2600,7 @@
         </div>
     </div>
 
-    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT -->
+    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT (Dynamic Identity Sync) -->
     <script>
         (function() {
             var currentSelectedTier = "";
@@ -2647,6 +2612,7 @@
             var firebaseInitialized = false;
             var firebaseListenerRef = null;
 
+            // 1. Firebase Setup Safely
             var firebaseConfig = {
                 "apiKey": "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
                 "authDomain": "chief-login12.firebaseapp.com",
@@ -2662,65 +2628,33 @@
                     firebase.initializeApp(firebaseConfig);
                     db = firebase.database();
                     firebaseInitialized = true;
-                    console.log("Voucher Fragment: Firebase Loaded Successfully.");
+                    console.log("Voucher Fragment: Firebase OK.");
                 }
             } catch (e) {
                 console.warn("Voucher Fragment Firebase Error:", e);
             }
 
-            // FIXED GLOBAL METHOD FOR TIMING SYNC (MainActivity Java triggers this directly)
-            window.initRealtimeSync = function(androidUserId) {
-                console.log("initRealtimeSync triggered with input ID: " + androidUserId);
-                
-                var finalId = "CHIEF_GUEST";
-                
-                if (androidUserId && androidUserId.trim() !== "" && androidUserId !== "null") {
-                    finalId = androidUserId.trim();
-                    localStorage.setItem('chief_user_id', finalId);
-                } else {
-                    try {
-                        if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
-                            var bridgeUid = window.AndroidBridge.getUserId();
-                            if (bridgeUid && bridgeUid.trim() !== "") {
-                                finalId = bridgeUid.trim();
-                            }
-                        } else {
-                            var storedUid = localStorage.getItem('chief_user_id');
-                            if (storedUid && storedUid.trim() !== "" && storedUid !== "null") {
-                                finalId = storedUid.trim();
-                            }
-                        }
-                    } catch (e) {
-                        console.log("Bridge resolution error: ", e);
+            function fetchAndroidUserId() {
+                try {
+                    var storedUid = localStorage.getItem('chief_user_id');
+                    if (storedUid && storedUid.trim() !== "" && storedUid !== "null" && storedUid !== "CHIEF_GUEST") {
+                        return storedUid;
                     }
-                }
-                
-                if (finalId !== "CHIEF_GUEST" && finalId !== userId) {
-                    userId = finalId;
-                    console.log("Workspace updated to user: " + userId);
-                    startFirebaseSync();
-                } else if (!firebaseListenerRef) {
-                    userId = finalId;
-                    startFirebaseSync();
-                }
-            };
-
-            function trySyncWithInitialLoad() {
-                var storedUid = localStorage.getItem('chief_user_id');
-                if (storedUid && storedUid !== "CHIEF_GUEST") {
-                    window.initRealtimeSync(storedUid);
-                } else {
-                    try {
-                        if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
-                            window.initRealtimeSync(window.AndroidBridge.getUserId());
-                            return;
+                    if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
+                        var bridgeUid = window.AndroidBridge.getUserId();
+                        if (bridgeUid && bridgeUid.trim() !== "") {
+                            return bridgeUid;
                         }
-                    } catch(e){}
-                    window.initRealtimeSync("CHIEF_GUEST");
+                    }
+                } catch (e) {
+                    console.log("Error reading bridge/storage: ", e);
                 }
+                return "CHIEF_GUEST"; 
             }
 
+            // Safe UI Event Attachments
             document.addEventListener('DOMContentLoaded', function() {
+                // Setup regular UI clicks
                 document.querySelectorAll('.cv-buy-btn').forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
                         var tier = this.getAttribute('data-tier');
@@ -2738,17 +2672,39 @@
                 var autoPayBtn = document.getElementById('autoPayBtn');
                 if (autoPayBtn) autoPayBtn.addEventListener('click', triggerAutoPay);
 
-                trySyncWithInitialLoad();
+                // Initial fall-back call
+                trySyncWithCorrectUser();
             });
+
+            // GLOBAL METHOD FOR APP SYNC TIMING (MainActivity.java se call hoga)
+            window.initRealtimeSync = function() {
+                console.log("initRealtimeSync triggered from Android Bridge.");
+                trySyncWithCorrectUser();
+            };
+
+            function trySyncWithCorrectUser() {
+                var detectedId = fetchAndroidUserId();
+                
+                // Agar actual username mil gaya hai aur current user purana guest hi hai, toh data migration/switch karo
+                if (detectedId && detectedId !== "CHIEF_GUEST" && detectedId !== userId) {
+                    userId = detectedId;
+                    console.log("User successfully connected to workspace: " + userId);
+                    startFirebaseSync();
+                } else if (!firebaseListenerRef && detectedId === "CHIEF_GUEST") {
+                    userId = "CHIEF_GUEST";
+                    startFirebaseSync();
+                }
+            }
 
             function startFirebaseSync() {
                 if (!firebaseInitialized || !db || !userId) return;
                 
+                // Purane dynamic references ko flush karo sync conflicts hatane ke liye
                 if (firebaseListenerRef) {
                     firebaseListenerRef.off();
                 }
 
-                console.log("Listening instance path: users/" + userId);
+                console.log("Listening target instance path: users/" + userId);
                 firebaseListenerRef = db.ref("users/" + userId);
                 
                 firebaseListenerRef.on('value', function(snapshot) {
@@ -2815,7 +2771,8 @@
             }
 
             function openPaymentModal(tier, amount) {
-                trySyncWithInitialLoad();
+                // Payment box khulne se pehle ek baar ID re-verify kar lo
+                trySyncWithCorrectUser();
 
                 currentSelectedTier = tier;
                 currentSelectedAmount = amount;
