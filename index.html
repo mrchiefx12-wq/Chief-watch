@@ -2346,7 +2346,7 @@
         .cv-notice-section ol { padding-left: 15px; margin: 0; }
         .cv-notice-section li { margin-bottom: 6px; }
 
-        /* MODALS (MOBILE-FIRST & EXACT MATCH TO UI IMAGE) */
+        /* MODALS (MOBILE-FIRST) */
         .cv-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); z-index: 10000;
@@ -2382,7 +2382,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* PERFECTLY MATCHED QR FRAME */
         .cv-modal-qr-container {
             width: 180px; 
             height: 180px; 
@@ -2408,7 +2407,6 @@
             line-height: 1.4; margin-bottom: 14px; padding: 0 4px;
         }
         
-        /* EXACT UI ASKING INPUT & BUTTONS styling */
         .cv-utr-input {
             width: 100%; background: #141414; 
             border: 1px solid rgba(214, 175, 55, 0.3);
@@ -2637,7 +2635,7 @@
         </div>
     </div>
 
-    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT (Dynamic Identity Sync) -->
+    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT -->
     <script>
         (function() {
             var currentSelectedTier = "";
@@ -2649,7 +2647,6 @@
             var firebaseInitialized = false;
             var firebaseListenerRef = null;
 
-            // 1. Firebase Setup Safely
             var firebaseConfig = {
                 "apiKey": "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
                 "authDomain": "chief-login12.firebaseapp.com",
@@ -2665,33 +2662,65 @@
                     firebase.initializeApp(firebaseConfig);
                     db = firebase.database();
                     firebaseInitialized = true;
-                    console.log("Voucher Fragment: Firebase OK.");
+                    console.log("Voucher Fragment: Firebase Loaded Successfully.");
                 }
             } catch (e) {
                 console.warn("Voucher Fragment Firebase Error:", e);
             }
 
-            function fetchAndroidUserId() {
-                try {
-                    var storedUid = localStorage.getItem('chief_user_id');
-                    if (storedUid && storedUid.trim() !== "" && storedUid !== "null" && storedUid !== "CHIEF_GUEST") {
-                        return storedUid;
-                    }
-                    if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
-                        var bridgeUid = window.AndroidBridge.getUserId();
-                        if (bridgeUid && bridgeUid.trim() !== "") {
-                            return bridgeUid;
+            // FIXED GLOBAL METHOD FOR TIMING SYNC (MainActivity Java triggers this directly)
+            window.initRealtimeSync = function(androidUserId) {
+                console.log("initRealtimeSync triggered with input ID: " + androidUserId);
+                
+                var finalId = "CHIEF_GUEST";
+                
+                if (androidUserId && androidUserId.trim() !== "" && androidUserId !== "null") {
+                    finalId = androidUserId.trim();
+                    localStorage.setItem('chief_user_id', finalId);
+                } else {
+                    try {
+                        if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
+                            var bridgeUid = window.AndroidBridge.getUserId();
+                            if (bridgeUid && bridgeUid.trim() !== "") {
+                                finalId = bridgeUid.trim();
+                            }
+                        } else {
+                            var storedUid = localStorage.getItem('chief_user_id');
+                            if (storedUid && storedUid.trim() !== "" && storedUid !== "null") {
+                                finalId = storedUid.trim();
+                            }
                         }
+                    } catch (e) {
+                        console.log("Bridge resolution error: ", e);
                     }
-                } catch (e) {
-                    console.log("Error reading bridge/storage: ", e);
                 }
-                return "CHIEF_GUEST"; 
+                
+                if (finalId !== "CHIEF_GUEST" && finalId !== userId) {
+                    userId = finalId;
+                    console.log("Workspace updated to user: " + userId);
+                    startFirebaseSync();
+                } else if (!firebaseListenerRef) {
+                    userId = finalId;
+                    startFirebaseSync();
+                }
+            };
+
+            function trySyncWithInitialLoad() {
+                var storedUid = localStorage.getItem('chief_user_id');
+                if (storedUid && storedUid !== "CHIEF_GUEST") {
+                    window.initRealtimeSync(storedUid);
+                } else {
+                    try {
+                        if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
+                            window.initRealtimeSync(window.AndroidBridge.getUserId());
+                            return;
+                        }
+                    } catch(e){}
+                    window.initRealtimeSync("CHIEF_GUEST");
+                }
             }
 
-            // Safe UI Event Attachments
             document.addEventListener('DOMContentLoaded', function() {
-                // Setup regular UI clicks
                 document.querySelectorAll('.cv-buy-btn').forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
                         var tier = this.getAttribute('data-tier');
@@ -2709,39 +2738,17 @@
                 var autoPayBtn = document.getElementById('autoPayBtn');
                 if (autoPayBtn) autoPayBtn.addEventListener('click', triggerAutoPay);
 
-                // Initial fall-back call
-                trySyncWithCorrectUser();
+                trySyncWithInitialLoad();
             });
-
-            // GLOBAL METHOD FOR APP SYNC TIMING (MainActivity.java se call hoga)
-            window.initRealtimeSync = function() {
-                console.log("initRealtimeSync triggered from Android Bridge.");
-                trySyncWithCorrectUser();
-            };
-
-            function trySyncWithCorrectUser() {
-                var detectedId = fetchAndroidUserId();
-                
-                // Agar actual username mil gaya hai aur current user purana guest hi hai, toh data migration/switch karo
-                if (detectedId && detectedId !== "CHIEF_GUEST" && detectedId !== userId) {
-                    userId = detectedId;
-                    console.log("User successfully connected to workspace: " + userId);
-                    startFirebaseSync();
-                } else if (!firebaseListenerRef && detectedId === "CHIEF_GUEST") {
-                    userId = "CHIEF_GUEST";
-                    startFirebaseSync();
-                }
-            }
 
             function startFirebaseSync() {
                 if (!firebaseInitialized || !db || !userId) return;
                 
-                // Purane dynamic references ko flush karo sync conflicts hatane ke liye
                 if (firebaseListenerRef) {
                     firebaseListenerRef.off();
                 }
 
-                console.log("Listening target instance path: users/" + userId);
+                console.log("Listening instance path: users/" + userId);
                 firebaseListenerRef = db.ref("users/" + userId);
                 
                 firebaseListenerRef.on('value', function(snapshot) {
@@ -2808,8 +2815,7 @@
             }
 
             function openPaymentModal(tier, amount) {
-                // Payment box khulne se pehle ek baar ID re-verify kar lo
-                trySyncWithCorrectUser();
+                trySyncWithInitialLoad();
 
                 currentSelectedTier = tier;
                 currentSelectedAmount = amount;
