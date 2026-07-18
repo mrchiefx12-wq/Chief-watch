@@ -2519,7 +2519,7 @@
         </div>
     </div>
 
-    <!-- MODAL LAYOUTS (PERFECTLY REALIGNED MATCHES) -->
+    <!-- MODAL LAYOUTS -->
     <div class="cv-modal-overlay" id="paymentModal">
         <div class="cv-modal-card">
             <button class="cv-modal-close" id="closePaymentModalBtn">&times;</button>
@@ -2561,7 +2561,6 @@
         </div>
     </div>
 
-    <!-- FIXED MAIN ISOLATED CODE BLOCK SCRIPT (Dynamic Identity Sync) -->
     <script>
         (function() {
             var currentSelectedTier = "";
@@ -2573,7 +2572,6 @@
             var firebaseInitialized = false;
             var firebaseListenerRef = null;
 
-            // 1. Firebase Setup Safely
             var firebaseConfig = {
                 "apiKey": "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
                 "authDomain": "chief-login12.firebaseapp.com",
@@ -2613,7 +2611,6 @@
                 return "CHIEF_GUEST"; 
             }
 
-            // Safe UI Event Attachments
             document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('.cv-buy-btn').forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
@@ -2762,13 +2759,14 @@
                 window.location.href = upiUri;
             }
 
+            // --- FIXED SECTION: confirm() removed for Android WebView compatibility ---
             document.getElementById('cancelPaymentBtn').addEventListener('click', function() {
                 if(!db) return;
-                if(confirm("Are you sure you want to cancel this payment request?")) {
-                    db.ref("users/" + userId + "/pendingRequest").remove().then(function() {
-                        document.getElementById('waitingModal').style.display = "none";
-                    });
-                }
+                db.ref("users/" + userId + "/pendingRequest").remove().then(function() {
+                    document.getElementById('waitingModal').style.display = "none";
+                }).catch(function(err) {
+                    console.error("Cancellation error:", err);
+                });
             });
 
             document.getElementById('goToVoucherBtn').addEventListener('click', function() {
