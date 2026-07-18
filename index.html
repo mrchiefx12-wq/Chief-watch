@@ -296,7 +296,7 @@
     
     <style>
         :root {
-            --bg-color: #050505; /* शुद्ध लग्जरी डार्क बैकग्राउंड */
+            --bg-color: #050505; 
             --gold-primary: #dfba6b;
             --gold-secondary: #9a7b36;
             --text-light: #f5f5f5;
@@ -304,432 +304,387 @@
             --border-gold: rgba(223, 186, 107, 0.25);
         }
 
-        /* 🚫 स्क्रॉलबार हटाओ और बैकग्राउंड फिक्स करो (Har device ke liye scrollbar band) */
         html, body {
             background-color: var(--bg-color) !important;
             color: var(--text-light);
             font-family: 'Montserrat', sans-serif;
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100%;
-            height: 100%;
-            overflow: hidden !important; /* Outer scroll disabled */
+            margin: 0 !important; padding: 0 !important;
+            width: 100%; height: 100%;
+            overflow-x: hidden !important;
             -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
         }
 
-        /* Chrome, Safari, Opera aur browsers ke liye scrollbar hide */
-        html::-webkit-scrollbar,
-        body::-webkit-scrollbar,
-        .scroll-wrapper::-webkit-scrollbar {
-            display: none !important;
-            width: 0 !important;
-            height: 0 !important;
-        }
-
-        /* 👑 नेचुरल स्क्रॉल रैपर (Scrollbar fully hidden but scrolling works smoothly) */
         .scroll-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto; 
-            box-sizing: border-box;
+            width: 100%; height: 100%;
+            overflow-y: auto; box-sizing: border-box;
             background-color: var(--bg-color);
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
+            transition: filter 0.3s ease;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
+        .scroll-wrapper::-webkit-scrollbar { display: none; }
 
-        /* कंटेंट एरिया - नेचुरल फ्लो और ऑटो-अडजस्टमेंट */
-        .content-container {
-            width: 100%;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 40px 20px 20px 20px;
-            box-sizing: border-box;
-            flex: 1;
-        }
+        body.modal-active .scroll-wrapper { filter: blur(4px); pointer-events: none; }
 
-        /* -----------------------------------------
-           VERIFICATION CARD
-        ----------------------------------------- */
+        .content-container { width: 100%; max-width: 850px; margin: 0 auto; padding: 40px 20px 20px 20px; box-sizing: border-box; flex: 1; }
+
         .verification-card {
             background: linear-gradient(135deg, #121212 0%, #0d0d0d 100%);
             border: 1px solid var(--gold-primary);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
-            border-radius: 4px;
-            padding: 50px 30px;
-            text-align: center;
-            position: relative;
-            box-sizing: border-box;
-            margin-bottom: 40px; 
+            border-radius: 16px; padding: 50px 30px;
+            text-align: center; position: relative;
+            box-sizing: border-box; margin-bottom: 40px; 
+            overflow: hidden;
         }
 
         .verification-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
             background: linear-gradient(90deg, var(--gold-secondary), var(--gold-primary), var(--gold-secondary));
         }
 
-        .logo {
-            font-family: 'Cinzel', serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: 8px;
-            color: var(--gold-primary);
-            margin: 0 0 2px 0;
-        }
-
-        .subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            color: var(--text-muted);
-            margin: 0 0 25px 0;
-            text-transform: uppercase;
-        }
-
-        .tagline {
-            font-size: 0.92rem;
-            line-height: 1.7;
-            margin: 0 auto 30px auto;
-            max-width: 650px;
-            font-weight: 300;
-            color: #d5d5d5;
-        }
-
-        .search-box { 
-            margin-bottom: 20px; 
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
+        .logo { font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 700; letter-spacing: 8px; color: var(--gold-primary); margin: 0 0 2px 0; }
+        .subtitle { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 4px; color: var(--text-muted); margin: 0 0 25px 0; text-transform: uppercase; }
+        .tagline { font-size: 0.92rem; line-height: 1.7; margin: 0 auto 30px auto; max-width: 650px; font-weight: 300; color: #d5d5d5; }
+        
+        .search-box { margin-bottom: 20px; width: 100%; display: flex; justify-content: center; }
         .search-box input {
-            width: 100%;
-            max-width: 450px;
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-gold);
-            color: #ffffff;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            text-align: center;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-            border-radius: 4px;
+            width: 100%; max-width: 450px; padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-gold);
+            color: #ffffff; font-size: 1rem; letter-spacing: 2px; text-align: center;
+            box-sizing: border-box; font-family: 'Montserrat', sans-serif; border-radius: 8px;
         }
-
-        .search-box input:focus { 
-            outline: none; 
-            border-color: var(--gold-primary); 
-            background: rgba(255, 255, 255, 0.04);
-        }
+        .search-box input:focus { outline: none; border-color: var(--gold-primary); background: rgba(255, 255, 255, 0.04); }
 
         .btn-verify {
             background: linear-gradient(135deg, var(--gold-secondary) 0%, var(--gold-primary) 100%);
-            color: #000000;
-            border: none;
-            padding: 16px 45px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: opacity 0.2s;
-            border-radius: 4px;
-            width: 100%;
-            max-width: 450px;
-            display: inline-block;
+            color: #000000; border: none; padding: 16px 45px;
+            font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+            letter-spacing: 2px; cursor: pointer; text-transform: uppercase;
+            border-radius: 8px; width: 100%; max-width: 450px; display: inline-block;
         }
 
-        .btn-verify:hover { opacity: 0.9; }
+        .error-msg { color: #ff6b6b; font-size: 0.95rem; margin-top: 20px; display: none; }
 
-        .result-container {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px dashed var(--border-gold);
-            display: none;
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(5, 5, 5, 0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center; z-index: 99999 !important;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: auto !important; padding: 20px; box-sizing: border-box;
+        }
+        body.modal-active .modal-overlay { opacity: 1; visibility: visible; }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #121212 0%, #0a0a0a 100%);
+            border: 1px solid var(--gold-primary); 
+            border-radius: 16px;
+            width: 100%; max-width: 450px; padding: 35px 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(223, 186, 107, 0.05); 
+            position: relative;
+            transform: scale(0.9); transition: transform 0.3s ease; text-align: center;
+            pointer-events: auto !important; box-sizing: border-box;
+            overflow: hidden;
+        }
+        body.modal-active .modal-content { transform: scale(1); }
+
+        .modal-content::after {
+            content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.08) 50%, transparent 100%);
+            transform: skewX(-20deg); animation: loopCardShimmer 4s infinite ease-in-out;
+            pointer-events: none; z-index: 1;
         }
 
-        .status-badge {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            color: var(--gold-primary);
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            font-weight: 700;
+        @keyframes loopCardShimmer {
+            0% { left: -150%; }
+            30% { left: 150%; }
+            100% { left: 150%; }
+        }
+        
+        .status-badge { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold-primary); letter-spacing: 1px; margin-bottom: 30px; font-weight: 700; line-height: 1.4; position: relative; z-index: 2; }
+        
+        .info-container { width: 100%; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 2; }
+        .info-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 14px 5px; border-bottom: 1px solid rgba(223, 186, 107, 0.1); 
+            gap: 15px; text-align: left;
+        }
+        .info-label { color: var(--text-muted); font-size: 0.88rem; font-weight: 400; white-space: nowrap; }
+        .info-value { color: var(--text-light); font-size: 0.95rem; font-weight: 600; text-align: right; word-break: break-word; }
+
+        .shimmer-wrapper { display: none; width: 100%; flex-direction: column; gap: 16px; margin: 10px 0 20px 0; }
+        .shimmer-header {
+            height: 24px; width: 75%; margin: 0 auto 15px auto;
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
+        }
+        .shimmer-row { display: flex; justify-content: space-between; width: 100%; padding: 10px 0; }
+        .shimmer-label { 
+            height: 18px; width: 35%; 
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%); 
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
+        }
+        .shimmer-value { 
+            height: 18px; width: 45%; 
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%); 
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
+        }
+        .shimmer-btn {
+            height: 40px; width: 120px; margin: 20px auto 0 auto;
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
         }
 
-        .details-table {
-            width: 100%;
-            max-width: 520px;
-            margin: 0 auto;
-            border-collapse: collapse;
+        @keyframes skeletonShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
-        .details-table td {
-            padding: 15px 10px;
-            text-align: left;
-            font-size: 0.95rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        .actual-data { display: block; animation: fadeIn 0.4s ease forwards; width: 100%; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .details-table td.label { color: #777; width: 45%; font-weight: 300; }
-        .details-table td.value { color: var(--text-light); font-weight: 600; text-align: right; }
-
-        .error-msg {
-            color: #ff6b6b;
-            font-size: 0.95rem;
-            margin-top: 20px;
-            display: none;
+        .btn-close {
+            background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary);
+            padding: 12px 40px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
+            letter-spacing: 2px; cursor: pointer; text-transform: uppercase; border-radius: 6px;
+            position: relative; z-index: 100000; margin-top: 10px; transition: all 0.2s ease;
         }
+        .btn-close:hover { background: var(--gold-primary); color: #000000; box-shadow: 0 0 15px rgba(223, 186, 107, 0.4); }
 
-        /* -----------------------------------------
-            FOOTER SECTION (NATURAL ATTACH)
-        ----------------------------------------- */
-        .footer-section {
-            background: radial-gradient(circle at top, #141414 0%, #050505 100%);
-            padding: 50px 20px 40px 20px;
-            text-align: center;
-            border-top: 1px solid #1a1a1a;
-            box-sizing: border-box;
-            width: 100%;
-            margin-top: auto; 
+        .footer-section { background: radial-gradient(circle at top, #141414 0%, #050505 100%); padding: 50px 20px 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; width: 100%; box-sizing: border-box; }
+        .brand-title { font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 6px; background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 12px 0; text-transform: uppercase; font-weight: 700; }
+        .philosophy-box { max-width: 700px; margin: 0 auto 30px; font-size: 13px; color: #666; line-height: 1.7; }
+        
+        .credits-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 0 auto 40px auto; max-width: 320px; width: 100%; }
+        .credit-card { 
+            background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(212, 175, 55, 0.4); 
+            padding: 15px 25px; width: 100%; border-radius: 8px; text-align: center; 
+            box-shadow: 0 0 15px rgba(223, 186, 107, 0.15); transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; overflow: hidden; box-sizing: border-box;
         }
-
-        .brand-title {
-            font-family: 'Cinzel', serif;
-            font-size: 26px;
-            letter-spacing: 6px;
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0 0 12px 0;
-            text-transform: uppercase;
-            font-weight: 700;
+        .credit-card:hover { box-shadow: 0 0 25px rgba(223, 186, 107, 0.35); transform: translateY(-2px); }
+        .credit-card::after {
+            content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.12) 50%, transparent 100%);
+            transform: skewX(-20deg); animation: loopCardShimmer 4s infinite ease-in-out; pointer-events: none;
         }
-
-        .philosophy-box {
-            max-width: 700px;
-            margin: 0 auto 30px;
-            font-size: 13px;
-            color: #666;
-            line-height: 1.7;
-        }
-
-        .credits-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
-        }
-
-        .credit-card {
-            background: rgba(10, 10, 10, 0.8);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 15px 25px;
-            min-width: 190px;
-            border-radius: 4px;
-            animation: goldPulse 3s infinite ease-in-out;
-            box-sizing: border-box;
-        }
-
-        @keyframes goldPulse {
-            0% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.2); }
-            50% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.25); border-color: rgba(212, 175, 55, 0.6); }
-            100% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.2); }
-        }
-
-        .credit-card .role {
-            font-size: 8px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #888;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .credit-card .identity {
-            font-family: 'Cinzel', serif;
-            font-size: 15px;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(212, 175, 55, 0.15);
-            padding-top: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            font-size: 12px;
-            max-width: 850px;
-            margin: 0 auto;
-            gap: 15px;
-        }
-
-        .deals-text { letter-spacing: 1px; color: #666; }
-        .deals-text a { color: #d4af37; text-decoration: none; font-weight: 600; }
-
+        
+        .credit-card .role { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: #888; display: block; margin-bottom: 5px; position: relative; z-index: 2; }
+        .credit-card .identity { font-family: 'Cinzel', serif; font-size: 15px; color: #fff; font-weight: 700; position: relative; z-index: 2; }
+        
+        .footer-bottom { border-top: 1px solid rgba(212, 175, 55, 0.15); padding-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; font-size: 12px; max-width: 850px; margin: 0 auto; gap: 15px; }
+        .deals-text { color: #666; } .deals-text a { color: #d4af37; text-decoration: none; font-weight: 600; }
         .social-wrapper { display: flex; gap: 15px; align-items: center; }
         .contact-us-label { font-size: 10px; letter-spacing: 1px; color: #d4af37; font-weight: 700; }
         .social-icon img { width: 18px; height: 18px; filter: grayscale(1) brightness(1.3); }
+        .disclaimer-text { margin-top: 30px; font-size: 9px; color: #333; letter-spacing: 1px; }
 
-        .disclaimer-text {
-            margin-top: 30px;
-            font-size: 9px;
-            color: #333;
-            letter-spacing: 1px;
-        }
-
-        /* 📱 RESPONSIVE RULES (SABHI PHONES ME SAME AUR PERFECT DIKHNE KE LIYE) */
-        @media (max-width: 768px) {
-            .content-container { padding: 25px 15px; }
-            .verification-card { padding: 35px 20px; margin-bottom: 30px; }
-            .logo { font-size: 2.2rem; letter-spacing: 6px; }
-            .subtitle { font-size: 0.8rem; letter-spacing: 3px; }
-            .tagline { font-size: 0.85rem; line-height: 1.6; margin-bottom: 25px; }
-            .search-box input { padding: 14px 15px; font-size: 0.95rem; }
-            .btn-verify { width: 100%; max-width: 100%; padding: 14px; font-size: 0.9rem; }
-            .details-table td { padding: 12px 5px; font-size: 0.85rem; }
+        @media (max-width: 480px) {
+            .content-container { padding: 20px 12px; }
+            .verification-card { padding: 35px 15px; margin-bottom: 20px; border-radius: 12px; }
+            .logo { font-size: 2.2rem; letter-spacing: 5px; }
+            .subtitle { font-size: 0.75rem; letter-spacing: 2px; }
+            .tagline { font-size: 0.85rem; line-height: 1.6; }
             
-            .footer-section { padding: 40px 15px; }
-            .brand-title { font-size: 22px; }
-            .philosophy-box { font-size: 12px; margin-bottom: 25px; }
-            .credits-container { gap: 10px; margin-bottom: 30px; }
-            .credit-card { width: 100%; min-width: unset; padding: 12px; }
+            .modal-overlay { padding: 15px; }
+            .modal-content { padding: 25px 15px; border-radius: 14px; width: 88%; max-width: 340px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); }
+            .status-badge { font-size: 0.85rem; margin-bottom: 20px; }
+            
+            .info-row { display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 2px; }
+            .info-label { font-size: 0.78rem; }
+            .info-value { font-size: 0.84rem; text-align: right; width: auto; max-width: 60%; }
+            .btn-close { padding: 10px 30px; font-size: 0.8rem; }
+            
+            .credits-container { flex-direction: column; width: 100%; max-width: 100%; padding: 0 10px; box-sizing: border-box; }
+            .credit-card { width: 100%; padding: 12px 15px; }
+            .credit-card .identity { font-size: 14px; }
+            
             .footer-bottom { flex-direction: column; text-align: center; gap: 20px; }
-            .social-wrapper { flex-direction: row; justify-content: center; width: 100%; }
         }
     </style>
 </head>
 <body>
 
 <div class="scroll-wrapper">
-
     <div class="content-container">
         <div class="verification-card">
             <h1 class="logo">CHIEF</h1>
             <div class="subtitle">digital verification</div>
-            
-            <div class="tagline">
-                Every CHIEF timepiece is a singular masterpiece—unique in the entire world. Enter your exclusive watch code below to verify its registry.
-            </div>
-
+            <div class="tagline">Every CHIEF timepiece is a singular masterpiece—unique in the entire world. Enter your exclusive watch code below to verify its registry.</div>
             <div class="search-box">
                 <input type="text" id="watchCode" placeholder="ENTER EXCLUSIVE CODE" autocomplete="off">
             </div>
-
-            <button class="btn-verify" onclick="verifyWatch()">Verify Identity</button>
-
-            <div class="result-container" id="resultSection">
-                <div class="status-badge">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
-                <table class="details-table">
-                    <tr>
-                        <td class="label">Timepiece Model</td>
-                        <td class="value" id="resModel">-</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Global Status</td>
-                        <td class="value" style="color: #dfba6b;">1 of 1 (Unique)</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Current Legal Owner</td>
-                        <td class="value" id="resOwner">-</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Registry Date</td>
-                        <td class="value" id="resDate">-</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="error-msg" id="errorSection">
-                ✕ INVALID CODE: Not found in global registry.
-            </div>
+            <button class="btn-verify" id="verifyBtn">Verify Identity</button>
+            <div class="error-msg" id="errorSection">✕ INVALID CODE: Not found in global registry.</div>
         </div>
     </div>
 
+    <!-- FOOTER SECTION -->
     <div class="footer-section">
         <div class="brand-title">THE CHIEF</div>
-        <div class="philosophy-box">
-            Crafted with purpose and precision. Experience a digital presence where luxury meets technology.
-        </div>
-
+        <div class="philosophy-box">Crafted with purpose and precision. Experience a digital presence where luxury meets technology.</div>
         <div class="credits-container">
-            <div class="credit-card">
-                <span class="role">Powered By</span>
-                <span class="identity">Mr Chandar Mohan</span>
-            </div>
-            <div class="credit-card">
-                <span class="role">Published By</span>
-                <span class="identity">Mr-Chief-India</span>
-            </div>
-            <div class="credit-card">
-                <span class="role">Founder</span>
-                <span class="identity">Mr Pawan Mahawar</span>
-            </div>
+            <div class="credit-card"><span class="role">Powered By</span><span class="identity">Mr Chandar Mohan</span></div>
+            <div class="credit-card"><span class="role">Published By</span><span class="identity">Mr-Chief-India</span></div>
+            <div class="credit-card"><span class="role">Founder</span><span class="identity">Mr Pawan Mahawar</span></div>
         </div>
-
         <div class="footer-bottom">
-            <div class="deals-text">
-                BEST DEALS TODAY — <a target="_blank">EXPLORE COLLECTION</a>
-            </div>
-
+            <div class="deals-text">BEST DEALS TODAY — <a target="_blank">EXPLORE COLLECTION</a></div>
             <div class="social-wrapper">
                 <span class="contact-us-label">CONTACT US</span>
-                <a href="https://www.instagram.com/mr_chief_india?igsh=dWNqMjIzcWVlbXht=" target="_blank" class="social-icon">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram">
-                </a>
-                <a href="mailto:mrchiefx12@gmail.com" class="social-icon">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Email">
-                </a>
-                <a href="https://youtube.com/@mrchief-c?si=0qDQUJmI7umYpPGo" target="_blank" class="social-icon">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube">
-                </a>
+                <a href="https://www.instagram.com/mr_chief_india?igsh=dWNqMjIzcWVlbXht=" target="_blank" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"></a>
+                <a href="mailto:mrchiefx12@gmail.com" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Email"></a>
+                <a href="https://youtube.com/@mrchief-c?si=0qDQUJmI7umYpPGo" target="_blank" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube"></a>
             </div>
         </div>
-
-        <div class="disclaimer-text">
-            Notice: This App is linked with Web. Not published officially.
-        </div>
+        <div class="disclaimer-text">Notice: This App is linked with Web. Not published officially.</div>
     </div>
-
 </div>
 
-    <script>
-        const chiefRegistry = {
-            "CHF-001": { model: "CHIEF Royal Chrono-Gold", owner: "Mr. Abhinav Sharma", date: "12th November 2025" },
-            "CHF-777": { model: "CHIEF Black Diamond Tourbillon", owner: "Mr. Vihaan Malhotra", date: "05th February 2026" },
-            "CHIEF-FOUNDER": { model: "CHIEF Origin Specimen Zero", owner: "The Founder & CEO", date: "01st January 2025" }
-        };
+<!-- POPUP MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+        <!-- Premium Initial Skeleton Loader -->
+        <div class="shimmer-wrapper" id="shimmerLoader">
+            <div class="shimmer-header"></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-btn"></div>
+        </div>
 
-        function verifyWatch() {
-            const codeInput = document.getElementById("watchCode").value.trim().toUpperCase();
-            const resultSection = document.getElementById("resultSection");
+        <!-- Dynamic Registry Data Wrapper -->
+        <div class="actual-data" id="actualDataView" style="display: none;">
+            <div class="status-badge">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
+            
+            <div class="info-container">
+                <div class="info-row">
+                    <span class="info-label">Timepiece Model</span>
+                    <span class="info-value" id="resModel">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Global Status</span>
+                    <span class="info-value" id="resStatus" style="color: #dfba6b;">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Current Legal Owner</span>
+                    <span class="info-value" id="resOwner">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Registry Date</span>
+                    <span class="info-value" id="resDate">-</span>
+                </div>
+            </div>
+            
+            <button class="btn-close" id="closeBtn">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- 🔥 New Firebase v10 Modular Architecture Integration -->
+<script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Your Exact Web App Config Map
+    const firebaseConfig = {
+        apiKey: "AIzaSyAIG79RwnrUTaRNhFU8YWBjGlNWiZ1Eeaw",
+        authDomain: "cm-smm-panel.firebaseapp.com",
+        databaseURL: "https://cm-smm-panel-default-rtdb.firebaseio.com",
+        projectId: "cm-smm-panel",
+        storageBucket: "cm-smm-panel.firebasestorage.app",
+        messagingSenderId: "805393568681",
+        appId: "1:805393568681:web:e1c454a61e17b394082ab8"
+    };
+
+    // Safe App Instantiation
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+    const db = getDatabase(app);
+
+    function showModal() { document.body.classList.add("modal-active"); }
+    function hideModal() { document.body.classList.remove("modal-active"); }
+
+    // Navigation and Popup Interactions
+    document.addEventListener("click", function(e) {
+        if (e.target && e.target.id === "closeBtn") { hideModal(); }
+        if (e.target === document.getElementById("modalOverlay")) { hideModal(); }
+    });
+
+    // Main Live Verification Runtime Pipeline
+    document.addEventListener("click", function(e) {
+        if (e.target && e.target.id === "verifyBtn") {
+            const watchCodeEl = document.getElementById("watchCode");
             const errorSection = document.getElementById("errorSection");
+            const shimmerLoader = document.getElementById("shimmerLoader");
+            const actualDataView = document.getElementById("actualDataView");
+            
+            if (!watchCodeEl || !errorSection || !shimmerLoader || !actualDataView) return;
 
-            resultSection.style.display = "none";
+            const codeInput = watchCodeEl.value.trim();
             errorSection.style.display = "none";
 
-            if (codeInput === "") { alert("Please enter a valid code."); return; }
+            if (codeInput === "") { alert("Please enter a code."); return; }
 
-            if (chiefRegistry[codeInput]) {
-                const data = chiefRegistry[codeInput];
-                document.getElementById("resModel").innerText = data.model;
-                document.getElementById("resOwner").innerText = data.owner;
-                document.getElementById("resDate").innerText = data.date;
-                resultSection.style.display = "block";
-            } else {
-                errorSection.style.display = "block";
+            // Trigger Shimmer Loaders
+            shimmerLoader.style.display = "flex";
+            actualDataView.style.display = "none";
+            showModal();
+
+            // Setup Real-time Active Sync Stream (`onValue` listens instantly for new writes)
+            const upperCaseRef = ref(db, 'watches/' + codeInput.toUpperCase());
+            
+            onValue(upperCaseRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    renderWatchData(snapshot.val());
+                } else {
+                    // Lowercase Node Fallback Checks
+                    const lowerCaseRef = ref(db, 'watches/' + codeInput.toLowerCase());
+                    onValue(lowerCaseRef, (lowSnapshot) => {
+                        if (lowSnapshot.exists()) {
+                            renderWatchData(lowSnapshot.val());
+                        } else {
+                            hideModal();
+                            errorSection.style.display = "block";
+                        }
+                    }, { onlyOnce: true });
+                }
+            }, (error) => {
+                console.error("Live Stream Failure: ", error);
+                hideModal();
+                alert("Database synchronization failed. Please review security rules or connection state.");
+            });
+
+            function renderWatchData(data) {
+                const resModel = document.getElementById("resModel");
+                const resStatus = document.getElementById("resStatus");
+                const resOwner = document.getElementById("resOwner");
+                const resDate = document.getElementById("resDate");
+
+                if (resModel) resModel.innerText = data.model || "-";
+                if (resStatus) resStatus.innerText = data.status || "1 of 1 (Unique)";
+                if (resOwner) resOwner.innerText = data.owner || "-";
+                if (resDate) resDate.innerText = data.date || "-";
+                
+                shimmerLoader.style.display = "none";
+                actualDataView.style.display = "block";
             }
         }
-    </script>
+    });
+</script>
 </body>
 </html>
         </div>
