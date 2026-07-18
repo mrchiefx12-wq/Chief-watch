@@ -2300,22 +2300,22 @@
         .cv-notice-section ol { padding-left: 15px; margin: 0; }
         .cv-notice-section li { margin-bottom: 6px; }
 
-        /* MODALS (MOBILE-FIRST & EXACT MATCH TO UI IMAGE) */
+        /* MODALS (EXACT CORNER AND ALIGNMENT MATCH) */
         .cv-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); z-index: 10000;
+            background: rgba(0, 0, 0, 0.85); z-index: 10000;
             display: none; align-items: center; justify-content: center;
-            padding: 12px; overflow-y: auto;
+            padding: 16px; overflow-y: auto;
         }
         .cv-modal-card {
-            background: #0f0f0f; 
-            border: 1px solid #d4af37; 
-            border-radius: 20px;
+            background: #111111; 
+            border: 1.5px solid #d4af37; 
+            border-radius: 28px;
             width: 100%; 
-            max-width: 315px; 
-            padding: 20px 16px; 
+            max-width: 360px; 
+            padding: 24px 20px; 
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.9);
             animation: cvModalFadeIn 0.25s ease-out;
             box-sizing: border-box;
         }
@@ -2324,50 +2324,62 @@
             to { transform: scale(1); opacity: 1; }
         }
         .cv-modal-close {
-            position: absolute; top: 14px; right: 14px;
-            font-size: 22px; color: #888; cursor: pointer; font-weight: bold;
+            position: absolute; top: 16px; right: 20px;
+            font-size: 22px; color: #777; cursor: pointer; font-weight: bold;
             background: none; border: none; outline: none; transition: color 0.2s;
         }
         .cv-modal-close:hover { color: #fff; }
         
+        /* EXACT TITLE COLOR FROM IMAGE */
         .cv-modal-title-custom {
-            text-align: center; font-size: 14px; font-weight: bold;
-            color: #ffd700; margin-bottom: 14px; padding: 0 15px;
-            letter-spacing: 0.5px;
+            text-align: center; 
+            font-size: 16px; 
+            font-weight: bold;
+            color: #cca43b; 
+            margin-bottom: 14px; 
+            padding: 0 15px;
+            letter-spacing: 0.3px;
+        }
+
+        /* DASHED LINE EXACTLY BELOW TITLE */
+        .cv-modal-divider {
+            border: none;
+            border-top: 1px dashed #333333;
+            margin: 0 auto 20px auto;
+            width: 96%;
         }
         
-        /* PERFECTLY MATCHED QR FRAME */
+        /* QR IMAGE CONTAINER WITH ROUNDED CORNERS MATCH */
         .cv-modal-qr-container {
-            width: 180px; 
-            height: 180px; 
-            margin: 0 auto 14px auto;
-            border-radius: 14px; 
+            width: 220px; 
+            height: auto; 
+            margin: 0 auto 20px auto;
+            border-radius: 24px; 
             overflow: hidden; 
             background: transparent; 
             display: flex; 
             align-items: center; 
             justify-content: center;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(214, 175, 55, 0.2);
         }
         .cv-modal-qr-img { 
             width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
+            height: auto; 
+            object-fit: contain; 
             display: block;
+            border-radius: 24px;
         }
         
         .cv-modal-desc {
-            font-size: 10px; color: #888; text-align: center;
-            line-height: 1.4; margin-bottom: 14px; padding: 0 4px;
+            font-size: 11px; color: #888; text-align: center;
+            line-height: 1.4; margin-bottom: 20px; padding: 0 8px;
         }
         
-        /* EXACT UI ASKING INPUT & BUTTONS styling */
+        /* INPUTS & BUTTONS STYLING */
         .cv-utr-input {
-            width: 100%; background: #141414; 
-            border: 1px solid rgba(214, 175, 55, 0.3);
-            border-radius: 10px; padding: 12px; font-size: 12px; color: #fff;
-            text-align: center; margin-bottom: 12px; outline: none;
+            width: 100%; background: transparent; 
+            border: 1px solid #333;
+            border-radius: 12px; padding: 14px; font-size: 13px; color: #fff;
+            text-align: center; margin-bottom: 14px; outline: none;
         }
         .cv-utr-input::placeholder { color: #555; }
         .cv-utr-input:focus { border-color: #d4af37; }
@@ -2375,16 +2387,16 @@
         .cv-verify-btn {
             width: 100%; 
             background: linear-gradient(135deg, #c59b3f, #e6c675);
-            color: #000; border: none; border-radius: 10px; padding: 12px;
-            font-size: 12px; font-weight: bold; cursor: pointer;
-            text-transform: uppercase; margin-bottom: 10px;
-            letter-spacing: 0.5px;
+            color: #000; border: none; border-radius: 12px; padding: 14px;
+            font-size: 13px; font-weight: bold; cursor: pointer;
+            text-transform: none; margin-bottom: 12px;
+            letter-spacing: 0.3px;
         }
         .cv-auto-upi-btn {
             width: 100%; background: #14110a; 
             border: 1px solid rgba(214, 175, 55, 0.4);
-            color: #ffd700; border-radius: 10px; padding: 11px;
-            font-size: 11px; font-weight: bold; cursor: pointer;
+            color: #ffd700; border-radius: 12px; padding: 13px;
+            font-size: 12px; font-weight: bold; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 6px;
         }
 
@@ -2552,11 +2564,12 @@
         </div>
     </div>
 
-    <!-- MODAL LAYOUTS -->
+    <!-- MODAL LAYOUTS (PERFECTLY REALIGNED MATCHES) -->
     <div class="cv-modal-overlay" id="paymentModal">
         <div class="cv-modal-card">
             <button class="cv-modal-close" id="closePaymentModalBtn">&times;</button>
-            <div class="cv-modal-title-custom" id="modalTitle">Pay For Premium Executive</div>
+            <div class="cv-modal-title-custom" id="modalTitle">Pay ₹200 For Advanced Starter</div>
+            <hr class="cv-modal-divider">
             <div class="cv-modal-qr-container">
                 <img class="cv-modal-qr-img" src="https://github.com/cmsmmpanel/CM-SMM-PANEL/blob/main/fam.png?raw=true" alt="UPI QR Code">
             </div>
@@ -2647,7 +2660,6 @@
 
             // Safe UI Event Attachments
             document.addEventListener('DOMContentLoaded', function() {
-                // Setup regular UI clicks
                 document.querySelectorAll('.cv-buy-btn').forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
                         var tier = this.getAttribute('data-tier');
@@ -2665,11 +2677,9 @@
                 var autoPayBtn = document.getElementById('autoPayBtn');
                 if (autoPayBtn) autoPayBtn.addEventListener('click', triggerAutoPay);
 
-                // Initial fall-back call
                 trySyncWithCorrectUser();
             });
 
-            // GLOBAL METHOD FOR APP SYNC TIMING (MainActivity.java se call hoga)
             window.initRealtimeSync = function() {
                 console.log("initRealtimeSync triggered from Android Bridge.");
                 trySyncWithCorrectUser();
@@ -2677,8 +2687,6 @@
 
             function trySyncWithCorrectUser() {
                 var detectedId = fetchAndroidUserId();
-                
-                // Agar actual username mil gaya hai aur current user purana guest hi hai, toh data migration/switch karo
                 if (detectedId && detectedId !== "CHIEF_GUEST" && detectedId !== userId) {
                     userId = detectedId;
                     console.log("User successfully connected to workspace: " + userId);
@@ -2692,7 +2700,6 @@
             function startFirebaseSync() {
                 if (!firebaseInitialized || !db || !userId) return;
                 
-                // Purane dynamic references ko flush karo sync conflicts hatane ke liye
                 if (firebaseListenerRef) {
                     firebaseListenerRef.off();
                 }
@@ -2764,7 +2771,6 @@
             }
 
             function openPaymentModal(tier, amount) {
-                // Payment box khulne se pehle ek baar ID re-verify kar lo
                 trySyncWithCorrectUser();
 
                 currentSelectedTier = tier;
@@ -2774,7 +2780,10 @@
                 var utrInput = document.getElementById('utrNumberInput');
                 var paymentModal = document.getElementById('paymentModal');
 
-                if (modalTitle) modalTitle.innerText = "Pay ₹" + amount + " For Chief " + tier.toUpperCase();
+                var displayName = tier.charAt(0).toUpperCase() + tier.slice(1);
+                if(tier === 'silver') displayName = "Advanced Starter";
+                
+                if (modalTitle) modalTitle.innerText = "Pay ₹" + amount + " For " + displayName;
                 if (utrInput) utrInput.value = "";
                 if (paymentModal) paymentModal.style.display = "flex";
             }
