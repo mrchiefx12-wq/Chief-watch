@@ -338,7 +338,7 @@
         }
         .scroll-wrapper::-webkit-scrollbar { display: none; }
 
-        body.modal-active .scroll-wrapper { filter: blur(8px); pointer-events: none; }
+        body.modal-active .scroll-wrapper { filter: blur(4px); pointer-events: none; }
 
         .content-container { width: 100%; max-width: 850px; margin: 0 auto; padding: 40px 20px 20px 20px; box-sizing: border-box; flex: 1; }
 
@@ -346,9 +346,10 @@
             background: linear-gradient(135deg, #121212 0%, #0d0d0d 100%);
             border: 1px solid var(--gold-primary);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
-            border-radius: 4px; padding: 50px 30px;
+            border-radius: 16px; padding: 50px 30px;
             text-align: center; position: relative;
             box-sizing: border-box; margin-bottom: 40px; 
+            overflow: hidden;
         }
 
         .verification-card::before {
@@ -365,7 +366,7 @@
             width: 100%; max-width: 450px; padding: 16px 20px;
             background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-gold);
             color: #ffffff; font-size: 1rem; letter-spacing: 2px; text-align: center;
-            box-sizing: border-box; font-family: 'Montserrat', sans-serif; border-radius: 4px;
+            box-sizing: border-box; font-family: 'Montserrat', sans-serif; border-radius: 8px;
         }
         .search-box input:focus { outline: none; border-color: var(--gold-primary); background: rgba(255, 255, 255, 0.04); }
 
@@ -374,98 +375,150 @@
             color: #000000; border: none; padding: 16px 45px;
             font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
             letter-spacing: 2px; cursor: pointer; text-transform: uppercase;
-            border-radius: 4px; width: 100%; max-width: 450px; display: inline-block;
+            border-radius: 8px; width: 100%; max-width: 450px; display: inline-block;
         }
 
         .error-msg { color: #ff6b6b; font-size: 0.95rem; margin-top: 20px; display: none; }
 
-        /* 👑 MODAL OVERLAY & CONTENT */
+        /* 👑 MODAL OVERLAY - SOFT BLUR & PREMIUM CARD EFFECT */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); display: flex;
-            justify-content: center; align-items: center; z-index: 99999 !important;
+            background-color: rgba(5, 5, 5, 0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center; z-index: 99999 !important;
             opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: auto !important; padding: 15px; box-sizing: border-box;
+            pointer-events: auto !important; padding: 20px; box-sizing: border-box;
         }
         body.modal-active .modal-overlay { opacity: 1; visibility: visible; }
         
         .modal-content {
-            background: linear-gradient(135deg, #0f0f0f 0%, #050505 100%);
-            border: 2px solid var(--gold-primary); border-radius: 4px;
-            width: 100%; max-width: 500px; padding: 35px 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9); position: relative;
-            transform: scale(0.8); transition: transform 0.3s ease; text-align: center;
+            background: linear-gradient(135deg, #121212 0%, #0a0a0a 100%);
+            border: 1px solid var(--gold-primary); 
+            border-radius: 16px;
+            width: 100%; max-width: 480px; padding: 35px 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(223, 186, 107, 0.05); 
+            position: relative;
+            transform: scale(0.9); transition: transform 0.3s ease; text-align: center;
             pointer-events: auto !important; box-sizing: border-box;
+            overflow: hidden;
         }
         body.modal-active .modal-content { transform: scale(1); }
+
+        /* ✨ CONTINUOUS POPUP CARD SHIMMER LAYER */
+        .modal-content::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%; width: 150%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.08) 50%, transparent 100%);
+            transform: skewX(-20deg);
+            animation: loopCardShimmer 4s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes loopCardShimmer {
+            0% { left: -150%; }
+            30% { left: 150%; }
+            100% { left: 150%; }
+        }
         
-        .status-badge { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold-primary); letter-spacing: 1px; margin-bottom: 25px; font-weight: 700; line-height: 1.4; }
+        .status-badge { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold-primary); letter-spacing: 1px; margin-bottom: 30px; font-weight: 700; line-height: 1.4; position: relative; z-index: 2; }
         
-        /* 📱 RESPONSIVE DYNAMIC DETAILS CONTAINER (No Tables) */
-        .info-container { width: 100%; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 12px; }
+        /* 📱 POPUP DETAILS LAYOUT */
+        .info-container { width: 100%; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 2; }
         .info-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 12px 5px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+            padding: 14px 5px; border-bottom: 1px solid rgba(223, 186, 107, 0.1); 
             gap: 15px; text-align: left;
         }
-        .info-label { color: #888; font-size: 0.9rem; font-weight: 300; white-space: nowrap; }
+        .info-label { color: var(--text-muted); font-size: 0.88rem; font-weight: 400; white-space: nowrap; }
         .info-value { color: var(--text-light); font-size: 0.95rem; font-weight: 600; text-align: right; word-break: break-word; }
 
-        /* ✨ SHIMMER LOADING EFFECT CSS */
-        .shimmer-wrapper { display: none; width: 100%; flex-direction: column; gap: 20px; margin: 20px 0 35px 0; }
-        .shimmer-line { 
-            height: 25px; width: 100%; 
-            background: linear-gradient(90deg, #121212 25%, #262626 50%, #121212 75%); 
-            background-size: 200% 100%;
-            animation: loadingShimmer 1.4s infinite linear;
-            border-radius: 4px;
+        /* Initial Skeleton Loader */
+        .shimmer-wrapper { display: none; width: 100%; flex-direction: column; gap: 16px; margin: 10px 0 20px 0; }
+        .shimmer-header {
+            height: 24px; width: 75%; margin: 0 auto 15px auto;
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
         }
-        .shimmer-line.short { width: 60%; margin: 0 auto; height: 30px; margin-bottom: 10px; }
+        .shimmer-row { display: flex; justify-content: space-between; width: 100%; padding: 10px 0; }
+        .shimmer-label { 
+            height: 18px; width: 35%; 
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%); 
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
+        }
+        .shimmer-value { 
+            height: 18px; width: 45%; 
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%); 
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
+        }
+        .shimmer-btn {
+            height: 40px; width: 120px; margin: 20px auto 0 auto;
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%; animation: skeletonShimmer 1.4s infinite linear; border-radius: 4px;
+        }
 
-        @keyframes loadingShimmer {
+        @keyframes skeletonShimmer {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
 
         /* Actual Data Wrapper for Fade-In */
-        .actual-data { display: block; animation: fadeIn 0.3s ease forwards; width: 100%; }
+        .actual-data { display: block; animation: fadeIn 0.4s ease forwards; width: 100%; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .btn-close {
             background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary);
-            padding: 12px 35px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
-            letter-spacing: 2px; cursor: pointer; text-transform: uppercase; border-radius: 4px;
-            position: relative; z-index: 100000;
+            padding: 12px 40px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
+            letter-spacing: 2px; cursor: pointer; text-transform: uppercase; border-radius: 6px;
+            position: relative; z-index: 100000; margin-top: 10px; transition: all 0.2s ease;
         }
-        .btn-close:hover { background: var(--gold-primary); color: #000000; box-shadow: 0 0 15px rgba(223, 186, 107, 0.5); }
+        .btn-close:hover { background: var(--gold-primary); color: #000000; box-shadow: 0 0 15px rgba(223, 186, 107, 0.4); }
 
-        /* FOOTER DESIGN WITH GOLD GLOW */
+        /* 👑 PREMIUM FOOTER DESIGN WITH GOLD GLOW & SHIMMER EFFECTS */
         .footer-section { background: radial-gradient(circle at top, #141414 0%, #050505 100%); padding: 50px 20px 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; width: 100%; box-sizing: border-box; }
         .brand-title { font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 6px; background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 12px 0; text-transform: uppercase; font-weight: 700; }
         .philosophy-box { max-width: 700px; margin: 0 auto 30px; font-size: 13px; color: #666; line-height: 1.7; }
-        .credits-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; }
+        
+        /* Footer Credits Container (Horizontal Layout Set Back) */
+        .credits-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; width: 100%; }
         
         .credit-card { 
             background: rgba(10, 10, 10, 0.8); 
             border: 1px solid rgba(212, 175, 55, 0.4); 
             padding: 15px 25px; 
             min-width: 190px; 
-            border-radius: 4px; 
+            border-radius: 8px; 
             text-align: center; 
             box-shadow: 0 0 15px rgba(223, 186, 107, 0.15);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         .credit-card:hover {
             box-shadow: 0 0 25px rgba(223, 186, 107, 0.35);
             transform: translateY(-2px);
         }
+
+        /* ✨ CONTINUOUS INDIVIDUAL SHIMMER FOR EACH FOOTER CARD */
+        .credit-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%; width: 150%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.12) 50%, transparent 100%);
+            transform: skewX(-20deg);
+            animation: loopCardShimmer 4s infinite ease-in-out;
+            pointer-events: none;
+        }
         
-        .credit-card .role { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: #888; display: block; margin-bottom: 5px; }
-        .credit-card .identity { font-family: 'Cinzel', serif; font-size: 15px; color: #fff; font-weight: 700; }
+        .credit-card .role { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: #888; display: block; margin-bottom: 5px; position: relative; z-index: 2; }
+        .credit-card .identity { font-family: 'Cinzel', serif; font-size: 15px; color: #fff; font-weight: 700; position: relative; z-index: 2; }
+        
         .footer-bottom { border-top: 1px solid rgba(212, 175, 55, 0.15); padding-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; font-size: 12px; max-width: 850px; margin: 0 auto; gap: 15px; }
         .deals-text { color: #666; } .deals-text a { color: #d4af37; text-decoration: none; font-weight: 600; }
         .social-wrapper { display: flex; gap: 15px; align-items: center; }
@@ -473,22 +526,25 @@
         .social-icon img { width: 18px; height: 18px; filter: grayscale(1) brightness(1.3); }
         .disclaimer-text { margin-top: 30px; font-size: 9px; color: #333; letter-spacing: 1px; }
 
-        /* 📱 EXTREME MOBILE OPTIMIZATIONS */
+        /* 📱 RESPONSIVE MOBILE FIXES */
         @media (max-width: 480px) {
             .content-container { padding: 20px 12px; }
-            .verification-card { padding: 35px 15px; margin-bottom: 20px; }
+            .verification-card { padding: 35px 15px; margin-bottom: 20px; border-radius: 12px; }
             .logo { font-size: 2.2rem; letter-spacing: 5px; }
             .subtitle { font-size: 0.75rem; letter-spacing: 2px; }
             .tagline { font-size: 0.85rem; line-height: 1.6; }
             
-            .modal-content { padding: 30px 15px; }
+            .modal-overlay { padding: 12px; }
+            .modal-content { padding: 30px 18px; border-radius: 14px; width: 100%; }
             
-            /* Mobile par aadhi-tedhi line fix karne ke liye column transform */
-            .info-row { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 2px; }
-            .info-label { font-size: 0.8rem; }
-            .info-value { text-align: left; font-size: 0.95rem; width: 100%; }
+            .info-row { display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 2px; }
+            .info-label { font-size: 0.82rem; }
+            .info-value { font-size: 0.88rem; text-align: right; width: auto; max-width: 60%; }
             
-            .credit-card { min-width: 100%; box-sizing: border-box; }
+            /* Keeps horizontal alignment or premium stack with fixed structural spacing */
+            .credits-container { display: flex; flex-direction: row; justify-content: center; gap: 10px; flex-wrap: wrap; }
+            .credit-card { min-width: 46%; flex: 1 1 46%; box-sizing: border-box; border-radius: 8px; padding: 12px 10px; }
+            .credit-card .identity { font-size: 12px; }
             .footer-bottom { flex-direction: column; text-align: center; gap: 20px; }
         }
     </style>
@@ -534,13 +590,14 @@
 <!-- POPUP MODAL WITH INSTANT RESPONSIVE SHIMMER -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
-        <!-- Loader Skeleton Structure -->
+        <!-- Premium Initial Skeleton Loader -->
         <div class="shimmer-wrapper" id="shimmerLoader">
-            <div class="shimmer-line short"></div>
-            <div class="shimmer-line"></div>
-            <div class="shimmer-line"></div>
-            <div class="shimmer-line"></div>
-            <div class="shimmer-line"></div>
+            <div class="shimmer-header"></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-row"><div class="shimmer-label"></div><div class="shimmer-value"></div></div>
+            <div class="shimmer-btn"></div>
         </div>
 
         <!-- Dynamic Registry Data Wrapper -->
@@ -569,7 +626,8 @@
             <button class="btn-close" id="closeBtn">Close</button>
         </div>
     </div>
-</div> 
+</div>
+
 <script>
     // ✅ Firebase Config Automatically Configured
     const firebaseConfig = {
