@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCH-V</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+body{
+background:#050505;
+color:#fff;
+font-family:Montserrat,Arial,sans-serif;
+}
+
+.arch-app{
+width:100%;
+height:100dvh;
+display:flex;
+flex-direction:column;
+background:
+radial-gradient(circle at top right,rgba(190,150,65,.12),transparent 38%),
+#070707;
+}
+
+/* HEADER */
+
+.arch-header{
+height:64px;
+flex-shrink:0;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 22px;
+border-bottom:1px solid rgba(210,174,91,.25);
+}
+
+.arch-brand{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.arch-logo{
+width:38px;
+height:38px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid #c9a65a;
+border-radius:50%;
+color:#d8b568;
+font-family:Cinzel,serif;
+}
+
+.arch-name{
+color:#d8b568;
+font-family:Cinzel,serif;
+letter-spacing:2px;
+font-size:16px;
+}
+
+.arch-sub{
+color:#777;
+font-size:7px;
+letter-spacing:1px;
+}
+
+.arch-online{
+color:#cdb16d;
+font-size:8px;
+}
+
+.arch-online span{
+width:7px;
+height:7px;
+display:inline-block;
+margin-right:5px;
+border-radius:50%;
+background:#c9a653;
+box-shadow:0 0 10px #c9a653;
+}
+
+/* CHAT */
+
+.chat-area{
+flex:1;
+min-height:0;
+overflow-y:auto;
+padding:22px;
+}
+
+.chat-area::-webkit-scrollbar{
+width:4px;
+}
+
+.chat-area::-webkit-scrollbar-thumb{
+background:#94783e;
+}
+
+.message{
+width:100%;
+max-width:1200px;
+margin:0 auto 16px;
+display:flex;
+gap:9px;
+}
+
+.message.user{
+justify-content:flex-end;
+}
+
+.message.ai{
+justify-content:flex-start;
+}
+
+.avatar{
+width:30px;
+height:30px;
+flex-shrink:0;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid #a78645;
+border-radius:50%;
+color:#d8b568;
+font-family:Cinzel,serif;
+font-size:10px;
+}
+
+.bubble{
+max-width:calc(100% - 40px);
+padding:13px 16px;
+border-radius:16px;
+font-size:12px;
+line-height:1.5;
+overflow-wrap:anywhere;
+}
+
+.ai .bubble{
+width:100%;
+background:#111;
+border:1px solid rgba(205,177,109,.18);
+border-top-left-radius:4px;
+}
+
+.user .bubble{
+max-width:420px;
+background:linear-gradient(135deg,#a8833d,#d7b86d);
+color:#080808;
+border-top-right-radius:4px;
+}
+
+/* COMMANDS */
+
+.command-title{
+margin-bottom:10px;
+color:#d8b568;
+font-family:Cinzel,serif;
+font-size:10px;
+letter-spacing:1px;
+}
+
+.quick-hint{
+margin-bottom:10px;
+color:#777;
+font-size:9px;
+}
+
+.quick-commands{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+}
+
+.quick-commands button{
+min-height:42px;
+padding:8px;
+border:1px solid rgba(205,177,109,.28);
+border-radius:8px;
+background:#151515;
+color:#d8b568;
+cursor:pointer;
+font-size:9px;
+font-family:Montserrat;
+transition:.2s;
+}
+
+.quick-commands button:hover{
+background:#292116;
+border-color:#d8b568;
+}
+
+/* DATA */
+
+.data-card{
+width:100%;
+margin-top:12px;
+padding:11px;
+border:1px solid rgba(205,177,109,.25);
+border-left:2px solid #c8a653;
+border-radius:9px;
+background:#101010;
+}
+
+.data-row{
+display:flex;
+align-items:flex-start;
+gap:8px;
+padding:7px 0;
+border-bottom:1px solid rgba(255,255,255,.05);
+font-size:11px;
+line-height:1.5;
+overflow-wrap:anywhere;
+word-break:break-word;
+}
+
+.data-row:last-child{
+border-bottom:0;
+}
+
+.data-key{
+min-width:125px;
+color:#8c8c8c;
+}
+
+.data-value{
+color:#e1c477;
+overflow-wrap:anywhere;
+word-break:break-word;
+}
+
+/* DETAIL BOX */
+
+.active-voucher-box{
+width:100%;
+margin-top:14px;
+border:1px solid rgba(205,177,109,.28);
+border-radius:10px;
+overflow:hidden;
+background:#0b0b0b;
+}
+
+.active-voucher-title{
+padding:13px 16px;
+color:#d8b568;
+font-family:Cinzel,serif;
+font-size:11px;
+letter-spacing:1px;
+border-bottom:1px solid rgba(205,177,109,.18);
+background:#121212;
+}
+
+.voucher-row{
+width:100%;
+min-height:48px;
+display:grid;
+grid-template-columns:minmax(180px,30%) minmax(0,1fr);
+align-items:center;
+gap:20px;
+padding:8px 14px;
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.voucher-row:last-child{
+border-bottom:0;
+}
+
+.voucher-detail{
+color:#888;
+font-size:10px;
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.voucher-value-box{
+min-width:0;
+width:100%;
+padding:9px 12px;
+border:1px solid rgba(205,177,109,.18);
+border-radius:6px;
+background:#151515;
+color:#dfc477;
+font-size:11px;
+overflow-wrap:anywhere;
+word-break:break-word;
+}
+
+/* REQUEST */
+
+.request-card{
+margin-top:13px;
+padding:12px;
+border:1px solid rgba(205,177,109,.34);
+border-radius:12px;
+background:#0e0e0e;
+}
+
+.request-title{
+margin-bottom:9px;
+color:#d8b568;
+font-family:Cinzel,serif;
+font-size:11px;
+letter-spacing:1px;
+}
+
+.request-buttons{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+.request-btn{
+flex:1;
+padding:11px 8px;
+border:0;
+border-radius:8px;
+cursor:pointer;
+font-size:10px;
+font-weight:700;
+}
+
+.approve-btn{
+background:linear-gradient(135deg,#a8833d,#d8b568);
+color:#080808;
+}
+
+.no-approve-btn{
+background:#202020;
+border:1px solid #555;
+color:#aaa;
+}
+
+/* COINS */
+
+.coin-tools{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-top:12px;
+}
+
+.coin-btn{
+flex:1;
+min-width:110px;
+padding:10px;
+border:1px solid rgba(205,177,109,.3);
+border-radius:8px;
+background:#161616;
+color:#d8b568;
+cursor:pointer;
+font-size:10px;
+}
+
+/* INPUT */
+
+.input-area{
+flex-shrink:0;
+padding:10px 22px 16px;
+border-top:1px solid rgba(210,174,91,.2);
+}
+
+.input-box{
+max-width:1200px;
+margin:auto;
+display:flex;
+align-items:center;
+gap:8px;
+padding:6px 7px 6px 15px;
+border:1px solid rgba(210,174,91,.35);
+border-radius:28px;
+background:#121212;
+}
+
+.input-box input{
+flex:1;
+min-width:0;
+border:0;
+outline:0;
+background:transparent;
+color:white;
+font-family:Montserrat;
+font-size:12px;
+}
+
+.input-box input::placeholder{
+color:#777;
+}
+
+.send-btn{
+width:38px;
+height:38px;
+border:0;
+border-radius:50%;
+cursor:pointer;
+background:linear-gradient(135deg,#a8833d,#d8b568);
+}
+
+/* LOCK */
+
+#archLock{
+position:fixed;
+inset:0;
+z-index:999999;
+display:flex;
+align-items:center;
+justify-content:center;
+background:
+radial-gradient(circle at center,rgba(190,150,65,.12),transparent 42%),
+#050505;
+}
+
+.lock-card{
+width:min(380px,calc(100% - 34px));
+padding:34px 25px;
+text-align:center;
+border:1px solid rgba(205,177,109,.35);
+border-radius:18px;
+background:#0c0c0c;
+box-shadow:0 20px 80px rgba(0,0,0,.8);
+}
+
+.lock-logo{
+width:62px;
+height:62px;
+margin:auto;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid #c9a65a;
+border-radius:50%;
+color:#d8b568;
+font-family:Cinzel,serif;
+font-size:22px;
+}
+
+.lock-title{
+margin-top:17px;
+color:#d8b568;
+font-family:Cinzel,serif;
+letter-spacing:3px;
+font-size:21px;
+}
+
+.lock-subtitle{
+margin-top:6px;
+margin-bottom:25px;
+color:#777;
+font-size:8px;
+letter-spacing:1.5px;
+}
+
+.lock-card input{
+width:100%;
+height:45px;
+padding:0 14px;
+outline:none;
+border:1px solid rgba(205,177,109,.28);
+border-radius:8px;
+background:#151515;
+color:white;
+font-family:Montserrat;
+}
+
+.lock-card input:focus{
+border-color:#d8b568;
+}
+
+.lock-card button{
+width:100%;
+height:45px;
+margin-top:12px;
+border:0;
+border-radius:8px;
+cursor:pointer;
+background:linear-gradient(135deg,#a8833d,#d8b568);
+color:#080808;
+font-weight:700;
+font-size:10px;
+}
+
+#lockError{
+min-height:17px;
+margin-top:12px;
+color:#c96d6d;
+font-size:9px;
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+.arch-header{
+height:58px;
+padding:0 10px;
+}
+
+.arch-logo{
+width:34px;
+height:34px;
+font-size:12px;
+}
+
+.arch-name{
+font-size:13px;
+}
+
+.arch-sub{
+font-size:5px;
+}
+
+.arch-online{
+font-size:6px;
+}
+
+.chat-area{
+padding:13px 7px;
+}
+
+.message{
+gap:5px;
+}
+
+.bubble{
+max-width:calc(100% - 34px);
+padding:10px;
+font-size:10px;
+}
+
+.quick-commands{
+grid-template-columns:repeat(2,1fr);
+gap:6px;
+}
+
+.quick-commands button{
+min-height:38px;
+font-size:8px;
+}
+
+.data-row{
+display:block;
+padding:6px 0;
+font-size:10px;
+}
+
+.data-key{
+display:block;
+min-width:0;
+margin-bottom:2px;
+font-size:9px;
+}
+
+.data-value{
+display:block;
+font-size:10px;
+word-break:break-all;
+}
+
+.voucher-row{
+min-height:auto;
+display:grid;
+grid-template-columns:minmax(0,42%) minmax(0,58%);
+gap:5px;
+padding:7px;
+}
+
+.voucher-detail{
+font-size:7px;
+line-height:1.3;
+}
+
+.voucher-value-box{
+padding:7px;
+font-size:8px;
+line-height:1.3;
+}
+
+.request-buttons{
+flex-direction:column;
+}
+
+.request-btn{
+width:100%;
+}
+
+.coin-tools{
+display:grid;
+grid-template-columns:1fr;
+}
+
+.coin-btn{
+width:100%;
+min-width:0;
+}
+
+.input-area{
+padding:7px;
+}
+
+.input-box{
+padding:5px 6px 5px 11px;
+}
+
+.send-btn{
+width:34px;
+height:34px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOCK -->
+
+<div id="archLock">
+
+<div class="lock-card">
+
+<div class="lock-logo">A</div>
+
+<div class="lock-title">ARCH-V</div>
+
+<div class="lock-subtitle">
+SECURE DATABASE ACCESS
+</div>
+
+<input
+id="archPassword"
+type="password"
+placeholder="ENTER ACCESS PASSWORD"
+onkeydown="if(event.key==='Enter')unlockARCHV()"
+>
+
+<button onclick="unlockARCHV()">
+UNLOCK ARCH-V
+</button>
+
+<div id="lockError"></div>
+
+</div>
+
+</div>
+
+
+<!-- APP -->
+
+<div class="arch-app">
+
+<header class="arch-header">
+
+<div class="arch-brand">
+
+<div class="arch-logo">A</div>
+
+<div>
+
+<div class="arch-name">ARCH-V</div>
+
+<div class="arch-sub">
+FIREBASE INTELLIGENCE ASSISTANT
+</div>
+
+</div>
+
+</div>
+
+<div class="arch-online">
+<span></span>
+LIVE DATABASE SYNC
+</div>
+
+</header>
+
+
+<main id="chatArea" class="chat-area">
+
+<div class="message ai">
+
+<div class="avatar">A</div>
+
+<div class="bubble">
+
+<div class="command-title">
+ARCH-V COMMANDS
+</div>
+
+<div class="quick-hint">
+Pehle user ya watch code likho, phir command select karo.
+</div>
+
+<div class="quick-commands">
+
+<button onclick="quickCommand('data')">
+USER KA DATA
+</button>
+
+<button onclick="quickCommand('voucher')">
+USER KA VOUCHER
+</button>
+
+<button onclick="quickCommand('pending')">
+USER KI PENDING REQUEST
+</button>
+
+<button onclick="quickCommand('coins')">
+USER KE COINS
+</button>
+
+<button onclick="quickCommand('watch')">
+WATCH DETAIL
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<div class="input-area">
+
+<div class="input-box">
+
+<input
+id="commandInput"
+placeholder="Pehle user ya watch code likho..."
+onkeydown="if(event.key==='Enter')sendCommand()"
+>
+
+<button class="send-btn" onclick="sendCommand()">
+➤
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* ================= PASSWORD ================= */
+
+const ARCHV_PASSWORD = "myvershu12";
+
+function unlockARCHV(){
+
+const password =
+document.getElementById("archPassword").value;
+
+if(password === ARCHV_PASSWORD){
+
+document.getElementById("archLock").style.display="none";
+
+}else{
+
+document.getElementById("lockError").innerText="ACCESS DENIED";
+
+}
+
+}
+
+
+/* ================= MAIN FIREBASE ================= */
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyBP8gUN9SVnUAsy_NI2CiIvJd69PTB1hrr5I",
+
+authDomain:"chief-login12.firebaseapp.com",
+
+databaseURL:"https://chief-login12-default-rtdb.firebaseio.com",
+
+projectId:"chief-login12",
+
+storageBucket:"chief-login12.firebasestorage.app",
+
+messagingSenderId:"334157325641",
+
+appId:"1:334157325641:web:c9bd4048105e71011e608",
+
+measurementId:"G-CB9F743N3M"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+let liveUsers = {};
+
+db.ref("users").on("value",snapshot=>{
+
+liveUsers = snapshot.val() || {};
+
+});
+
+
+/* ================= WATCH FIREBASE ================= */
+
+const watchFirebaseConfig = {
+
+apiKey:"AIzaSyAIGI79RWnrUtaRNhFU8YWBjGINWiZ1Eew",
+
+authDomain:"cm-smm-panel.firebaseapp.com",
+
+databaseURL:"https://cm-smm-panel-default-rtdb.firebaseio.com",
+
+projectId:"cm-smm-panel",
+
+storageBucket:"cm-smm-panel.firebasestorage.app",
+
+messagingSenderId:"805393568681",
+
+appId:"1:805393568681:web:e10454a61e17b394082ab8"
+
+};
+
+const watchApp = firebase.initializeApp(
+
+watchFirebaseConfig,
+
+"WATCH_DATABASE"
+
+);
+
+const watchDB = watchApp.database();
+
+let liveWatches = {};
+
+watchDB.ref("watches").on(
+
+"value",
+
+snapshot=>{
+
+liveWatches = snapshot.val() || {};
+
+}
+
+);
+
+
+/* ================= ESCAPE ================= */
+
+function escapeHTML(value){
+
+return String(value ?? "N/A")
+
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= SCROLL ================= */
+
+function scrollChat(){
+
+const chat =
+document.getElementById("chatArea");
+
+chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+/* ================= USER MESSAGE ================= */
+
+function addUserMessage(text){
+
+const div=document.createElement("div");
+
+div.className="message user";
+
+div.innerHTML=`
+
+<div class="bubble">
+${escapeHTML(text)}
+</div>
+
+`;
+
+document.getElementById("chatArea").appendChild(div);
+
+scrollChat();
+
+}
+
+
+/* ================= AI MESSAGE ================= */
+
+function addAIMessage(text,html=""){
+
+const div=document.createElement("div");
+
+div.className="message ai";
+
+div.innerHTML=`
+
+<div class="avatar">A</div>
+
+<div class="bubble">
+
+${escapeHTML(text)}
+
+${html}
+
+</div>
+
+`;
+
+document.getElementById("chatArea").appendChild(div);
+
+scrollChat();
+
+}
+
+
+/* ================= QUICK COMMAND ================= */
+
+function quickCommand(type){
+
+const input =
+document.getElementById("commandInput");
+
+const value=input.value.trim();
+
+if(!value){
+
+input.focus();
+
+input.placeholder=
+"Pehle user ya watch code likho...";
+
+return;
+
+}
+
+if(type==="data")
+input.value=value+" user ka data";
+
+if(type==="voucher")
+input.value=value+" user ka voucher";
+
+if(type==="pending")
+input.value=value+" user ki pending request";
+
+if(type==="coins")
+input.value=value+" user ke coins";
+
+if(type==="watch")
+input.value=value+" detail";
+
+input.focus();
+
+}
+
+
+/* ================= FIND USER ================= */
+
+function findUser(name){
+
+const search=name.toLowerCase().trim();
+
+const users=Object.keys(liveUsers);
+
+const exact=users.find(
+
+user=>user.toLowerCase()===search
+
+);
+
+if(exact)return exact;
+
+const similar=users.find(
+
+user=>user.toLowerCase().includes(search)
+
+);
+
+return similar || null;
+
+}
+
+
+/* ================= COMMAND ENGINE ================= */
+
+function sendCommand(){
+
+const input=
+document.getElementById("commandInput");
+
+const command=input.value.trim();
+
+if(!command)return;
+
+addUserMessage(command);
+
+input.value="";
+
+let match;
+
+
+/* USER DATA */
+
+match=command.match(
+/^(.+?)\s+user\s+ka\s+data$/i
+);
+
+if(match){
+
+showUserData(match[1],false);
+
+return;
+
+}
+
+
+/* FULL DATA */
+
+match=command.match(
+/^(.+?)\s+user\s+ka\s+full\s+data$/i
+);
+
+if(match){
+
+showUserData(match[1],true);
+
+return;
+
+}
+
+
+/* USER VOUCHER */
+
+match=command.match(
+/^(.+?)\s+user\s+ka\s+voucher$/i
+);
+
+if(match){
+
+showActiveVoucher(match[1]);
+
+return;
+
+}
+
+
+/* PENDING REQUEST */
+
+match=command.match(
+/^(.+?)\s+user\s+ki\s+pending\s+request$/i
+);
+
+if(match){
+
+showPendingRequest(match[1]);
+
+return;
+
+}
+
+
+/* USER COINS */
+
+match=command.match(
+/^(.+?)\s+user\s+ke\s+coins$/i
+);
+
+if(match){
+
+showCoins(match[1]);
+
+return;
+
+}
+
+
+/* SET COINS */
+
+match=command.match(
+/^(.+?)\s+(?:user\s+)?ke\s+coins\s+(\d+)\s*(?:kar\s+do|kardo|ker\s+do)$/i
+);
+
+if(match){
+
+setCoins(match[1],Number(match[2]));
+
+return;
+
+}
+
+
+/* APPROVE */
+
+match=command.match(
+/^(.+?)\s*(?:user\s*)?(?:ki|ka)\s*(?:pending\s*)?request\s*(?:approve|approved)\s*(?:karo|kero|ker do|kardo|do)?$/i
+);
+
+if(match){
+
+approveUserRequest(match[1]);
+
+return;
+
+}
+
+
+/* NEW WATCH DETAIL COMMAND */
+
+match=command.match(
+/^(.+?)\s+detail$/i
+);
+
+if(match){
+
+showWatchDetail(match[1]);
+
+return;
+
+}
+
+
+addAIMessage("Command samajh nahi aaya.");
+
+}
+
+
+/* ================= USER DATA ================= */
+
+function showUserData(searchName,full){
+
+const username=findUser(searchName);
+
+if(!username){
+
+addAIMessage(
+"User \""+searchName+"\" users database me nahi mila."
+);
+
+return;
+
+}
+
+const user=liveUsers[username];
+
+addAIMessage(
+
+username+" ka "+
+
+(full?"full Firebase data":"Firebase data"),
+
+`
+
+<div class="data-card">
+${formatData(user)}
+</div>
+
+${coinButtons(username)}
+
+`
+
+);
+
+}
+
+
+/* ================= ACTIVE VOUCHER ================= */
+
+function showActiveVoucher(searchName){
+
+const username=findUser(searchName);
+
+if(!username){
+
+addAIMessage("User nahi mila.");
+
+return;
+
+}
+
+const voucher=liveUsers[username]?.activeVoucher;
+
+if(!voucher){
+
+addAIMessage(
+username+" ka koi active voucher nahi hai."
+);
+
+return;
+
+}
+
+addAIMessage(
+
+username+" ka active voucher:",
+
+`
+
+<div class="active-voucher-box">
+
+<div class="active-voucher-title">
+ACTIVE VOUCHER DETAILS
+</div>
+
+${formatVoucherObject(voucher)}
+
+</div>
+
+`
+
+);
+
+}
+
+
+/* ================= PENDING ================= */
+
+function showPendingRequest(searchName){
+
+const username=findUser(searchName);
+
+if(!username){
+
+addAIMessage("User nahi mila.");
+
+return;
+
+}
+
+const request=
+liveUsers[username]?.pendingRequest;
+
+if(!request || request.status!=="pending"){
+
+addAIMessage(
+username+" ki koi pending request nahi hai."
+);
+
+return;
+
+}
+
+addAIMessage(
+
+username+" ki pending voucher request:",
+
+`
+
+<div class="request-card">
+
+<div class="request-title">
+PENDING VOUCHER REQUEST
+</div>
+
+<div class="data-card">
+${formatData(request)}
+</div>
+
+<div class="request-buttons">
+
+<button
+class="request-btn approve-btn"
+onclick="approveUserRequest('${encodeURIComponent(username)}')"
+>
+APPROVE
+</button>
+
+<button
+class="request-btn no-approve-btn"
+onclick="notApprove(this)"
+>
+DO NOT APPROVE
+</button>
+
+</div>
+
+</div>
+
+`
+
+);
+
+}
+
+
+/* ================= APPROVE ================= */
+
+async function approveUserRequest(searchName){
+
+const username=findUser(searchName);
+
+if(!username){
+
+addAIMessage("User nahi mila.");
+
+return;
+
+}
+
+const request=
+liveUsers[username]?.pendingRequest;
+
+if(!request){
+
+addAIMessage(
+username+" ki koi pending request nahi hai."
+);
+
+return;
+
+}
+
+if(request.status!=="pending"){
+
+addAIMessage(
+username+" ki request already "+request.status+" hai."
+);
+
+return;
+
+}
+
+const approved=confirm(
+"Request approve karein?\n\nUser: "+username
+);
+
+if(!approved)return;
+
+try{
+
+await db.ref(
+"users/"+username+"/pendingRequest/status"
+).set("approved");
+
+addAIMessage(
+
+"✓ REQUEST APPROVED\n\n"+
+"User: "+username+"\n"+
+"Firebase status: pending → approved"
+
+);
+
+}catch(error){
+
+addAIMessage(
+"Firebase update failed:\n\n"+error.message
+);
+
+}
+
+}
+
+
+/* ================= NOT APPROVE ================= */
+
+function notApprove(button){
+
+const card=button.closest(".request-card");
+
+card.innerHTML=`
+
+<div class="request-title">
+REQUEST NOT APPROVED
+</div>
+
+<div class="data-card">
+Firebase me koi change nahi kiya gaya.
+</div>
+
+`;
+
+}
+
+
+/* ================= COINS ================= */
+
+function showCoins(searchName){
+
+const username=findUser(searchName);
+
+if(!username){
+
+addAIMessage("User nahi mila.");
+
+return;
+
+}
+
+const coins=liveUsers[username].coins || 0;
+
+addAIMessage(
+
+username+" ke current coins: "+coins,
+
+coinButtons(username)
+
+);
+
+}
+
+
+function coinButtons(username){
+
+return `
+
+<div class="coin-tools">
+
+<button
+class="coin-btn"
+onclick="changeCoins('${encodeURIComponent(username)}','increase')"
+>
+INCREASE COINS
+</button>
+
+<button
+class="coin-btn"
+onclick="changeCoins('${encodeURIComponent(username)}','decrease')"
+>
+DECREASE COINS
+</button>
+
+<button
+class="coin-btn"
+onclick="changeCoins('${encodeURIComponent(username)}','set')"
+>
+SET COINS
+</button>
+
+</div>
+
+`;
+
+}
+
+
+async function changeCoins(encodedUsername,type){
+
+const username=decodeURIComponent(encodedUsername);
+
+const current=Number(
+liveUsers[username]?.coins || 0
+);
+
+const input=prompt(
+
+type==="set"
+?"New coin value:"
+:type==="increase"
+?"Kitne coins increase karne hain?"
+:"Kitne coins decrease karne hain?"
+
+);
+
+if(input===null)return;
+
+const amount=Number(input);
+
+if(isNaN(amount)||amount<0){
+
+alert("Valid number enter karo.");
+
+return;
+
+}
+
+let newValue;
+
+if(type==="set")
+newValue=amount;
+
+else if(type==="increase")
+newValue=current+amount;
+
+else
+newValue=Math.max(0,current-amount);
+
+await db.ref(
+"users/"+username+"/coins"
+).set(newValue);
+
+addAIMessage(
+
+"COINS UPDATED\n\n"+
+"User: "+username+"\n"+
+"Old: "+current+"\n"+
+"New: "+newValue
+
+);
+
+}
+
+
+async function setCoins(searchName,value){
+
+const username=findUser(searchName);
+
+if(!username){
+
+addAIMessage("User nahi mila.");
+
+return;
+
+}
+
+await db.ref(
+"users/"+username+"/coins"
+).set(value);
+
+addAIMessage(
+
+username+
+" ke coins Firebase me "+
+value+
+" kar diye gaye."
+
+);
+
+}
+
+
+/* ================= WATCH DETAIL ================= */
+
+function showWatchDetail(watchCode){
+
+const code=watchCode.trim();
+
+const watch=liveWatches[code];
+
+if(!watch){
+
+addAIMessage(
+
+"Watch code \""+
+code+
+"\" nahi mila."
+
+);
+
+return;
+
+}
+
+addAIMessage(
+
+code+" ki watch detail:",
+
+`
+
+<div class="active-voucher-box">
+
+<div class="active-voucher-title">
+WATCH DETAILS
+</div>
+
+${formatWatchData(watch)}
+
+</div>
+
+`
+
+);
+
+}
+
+
+/* ================= FORMAT WATCH ================= */
+
+function formatWatchData(watch){
+
+let html="";
+
+Object.keys(watch).forEach(key=>{
+
+let value=watch[key];
+
+if(value!==null && typeof value==="object"){
+
+value=JSON.stringify(value);
+
+}
+
+html+=`
+
+<div class="voucher-row">
+
+<div class="voucher-detail">
+${escapeHTML(key)}
+</div>
+
+<div class="voucher-value-box">
+${escapeHTML(value)}
+</div>
+
+</div>
+
+`;
+
+});
+
+return html;
+
+}
+
+
+/* ================= FORMAT DATA ================= */
+
+function formatData(obj){
+
+if(obj===null||obj===undefined)return "";
+
+if(typeof obj!=="object"){
+
+return `
+
+<div class="data-row">
+
+<span class="data-value">
+${escapeHTML(obj)}
+</span>
+
+</div>
+
+`;
+
+}
+
+let html="";
+
+Object.keys(obj).forEach(key=>{
+
+const value=obj[key];
+
+if(value!==null && typeof value==="object"){
+
+html+=`
+
+<div class="data-row">
+
+<span class="data-key">
+${escapeHTML(key)}
+</span>
+
+<div class="data-value">
+${formatData(value)}
+</div>
+
+</div>
+
+`;
+
+}else{
+
+html+=`
+
+<div class="data-row">
+
+<span class="data-key">
+${escapeHTML(key)}
+</span>
+
+<span class="data-value">
+${escapeHTML(value)}
+</span>
+
+</div>
+
+`;
+
+}
+
+});
+
+return html;
+
+}
+
+
+/* ================= FORMAT VOUCHER ================= */
+
+function formatVoucherObject(voucher){
+
+let html="";
+
+Object.keys(voucher).forEach(key=>{
+
+let value=voucher[key];
+
+if(value!==null && typeof value==="object"){
+
+value=JSON.stringify(value);
+
+}
+
+html+=`
+
+<div class="voucher-row">
+
+<div class="voucher-detail">
+${escapeHTML(key)}
+</div>
+
+<div class="voucher-value-box">
+${escapeHTML(value)}
+</div>
+
+</div>
+
+`;
+
+});
+
+return html;
+
+}
+
+</script>
+
+</body>
+</html>
