@@ -1,17 +1,20 @@
 <div id="chief-legal-container">
   <style>
-    /* Google Sites & Webview Scroll Fix */
     :root {
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
-    ::-webkit-scrollbar { display: none !important; }
 
-    html, body {
+    ::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    html,
+    body {
       margin: 0 !important;
       padding: 0 !important;
       background: #050505;
-      overflow: visible !important; /* Force scroll sync with page */
+      overflow: visible !important;
       height: auto !important;
     }
 
@@ -26,7 +29,97 @@
       margin: 0 auto;
       border-radius: 20px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      overflow: hidden; /* Prevent internal scrolling */
+      overflow: hidden;
+    }
+
+    /* TOP BRAND */
+    .chief-brand {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .chief-brand h1 {
+      margin: 0;
+      color: #d4af37;
+      font-size: 30px;
+      letter-spacing: 8px;
+      font-weight: 600;
+    }
+
+    .chief-brand span {
+      display: block;
+      margin-top: 6px;
+      color: #666;
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    /* NAVIGATION */
+    .legal-nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 25px auto 40px;
+      padding: 6px;
+      max-width: 560px;
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 12px;
+      background: rgba(212,175,55,0.03);
+    }
+
+    .legal-nav button {
+      flex: 1;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #777;
+      padding: 13px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: 0.3s ease;
+    }
+
+    .legal-nav button:hover {
+      color: #fcf6ba;
+    }
+
+    .legal-nav button.active {
+      color: #050505;
+      background: linear-gradient(
+        135deg,
+        #8f6b1f,
+        #d4af37,
+        #fcf6ba,
+        #d4af37,
+        #8f6b1f
+      );
+      box-shadow: 0 0 18px rgba(212,175,55,0.22);
+    }
+
+    /* FRAGMENTS */
+    .legal-fragment {
+      display: none;
+      animation: chiefFade 0.35s ease;
+    }
+
+    .legal-fragment.active {
+      display: block;
+    }
+
+    @keyframes chiefFade {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .legal-header {
@@ -36,7 +129,7 @@
       padding-bottom: 20px;
     }
 
-    .legal-header h1 {
+    .legal-header h2 {
       color: #d4af37;
       font-size: 26px;
       letter-spacing: 4px;
@@ -55,7 +148,7 @@
       margin-bottom: 30px;
     }
 
-    .legal-section h2 {
+    .legal-section h3 {
       color: #fcf6ba;
       font-size: 16px;
       margin-bottom: 15px;
@@ -65,7 +158,8 @@
       text-transform: uppercase;
     }
 
-    .legal-section p, .legal-section li {
+    .legal-section p,
+    .legal-section li {
       font-size: 14px;
       margin-bottom: 10px;
     }
@@ -73,6 +167,10 @@
     .legal-section ul {
       padding-left: 20px;
       list-style-type: square;
+    }
+
+    .legal-section b {
+      color: #d4af37;
     }
 
     .contact-card {
@@ -96,69 +194,728 @@
       margin-top: 40px;
       letter-spacing: 2px;
     }
+
+    @media (max-width: 520px) {
+      #chief-legal-container {
+        padding: 28px 16px;
+        border-radius: 14px;
+      }
+
+      .chief-brand h1 {
+        font-size: 25px;
+        letter-spacing: 6px;
+      }
+
+      .legal-nav button {
+        font-size: 9px;
+        padding: 12px 5px;
+      }
+
+      .legal-header h2 {
+        font-size: 21px;
+        letter-spacing: 3px;
+      }
+
+      .legal-section p,
+      .legal-section li {
+        font-size: 13px;
+      }
+    }
   </style>
 
-  <div class="legal-header">
-    <h1>Privacy Policy</h1>
-    <p>Last Updated: June 29, 2026</p>
+  <!-- CHIEF BRAND -->
+  <div class="chief-brand">
+    <h1>CHIEF</h1>
+    <span>Luxury Without Compromise</span>
   </div>
 
-  <div class="legal-section">
-    <p>Welcome to <b>CHIEF</b>. We are committed to protecting the privacy and data security of our users. This Privacy Policy outlines how our mobile application (operating via a secure webview connection) handles your information when you access our platform, create an account, or engage with our digital registry services.</p>
+  <!-- PROFESSIONAL NAVIGATION -->
+  <div class="legal-nav">
+    <button
+      class="active"
+      onclick="showChiefLegal('privacy', this)">
+      Privacy Policy
+    </button>
+
+    <button
+      onclick="showChiefLegal('terms', this)">
+      Terms & Conditions
+    </button>
   </div>
 
-  <div class="legal-section">
-    <h2>1. The Information We Collect</h2>
-    <p>We believe in absolute data minimization. We only collect the specific details required to manage your account and watch authentication:</p>
-    <ul>
-      <li><b>Account Profile Information:</b> When you launch the application and set up an account, we collect your <b>Name</b> to establish and secure your profile.</li>
-      <li><b>Digital Watch Registry Data:</b> For patrons who purchase a CHIEF watch, we securely store details including your Name, the watch's Unique Registry Code, and the specific Watch Edition to maintain permanent, digital ownership records.</li>
-      <li><b>Reward System Balance:</b> We track the "Coins" earned and utilized through your in-app rewards activity.</li>
-    </ul>
-  </div>
+  <!-- PRIVACY POLICY FRAGMENT -->
+  <section
+    id="chief-privacy"
+    class="legal-fragment active">
 
-  <div class="legal-section">
-    <h2>2. Zero Device Permissions Policy</h2>
-    <p>To ensure your ultimate privacy, our mobile application **does not** request, access, or track any hardware permissions from your device. This includes but is not limited to: Location tracking, Camera, Microphone, Storage/Media, Contacts, or Device IDs.</p>
-  </div>
+    <div class="legal-header">
+      <h2>Privacy Policy</h2>
+      <p>Last Updated: July 19, 2026</p>
+    </div>
 
-  <div class="legal-section">
-    <h2>3. How We Utilize Your Data</h2>
-    <p>Your data is strictly utilized for core app features to optimize your brand experience:</p>
-    <ul>
-      <li><b>Digital Authenticity & Registry:</b> Keeping your watch registry securely saved so you can check and prove which watch belongs to whose name digitally.</li>
-      <li><b>In-App Loyalty Program:</b> Maintaining your permanent Coin balance so you can seamlessly earn rewards and redeem them for items in our store.</li>
-      <li><b>Profile Persistence:</b> Ensuring your account dashboard and watch purchase history remain safely saved for lifetime verification.</li>
-    </ul>
-  </div>
+    <div class="legal-section">
+      <p>
+        Welcome to <b>CHIEF</b>. This Privacy Policy explains how CHIEF
+        ("we", "us", or "our") collects, uses, stores, and protects information
+        when you use the CHIEF mobile application and its related services.
+      </p>
 
-  <div class="legal-section">
-    <h2>4. Order Integration via WhatsApp</h2>
-    <p>Our application utilizes a direct WhatsApp redirect for frictionless order processing. When you click the "Confirm Order" section within the app, you will be seamlessly directed to WhatsApp to complete your message manually. We do not automatically scrape or extract any external communication data or personal details from your WhatsApp application.</p>
-  </div>
+      <p>
+        CHIEF is designed to provide watch verification, registry services,
+        rewards, voucher management, customised watch order requests, and
+        related Chief Store services.
+      </p>
+    </div>
 
-  <div class="legal-section">
-    <h2>5. Third-Party Sharing</h2>
-    <p>We respect your privacy. We do not sell, trade, rent, or lease your personal identification or watch registry details to third-party marketing companies, advertisers, or any outsiders.</p>
-  </div>
+    <div class="legal-section">
+      <h3>1. Information We Collect</h3>
 
-  <div class="legal-section">
-    <h2>6. User Rights & Fast Support</h2>
-    <p>Every user has the right to access their digital assets and profile safely. We provide direct and expedited concierge assistance. If you ever need help, profile corrections, or have any questions about your stored data, you can connect with us directly.</p>
-  </div>
+      <p>
+        CHIEF follows a data-minimisation approach and collects information
+        necessary to provide its services.
+      </p>
 
-  <div class="legal-section">
-    <h2>7. Third-Party Advertising (AdMob)</h2>
-    <p>This application uses Google AdMob to display advertisements. AdMob may use cookies and device identifiers to provide personalized ads. You can learn more about how Google uses data in their Privacy Policy.</p>
-  </div>
+      <ul>
+        <li>
+          <b>Account Information:</b>
+          When you create an account, we may store your username and password
+          or authentication credentials required to manage your account.
+        </li>
 
-  <div class="contact-card">
-    <p><b>CONTACT OUR SUPPORT CONCIERGE</b></p>
-    <p>Email: mrchief12@gmail.com</p>
-    <p>Support Channel: Contect us via App</p>
-  </div>
+        <li>
+          <b>Authentication Information:</b>
+          Account authentication may be handled through Firebase-based services.
+          A system-generated authentication identifier may be associated with
+          your account for account management and security.
+        </li>
+
+        <li>
+          <b>Watch Verification Information:</b>
+          When you verify an eligible CHIEF watch, the App may process the
+          unique watch verification code and related registry information.
+        </li>
+
+        <li>
+          <b>Watch Registry Information:</b>
+          With the user's permission, registry information may include the
+          user-provided name, watch model, unique watch status, registry date,
+          and other information necessary to maintain the CHIEF watch registry.
+        </li>
+
+        <li>
+          <b>Rewards and C Coins:</b>
+          We may store information about daily rewards, referral rewards,
+          free reward activities, and C Coins earned through eligible activities.
+        </li>
+
+        <li>
+          <b>Voucher Information:</b>
+          We may store voucher type, purchase amount, activation status,
+          monthly credit information, validity information, redemption status,
+          and other information required to manage your voucher.
+        </li>
+
+        <li>
+          <b>Payment Verification Information:</b>
+          If a voucher purchase requires transaction verification, the user may
+          submit a UTR or transaction reference. This information may be stored
+          for manual payment verification and voucher activation.
+        </li>
+
+        <li>
+          <b>Order Information:</b>
+          Information entered by the user while customising or preparing a
+          CHIEF watch order may be used to prepare and communicate the order
+          request.
+        </li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h3>2. Device Permissions</h3>
+
+      <p>
+        CHIEF does not require access to your device's location, camera,
+        microphone, contacts, or personal media files for basic account creation
+        and watch verification services.
+      </p>
+
+      <p>
+        Certain third-party services used by the App, such as advertising
+        services, may process technical information according to their own
+        policies and applicable configurations.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>3. How We Use Your Information</h3>
+
+      <ul>
+        <li>Creating and managing user accounts;</li>
+        <li>Authenticating users and maintaining account security;</li>
+        <li>Providing CHIEF watch verification services;</li>
+        <li>Maintaining the CHIEF watch registry;</li>
+        <li>Managing daily rewards, referrals, and C Coins;</li>
+        <li>Verifying voucher transactions and activating vouchers;</li>
+        <li>Maintaining voucher credit and redemption records;</li>
+        <li>Preparing customised watch order requests;</li>
+        <li>Providing customer support;</li>
+        <li>Preventing fraud, abuse, and unauthorised activity;</li>
+        <li>Maintaining and improving the App and its services.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h3>4. Watch Registry and Verification</h3>
+
+      <p>
+        CHIEF watches may contain a unique verification code that can be used
+        to verify an eligible watch through the App.
+      </p>
+
+      <p>
+        When a user chooses to register or verify a watch, the App may associate
+        registry information with the watch record, including the user's
+        provided name, watch model, unique status, and registry date.
+      </p>
+
+      <p>
+        Users must not attempt to guess, generate, manipulate, duplicate, or
+        misuse watch verification codes or registry records.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>5. C Coins and Rewards</h3>
+
+      <p>
+        CHIEF may provide rewards through daily rewards, referral features,
+        free reward activities, or other eligible activities.
+      </p>
+
+      <p>
+        <b>C Coins are reward points and are not cash.</b>
+        C Coins cannot be purchased through the App, withdrawn as cash, or
+        converted into cash.
+      </p>
+
+      <p>
+        Reward balances and C Coins may be adjusted, suspended, or removed where
+        there is suspected fraud, abuse, technical error, duplicate activity,
+        or violation of applicable terms.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>6. Vouchers and Store Credit</h3>
+
+      <p>
+        CHIEF may offer vouchers such as Silver, Gold, and Diamond vouchers.
+        Voucher information, including price, monthly credit, total limit,
+        validity, discount, and other conditions, is displayed with the
+        applicable voucher.
+      </p>
+
+      <p>
+        Voucher credit is intended only for eligible purchases of physical
+        products from the CHIEF Store.
+      </p>
+
+      <p>
+        Voucher credit cannot be withdrawn as cash, converted into cash,
+        transferred to a bank account or wallet, or used as general in-app
+        money.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>7. Payment Verification</h3>
+
+      <p>
+        Where a voucher purchase requires payment verification, the App may
+        request a UTR or transaction reference from the user.
+      </p>
+
+      <p>
+        The submitted transaction reference may be stored and manually reviewed
+        by CHIEF for payment verification and voucher activation.
+      </p>
+
+      <p>
+        CHIEF does not request or store your banking password, UPI PIN, ATM PIN,
+        or card PIN.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>8. Order Integration via WhatsApp</h3>
+
+      <p>
+        CHIEF may provide an order customisation feature that prepares an order
+        summary based on information entered by the user.
+      </p>
+
+      <p>
+        When the user chooses to contact CHIEF through WhatsApp, the App may
+        open WhatsApp and prepare a message containing the order information.
+        The user can review the message before sending it.
+      </p>
+
+      <p>
+        CHIEF does not access, read, or extract unrelated private conversations
+        from the user's WhatsApp account.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>9. Third-Party Services</h3>
+
+      <p>
+        CHIEF may use third-party services and infrastructure to operate the
+        App and its services, including cloud storage, authentication, hosting,
+        advertising, and communication services.
+      </p>
+
+      <p>
+        CHIEF does not sell your personal information to third-party marketing
+        companies.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>10. Advertising Services</h3>
+
+      <p>
+        CHIEF may use Google AdMob or other advertising services to display
+        advertisements and provide eligible reward advertisements.
+      </p>
+
+      <p>
+        Advertising providers may process certain technical, device, or
+        advertising-related information according to their own privacy policies
+        and applicable laws.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>11. Data Storage and Security</h3>
+
+      <p>
+        CHIEF uses third-party cloud and hosting infrastructure, including
+        Firebase-based services, to store and manage application information.
+      </p>
+
+      <p>
+        We take reasonable measures to protect information against unauthorised
+        access, misuse, alteration, disclosure, or destruction.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>12. Account Deletion and Data Requests</h3>
+
+      <p>
+        Users may request deletion of their CHIEF account and associated
+        personal account information through the account deletion method
+        provided by CHIEF.
+      </p>
+
+      <p>
+        To request account deletion or ask questions about your stored data,
+        please contact us using the contact details below.
+      </p>
+
+      <p>
+        Certain information may be retained where necessary for legal
+        obligations, fraud prevention, security, dispute resolution, product
+        authenticity records, or other lawful purposes.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>13. Children's Privacy</h3>
+
+      <p>
+        CHIEF does not knowingly collect personal information from children in
+        violation of applicable law.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>14. Changes to This Privacy Policy</h3>
+
+      <p>
+        CHIEF may update this Privacy Policy from time to time. Any updated
+        version may be made available through the App or the official CHIEF
+        Privacy Policy page.
+      </p>
+    </div>
+
+    <div class="contact-card">
+      <p><b>CONTACT OUR SUPPORT CONCIERGE</b></p>
+      <p>Email: mrchief12@gmail.com</p>
+      <p>Support Channel: Contact us via the CHIEF App</p>
+    </div>
+
+  </section>
+
+  <!-- TERMS & CONDITIONS FRAGMENT -->
+  <section
+    id="chief-terms"
+    class="legal-fragment">
+
+    <div class="legal-header">
+      <h2>Terms & Conditions</h2>
+      <p>Last Updated: July 19, 2026</p>
+    </div>
+
+    <div class="legal-section">
+      <p>
+        These Terms and Conditions govern your access to and use of the CHIEF
+        mobile application and related CHIEF services.
+      </p>
+
+      <p>
+        By creating an account or using the App, you agree to these Terms.
+        If you do not agree with these Terms, you should not use the App.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>1. About CHIEF</h3>
+
+      <p>
+        CHIEF provides services including watch verification, watch registry
+        services, reward features, C Coins, customised watch order requests,
+        CHIEF Store vouchers, and customer communication services.
+      </p>
+
+      <p>
+        CHIEF may update, modify, suspend, or discontinue any feature of the
+        App when reasonably necessary.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>2. Account Registration</h3>
+
+      <p>
+        To use certain features, you may need to create a CHIEF account.
+      </p>
+
+      <ul>
+        <li>Provide accurate information requested by the App;</li>
+        <li>Keep your login credentials confidential;</li>
+        <li>Not share your account credentials with unauthorised persons;</li>
+        <li>Not create accounts for fraudulent or abusive purposes.</li>
+      </ul>
+
+      <p>
+        You are responsible for activity performed through your account unless
+        the activity occurred due to circumstances outside your reasonable control.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>3. Watch Verification</h3>
+
+      <p>
+        CHIEF watches may be associated with unique verification codes.
+        Eligible users may use a valid code to verify a CHIEF watch through
+        the App.
+      </p>
+
+      <p>Users must not:</p>
+
+      <ul>
+        <li>Guess, generate, or exploit verification codes;</li>
+        <li>Use another person's verification code without authorisation;</li>
+        <li>Modify or falsify registry records;</li>
+        <li>Bypass verification or security systems.</li>
+      </ul>
+
+      <p>
+        CHIEF may suspend or invalidate a verification record if fraud, misuse,
+        false information, or unauthorised activity is suspected.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>4. C Coins and Rewards</h3>
+
+      <p>
+        CHIEF may provide rewards through daily rewards, referral features,
+        free reward activities, or other eligible activities.
+      </p>
+
+      <p>
+        <b>C Coins are an in-app reward balance and are not cash.</b>
+      </p>
+
+      <ul>
+        <li>C Coins cannot be purchased through the App;</li>
+        <li>C Coins cannot be withdrawn as cash;</li>
+        <li>C Coins cannot be converted into cash;</li>
+        <li>C Coins are not a bank balance or financial instrument.</li>
+      </ul>
+
+      <p>
+        CHIEF may correct, adjust, suspend, or remove rewards where there is
+        suspected fraud, abuse, technical error, duplicate activity, or
+        violation of these Terms.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>5. Advertisements and Reward Activities</h3>
+
+      <p>
+        The App may display advertisements. Certain eligible activities may
+        allow users to watch advertisements and receive rewards.
+      </p>
+
+      <p>
+        Reward availability may depend on advertising availability, technical
+        limitations, eligibility rules, and anti-fraud systems.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>6. CHIEF Store Vouchers</h3>
+
+      <p>
+        CHIEF may offer different voucher categories, including Silver, Gold,
+        and Diamond vouchers.
+      </p>
+
+      <p>
+        The specific price, monthly credit, total credit limit, validity period,
+        discount, and other conditions applicable to a voucher will be displayed
+        to the user before or at the time of purchase.
+      </p>
+
+      <p>
+        Voucher credit is intended only for eligible physical products
+        purchased from the CHIEF Store.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>7. Voucher Credit Restrictions</h3>
+
+      <p>Voucher credit:</p>
+
+      <ul>
+        <li>May be used only for eligible physical CHIEF Store products;</li>
+        <li>Cannot be withdrawn as cash;</li>
+        <li>Cannot be converted into cash;</li>
+        <li>Cannot be transferred to a bank account or payment wallet;</li>
+        <li>Cannot be sold or exchanged for cash;</li>
+        <li>Cannot be used to purchase another voucher;</li>
+        <li>Is subject to the applicable voucher validity and conditions.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h3>8. Voucher Discount</h3>
+
+      <p>
+        Where a voucher states "50% OFF", the discount is subject to the
+        specific voucher terms and eligible CHIEF Store products.
+      </p>
+
+      <p>
+        Unless otherwise stated in the applicable voucher terms, the discount
+        may be available only once and does not automatically create a new
+        voucher after use.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>9. Voucher Payment and Activation</h3>
+
+      <p>
+        A voucher may require payment verification before activation.
+      </p>
+
+      <p>
+        Where the App requests a UTR or transaction reference, the user must
+        provide accurate transaction information.
+      </p>
+
+      <p>
+        CHIEF may manually verify the submitted transaction. The voucher will
+        not be active until the payment is successfully verified.
+      </p>
+
+      <p>
+        False, altered, duplicated, or fraudulent transaction information may
+        result in rejection, suspension, or account action.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>10. Voucher Redemption</h3>
+
+      <p>
+        Each eligible voucher may have a unique redemption code.
+        The user may be required to provide the correct redemption code when
+        redeeming the voucher at the CHIEF Store.
+      </p>
+
+      <p>
+        CHIEF may refuse redemption where the voucher is expired, already used,
+        suspended, invalid, or where fraud or misuse is suspected.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>11. Orders and Customised Watches</h3>
+
+      <p>
+        The App may allow users to select or customise watch preferences and
+        prepare an order request.
+      </p>
+
+      <p>
+        When a user confirms an order request, the App may generate an order
+        summary and allow the user to contact CHIEF through WhatsApp.
+      </p>
+
+      <p>
+        Generating an order summary or WhatsApp message does not necessarily
+        mean that the order has been accepted.
+      </p>
+
+      <p>
+        A final order is subject to confirmation by CHIEF, product availability,
+        pricing, specifications, and applicable conditions.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>12. WhatsApp Communication</h3>
+
+      <p>
+        When you choose to contact CHIEF through WhatsApp, you are using a
+        third-party communication service.
+      </p>
+
+      <p>
+        You are responsible for reviewing the order information before sending
+        the message.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>13. Prohibited Activities</h3>
+
+      <ul>
+        <li>Using the App for fraud or illegal activity;</li>
+        <li>Attempting to hack or bypass App security;</li>
+        <li>Manipulating rewards, referrals, C Coins, or voucher records;</li>
+        <li>Submitting false UTR or payment information;</li>
+        <li>Using another user's account without permission;</li>
+        <li>Misusing watch verification codes;</li>
+        <li>Using automated systems to abuse reward programs;</li>
+        <li>Interfering with the App, servers, or databases;</li>
+        <li>Uploading malicious code.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h3>14. Intellectual Property</h3>
+
+      <p>
+        The CHIEF name, brand identity, logos, software, content, designs,
+        text, graphics, databases, and other materials provided by CHIEF are
+        protected by applicable intellectual property laws.
+      </p>
+
+      <p>
+        You may not copy, reproduce, modify, distribute, sell, or commercially
+        exploit CHIEF materials without appropriate permission, except where
+        permitted by applicable law.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>15. Service Availability</h3>
+
+      <p>
+        CHIEF does not guarantee that the App or every feature will always be
+        available, uninterrupted, error-free, or free from technical issues.
+      </p>
+
+      <p>
+        Features may be temporarily unavailable due to maintenance, technical
+        problems, third-party service failures, security concerns, or other
+        circumstances.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>16. Account Suspension</h3>
+
+      <p>
+        CHIEF may suspend or restrict an account where reasonably necessary due
+        to fraud, abuse, false information, payment manipulation, reward
+        manipulation, voucher misuse, security concerns, violation of these
+        Terms, or legal requirements.
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h3>17. Changes to These Terms</h3>
+
+      <p>
+        CHIEF may update these Terms from time to time.
+        Updated Terms may be made available through the App or the official
+        CHIEF website.
+      </p>
+
+      <p>
+        Continued use of the App after an update means that you accept the
+        updated Terms.
+      </p>
+    </div>
+
+    <div class="contact-card">
+      <p><b>CONTACT OUR SUPPORT CONCIERGE</b></p>
+      <p>Email: mrchief12@gmail.com</p>
+      <p>Support Channel: Contact us via the CHIEF App</p>
+    </div>
+
+  </section>
 
   <div class="footer-brand">
     &copy; 2026 CHIEF | LUXURY WITHOUT COMPROMISE
   </div>
+
+  <script>
+    function showChiefLegal(section, button) {
+      document
+        .querySelectorAll('.legal-fragment')
+        .forEach(function(fragment) {
+          fragment.classList.remove('active');
+        });
+
+      document
+        .querySelectorAll('.legal-nav button')
+        .forEach(function(btn) {
+          btn.classList.remove('active');
+        });
+
+      document
+        .getElementById('chief-' + section)
+        .classList.add('active');
+
+      button.classList.add('active');
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  </script>
 </div>
