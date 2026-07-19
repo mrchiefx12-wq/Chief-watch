@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>ARCH-1</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+body{
+background:#050505;
+color:white;
+font-family:Montserrat,Arial;
+}
+
+.app{
+width:100%;
+height:100vh;
+display:flex;
+flex-direction:column;
+background:
+radial-gradient(circle at top right,rgba(200,160,70,.12),transparent 38%),
+#070707;
+}
+
+header{
+height:62px;
+flex-shrink:0;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 22px;
+border-bottom:1px solid rgba(210,174,91,.25);
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.logo{
+width:38px;
+height:38px;
+border:1px solid #d1ad5e;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#d8b568;
+font-family:Cinzel;
+}
+
+.name{
+color:#d8b568;
+font-family:Cinzel;
+letter-spacing:2px;
+font-size:16px;
+}
+
+.sub{
+color:#777;
+font-size:7px;
+letter-spacing:1px;
+}
+
+.status{
+font-size:8px;
+color:#d8b568;
+}
+
+.status span{
+display:inline-block;
+width:7px;
+height:7px;
+margin-right:5px;
+border-radius:50%;
+background:#c8a653;
+box-shadow:0 0 10px #c8a653;
+}
+
+.chat{
+flex:1;
+min-height:0;
+overflow-y:auto;
+overflow-x:hidden;
+padding:20px;
+scrollbar-width:none;
+-ms-overflow-style:none;
+}
+
+.chat::-webkit-scrollbar{
+display:none;
+}
+
+.msg{
+width:100%;
+max-width:1200px;
+margin:0 auto 15px;
+display:flex;
+gap:8px;
+}
+
+.ai{
+justify-content:flex-start;
+}
+
+.user{
+justify-content:flex-end;
+}
+
+.avatar{
+width:30px;
+height:30px;
+flex-shrink:0;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid #c8a653;
+border-radius:50%;
+color:#d8b568;
+font-family:Cinzel;
+font-size:10px;
+}
+
+.bubble{
+max-width:100%;
+padding:13px;
+border-radius:15px;
+font-size:11px;
+line-height:1.5;
+overflow-wrap:anywhere;
+}
+
+.ai .bubble{
+width:100%;
+background:#111;
+border:1px solid rgba(205,177,109,.2);
+border-top-left-radius:4px;
+}
+
+.user .bubble{
+max-width:420px;
+background:linear-gradient(135deg,#a8833d,#d8b568);
+color:#080808;
+border-top-right-radius:4px;
+}
+
+.commands{
+display:grid;
+grid-template-columns:1fr;
+gap:8px;
+margin-top:12px;
+}
+
+.commands button{
+height:42px;
+padding:0 18px;
+border:1px solid rgba(205,177,109,.3);
+border-radius:8px;
+background:#151515;
+color:#d8b568;
+font-size:10px;
+cursor:pointer;
+transition:.2s;
+}
+
+.commands button:hover{
+background:#d8b568;
+color:#080808;
+}
+
+.card{
+margin-top:12px;
+padding:11px;
+border:1px solid rgba(205,177,109,.3);
+border-radius:9px;
+background:#101010;
+}
+
+.row{
+display:flex;
+gap:10px;
+padding:8px 0;
+border-bottom:1px solid rgba(255,255,255,.06);
+font-size:10px;
+overflow-wrap:anywhere;
+}
+
+.row:last-child{
+border-bottom:0;
+}
+
+.key{
+min-width:150px;
+color:#888;
+}
+
+.value{
+color:#dfc477;
+overflow-wrap:anywhere;
+word-break:break-word;
+}
+
+.input-area{
+flex-shrink:0;
+padding:9px 20px 15px;
+border-top:1px solid rgba(210,174,91,.2);
+}
+
+.input-box{
+max-width:1200px;
+margin:auto;
+display:flex;
+gap:8px;
+align-items:center;
+padding:6px 7px 6px 15px;
+border:1px solid rgba(210,174,91,.35);
+border-radius:28px;
+background:#121212;
+}
+
+input{
+flex:1;
+min-width:0;
+border:0;
+outline:0;
+background:transparent;
+color:white;
+font-size:12px;
+font-family:Montserrat;
+}
+
+.send{
+width:38px;
+height:38px;
+border:0;
+border-radius:50%;
+background:linear-gradient(135deg,#a8833d,#d8b568);
+cursor:pointer;
+}
+
+#lock{
+position:fixed;
+inset:0;
+z-index:99;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#050505;
+}
+
+.lock-card{
+width:380px;
+padding:30px 24px;
+text-align:center;
+border:1px solid rgba(205,177,109,.35);
+border-radius:18px;
+background:#0c0c0c;
+}
+
+.lock-card .logo{
+margin:auto;
+width:60px;
+height:60px;
+font-size:21px;
+}
+
+.lock-card h1{
+margin-top:15px;
+color:#d8b568;
+font-family:Cinzel;
+letter-spacing:3px;
+}
+
+.lock-card p{
+margin:7px 0 22px;
+font-size:8px;
+color:#777;
+letter-spacing:1px;
+}
+
+.lock-card input{
+width:100%;
+height:44px;
+padding:0 13px;
+border:1px solid rgba(205,177,109,.3);
+border-radius:8px;
+background:#151515;
+}
+
+.lock-card button{
+width:100%;
+height:44px;
+margin-top:11px;
+border:0;
+border-radius:8px;
+background:linear-gradient(135deg,#a8833d,#d8b568);
+font-weight:bold;
+cursor:pointer;
+}
+
+#error{
+margin-top:10px;
+color:#c86d6d;
+font-size:9px;
+min-height:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="lock">
+
+<div class="lock-card">
+
+<div class="logo">1</div>
+
+<h1>ARCH-1</h1>
+
+<p>USER DATA ACCESS</p>
+
+<input id="password" type="password" placeholder="ENTER PASSWORD">
+
+<button onclick="unlock()">UNLOCK ARCH-1</button>
+
+<div id="error"></div>
+
+</div>
+
+</div>
+
+<div class="app">
+
+<header>
+
+<div class="brand">
+
+<div class="logo">1</div>
+
+<div>
+
+<div class="name">ARCH-1</div>
+
+<div class="sub">USER DATA AGENT</div>
+
+</div>
+
+</div>
+
+<div class="status">
+<span></span>LIVE DATABASE SYNC
+</div>
+
+</header>
+
+<main id="chat" class="chat">
+
+<div class="msg ai">
+
+<div class="avatar">1</div>
+
+<div class="bubble">
+
+<b style="color:#d8b568">
+ARCH-1 USER COMMAND
+</b>
+
+<div class="commands">
+
+<button onclick="quick()">
+USER KA FULL DATA
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<div class="input-area">
+
+<div class="input-box">
+
+<input id="input" placeholder="User name ya command likho...">
+
+<button class="send" onclick="send()">➤</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const PASSWORD="myvershu12";
+
+function unlock(){
+
+if(document.getElementById("password").value===PASSWORD){
+
+document.getElementById("lock").style.display="none";
+
+}else{
+
+document.getElementById("error").innerText="ACCESS DENIED";
+
+}
+
+}
+
+const firebaseConfig={
+
+apiKey:"AIzaSyBP8gUN9SVnUAsy_NI2CiIvJd69PTB1hrr5I",
+
+authDomain:"chief-login12.firebaseapp.com",
+
+databaseURL:"https://chief-login12-default-rtdb.firebaseio.com",
+
+projectId:"chief-login12",
+
+storageBucket:"chief-login12.firebasestorage.app",
+
+messagingSenderId:"334157325641",
+
+appId:"1:334157325641:web:c9bd4048105e71011e608",
+
+measurementId:"G-CB9F743N3M"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.database();
+
+let users={};
+
+db.ref("users").on("value",s=>{
+
+users=s.val()||{};
+
+});
+
+function esc(v){
+
+return String(v??"N/A")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;");
+
+}
+
+function findUser(name){
+
+let key=name.toLowerCase().trim();
+
+let exact=Object.keys(users).find(
+
+x=>x.toLowerCase()===key
+
+);
+
+if(exact)return exact;
+
+return Object.keys(users).find(
+
+x=>x.toLowerCase().includes(key)
+
+);
+
+}
+
+function addUser(text){
+
+let d=document.createElement("div");
+
+d.className="msg user";
+
+d.innerHTML=`<div class="bubble">${esc(text)}</div>`;
+
+chat.appendChild(d);
+
+scroll();
+
+}
+
+function addAI(text,html=""){
+
+let d=document.createElement("div");
+
+d.className="msg ai";
+
+d.innerHTML=`
+
+<div class="avatar">1</div>
+
+<div class="bubble">
+
+${esc(text)}
+
+${html}
+
+</div>
+
+`;
+
+chat.appendChild(d);
+
+scroll();
+
+}
+
+function scroll(){
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+function quick(){
+
+let input=document.getElementById("input");
+
+let name=input.value.trim();
+
+if(!name){
+
+input.focus();
+
+return;
+
+}
+
+input.value=name+" user ka full data";
+
+input.focus();
+
+}
+
+function format(obj){
+
+let html="";
+
+Object.keys(obj||{}).forEach(k=>{
+
+let v=obj[k];
+
+if(v!==null&&typeof v==="object"){
+
+html+=`
+
+<div class="row">
+
+<div class="key">${esc(k)}</div>
+
+<div class="value">${format(v)}</div>
+
+</div>
+
+`;
+
+}else{
+
+html+=`
+
+<div class="row">
+
+<div class="key">${esc(k)}</div>
+
+<div class="value">${esc(v)}</div>
+
+</div>
+
+`;
+
+}
+
+});
+
+return html;
+
+}
+
+function showData(name){
+
+let username=findUser(name);
+
+if(!username){
+
+addAI("User nahi mila.");
+
+return;
+
+}
+
+let user=users[username];
+
+addAI(
+
+username+" ka full data:",
+
+`<div class="card">${format(user)}</div>`
+
+);
+
+}
+
+function send(){
+
+let input=document.getElementById("input");
+
+let command=input.value.trim();
+
+if(!command)return;
+
+addUser(command);
+
+input.value="";
+
+let m=command.match(/^(.+?)\s+user\s+ka\s+full\s+data$/i);
+
+if(m){
+
+showData(m[1]);
+
+return;
+
+}
+
+addAI("Command format: USERNAME USER KA FULL DATA");
+
+}
+
+document.getElementById("input").addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+
+e.preventDefault();
+
+send();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
