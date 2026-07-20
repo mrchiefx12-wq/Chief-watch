@@ -4116,15 +4116,15 @@ html, body {
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: #ffffff;
-  -webkit-text-size-adjust: 100%; /* iOS पर फॉन्ट साइज को अचानक बढ़ने से रोकता है */
+  -webkit-text-size-adjust: 100%;
 }
 
 #chief-help-page {
   width: 100%;
   min-height: 100vh;
   background: #0a0a0a;
-  /* पैडिंग को मोबाइल के हिसाब से डायनामिक बनाया */
-  padding: clamp(30px, 5vw, 60px) clamp(12px, 4vw, 6vw) clamp(40px, 6vw, 80px);
+  /* पैडिंग को व्यवस्थित किया ताकि कंटेंट किनारों से बिल्कुल न चिपके और फुल स्क्रीन रहे */
+  padding: clamp(30px, 5vw, 60px) clamp(16px, 4vw, 6vw) clamp(40px, 6vw, 80px);
   overflow-x: hidden;
 }
 
@@ -4136,7 +4136,7 @@ body {
 
 .chief-help-header {
   text-align: center;
-  margin-bottom: clamp(30px, 6vw, 60px);
+  margin-bottom: clamp(30px, 6vw, 50px);
 }
 
 .chief-help-label {
@@ -4150,7 +4150,7 @@ body {
 
 /* SHIMMER EFFECT FOR TITLE */
 .chief-help-title {
-  font-size: clamp(32px, 7vw, 76px); /* छोटे फोन पर 32px से शुरू होगा ताकि स्क्रीन से बाहर न जाए */
+  font-size: clamp(32px, 7vw, 76px);
   font-weight: 800;
   letter-spacing: -1px;
   line-height: 1.1;
@@ -4186,13 +4186,13 @@ body {
   padding: 0 10px;
 }
 
+/* HEADER BOX / CARD CONTAINER REMOVED (NOW FULL SCREEN & FREE) */
 .chief-help-card {
   width: 100%;
-  background: #121212;
-  border: 1px solid #2a2a2a;
-  border-radius: clamp(12px, 3vw, 20px);
-  padding: clamp(20px, 4vw, 70px); /* अंदर का स्पेस मोबाइल पर खुद कम हो जाएगा */
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  background: transparent; /* बॉक्स का बैकग्राउंड हटाया */
+  border: none;             /* बॉक्स का बॉर्डर हटाया */
+  padding: 0;               /* एक्स्ट्रा पैडिंग हटाई ताकि दबे नहीं */
+  box-shadow: none;         /* शैडो हटाई */
 }
 
 .chief-help-card h2 {
@@ -4314,14 +4314,13 @@ body {
 
 .chief-issue {
   border-bottom: 1px solid #222222;
-  background: #121212;
+  background: transparent;
 }
 
 .chief-issue summary {
   list-style: none;
   cursor: pointer;
   display: grid;
-  /* नंबर, टेक्स्ट और एरो का स्पेस स्क्रीन चौड़ाई के हिसाब से एडजस्ट होगा */
   grid-template-columns: clamp(30px, 4vw, 55px) 1fr clamp(20px, 4vw, 35px);
   align-items: center;
   gap: 10px;
@@ -4334,7 +4333,7 @@ body {
 }
 
 .chief-issue summary:hover {
-  background: #1a1a1a;
+  background: #121212;
 }
 
 .issue-number {
@@ -4364,11 +4363,11 @@ body {
 }
 
 .issue-solution {
-  /* मार्जिन लेफ्ट को डायनामिक किया ताकि मोबाइल पर खाली स्पेस ज्यादा न छूटे */
-  margin: 0 5px 20px clamp(40px, 6vw, 80px);
+  margin: 0 5px 20px clamp(35px, 5vw, 65px); /* मोबाइल मार्जिन लेफ्ट को थोड़ा कम किया ताकि जगह वेस्ट न हो */
   padding: clamp(15px, 3vw, 22px) clamp(15px, 3vw, 25px);
   border-left: 3px solid #d4af37;
-  background: #161616;
+  background: #121212;
+  border-radius: 0 8px 8px 0;
 }
 
 .issue-solution strong {
@@ -4387,10 +4386,9 @@ body {
   line-height: 1.7;
 }
 
-/* छोटे मोबाइल स्क्रीन्स के लिए अतिरिक्त सेफ्टी */
 @media (max-width: 480px) {
   .chief-contact-button {
-    width: 100%; /* बहुत छोटे फोन पर बटन पूरा फैल जाएगा ताकि दबाने में आसानी हो */
+    width: 100%;
   }
 }
 </style>
