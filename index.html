@@ -4116,13 +4116,15 @@ html, body {
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: #ffffff;
+  -webkit-text-size-adjust: 100%; /* iOS पर फॉन्ट साइज को अचानक बढ़ने से रोकता है */
 }
 
 #chief-help-page {
   width: 100%;
   min-height: 100vh;
   background: #0a0a0a;
-  padding: 60px 6vw 80px;
+  /* पैडिंग को मोबाइल के हिसाब से डायनामिक बनाया */
+  padding: clamp(30px, 5vw, 60px) clamp(12px, 4vw, 6vw) clamp(40px, 6vw, 80px);
   overflow-x: hidden;
 }
 
@@ -4134,25 +4136,26 @@ body {
 
 .chief-help-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: clamp(30px, 6vw, 60px);
 }
 
 .chief-help-label {
-  font-size: 12px;
+  font-size: clamp(10px, 2.5vw, 12px);
   letter-spacing: 4px;
   font-weight: 700;
   color: #d4af37; /* Gold */
   text-transform: uppercase;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 /* SHIMMER EFFECT FOR TITLE */
 .chief-help-title {
-  font-size: clamp(40px, 6vw, 76px);
+  font-size: clamp(32px, 7vw, 76px); /* छोटे फोन पर 32px से शुरू होगा ताकि स्क्रीन से बाहर न जाए */
   font-weight: 800;
-  letter-spacing: -2px;
-  line-height: 1.05;
-  margin: 0;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin: 0 auto;
+  max-width: 90%;
   background: linear-gradient(
     to right, 
     #bf953f 0%, 
@@ -4176,56 +4179,57 @@ body {
 
 .chief-help-subtitle {
   max-width: 800px;
-  margin: 24px auto 0;
+  margin: 18px auto 0;
   color: #aaaaaa;
-  font-size: 17px;
-  line-height: 1.8;
+  font-size: clamp(14px, 3.5vw, 17px);
+  line-height: 1.6;
+  padding: 0 10px;
 }
 
 .chief-help-card {
   width: 100%;
   background: #121212;
   border: 1px solid #2a2a2a;
-  border-radius: 20px;
-  padding: clamp(30px, 5vw, 70px);
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(20px, 4vw, 70px); /* अंदर का स्पेस मोबाइल पर खुद कम हो जाएगा */
   box-shadow: 0 12px 40px rgba(0,0,0,0.5);
 }
 
 .chief-help-card h2 {
-  font-size: 32px;
-  margin: 0 0 22px;
+  font-size: clamp(24px, 5vw, 32px);
+  margin: 0 0 18px;
   color: #d4af37; /* Gold */
 }
 
 .chief-help-card > p {
   color: #cccccc;
-  font-size: 16px;
-  line-height: 1.9;
+  font-size: clamp(14px, 3.5vw, 16px);
+  line-height: 1.7;
   margin: 0 0 22px;
 }
 
 .chief-help-section {
-  padding: 32px 0;
+  padding: clamp(20px, 4vw, 32px) 0;
   border-bottom: 1px solid #222222;
 }
 
 .chief-help-section h3 {
-  font-size: 20px;
-  color: #f3e5ab; /* Soft Gold/Cream */
-  margin: 0 0 12px;
+  font-size: clamp(17px, 4vw, 20px);
+  color: #f3e5ab; /* Soft Gold */
+  margin: 0 0 10px;
 }
 
 .chief-help-section p {
   color: #bbbbbb;
-  font-size: 16px;
-  line-height: 1.9;
+  font-size: clamp(14px, 3.5vw, 16px);
+  line-height: 1.7;
   margin: 0;
 }
 
 .chief-help-contact {
-  margin-top: 48px;
-  padding: 45px 30px;
-  border-radius: 18px;
+  margin-top: clamp(35px, 5vw, 48px);
+  padding: clamp(25px, 5vw, 45px) clamp(15px, 4vw, 30px);
+  border-radius: clamp(12px, 3vw, 18px);
   background: linear-gradient(135deg, #1e1b12 0%, #0a0a0a 100%);
   border: 1px solid #332a15;
   text-align: center;
@@ -4233,14 +4237,15 @@ body {
 
 .chief-help-contact h2 {
   color: #d4af37;
-  font-size: 30px;
-  margin: 0 0 14px;
+  font-size: clamp(22px, 5vw, 30px);
+  margin: 0 0 12px;
 }
 
 .chief-help-contact p {
   color: #cccccc;
-  line-height: 1.8;
-  margin: 0 0 28px;
+  font-size: clamp(14px, 3.5vw, 16px);
+  line-height: 1.6;
+  margin: 0 0 24px;
 }
 
 .chief-contact-button {
@@ -4257,6 +4262,8 @@ body {
   font-weight: 700;
   transition: all 0.25s ease;
   border: 1px solid #bf953f;
+  width: auto;
+  max-width: 100%;
 }
 
 .chief-contact-button:hover {
@@ -4273,76 +4280,21 @@ body {
   letter-spacing: 0.6px;
 }
 
-@media (max-width: 700px) {
-  #chief-help-page {
-    padding: 38px 16px 55px;
-  }
-
-  .chief-help-header {
-    margin-bottom: 38px;
-  }
-
-  .chief-help-title {
-    font-size: 42px;
-    letter-spacing: -1px;
-  }
-
-  .chief-help-subtitle {
-    font-size: 15px;
-  }
-
-  .chief-help-card {
-    padding: 28px 20px;
-    border-radius: 15px;
-  }
-
-  .chief-help-card h2 {
-    font-size: 27px;
-  }
-
-  .chief-help-card > p,
-  .chief-help-section p {
-    font-size: 14px;
-    line-height: 1.85;
-  }
-
-  .chief-help-section {
-    padding: 26px 0;
-  }
-
-  .chief-help-section h3 {
-    font-size: 18px;
-  }
-
-  .chief-help-contact {
-    padding: 34px 18px;
-    border-radius: 14px;
-  }
-
-  .chief-help-contact h2 {
-    font-size: 24px;
-  }
-
-  .chief-contact-button {
-    width: 100%;
-  }
-}
-
 /* COMMON ISSUES SECTION */
 .chief-issues-section {
-  margin-top: 75px;
-  padding-top: 65px;
+  margin-top: clamp(45px, 6vw, 75px);
+  padding-top: clamp(40px, 5vw, 65px);
   border-top: 1px solid #222222;
 }
 
 .chief-issues-heading {
   text-align: center;
-  margin-bottom: 38px;
+  margin-bottom: 30px;
 }
 
 .chief-issues-heading h2 {
-  font-size: clamp(30px, 4vw, 48px);
-  margin: 10px 0 15px;
+  font-size: clamp(24px, 5vw, 48px);
+  margin: 10px 0 12px;
   letter-spacing: -1px;
   color: #ffffff;
 }
@@ -4351,8 +4303,8 @@ body {
   max-width: 650px;
   margin: auto;
   color: #aaaaaa;
-  font-size: 16px;
-  line-height: 1.8;
+  font-size: clamp(14px, 3.5vw, 16px);
+  line-height: 1.6;
 }
 
 .chief-issues-list {
@@ -4369,10 +4321,11 @@ body {
   list-style: none;
   cursor: pointer;
   display: grid;
-  grid-template-columns: 55px 1fr 35px;
+  /* नंबर, टेक्स्ट और एरो का स्पेस स्क्रीन चौड़ाई के हिसाब से एडजस्ट होगा */
+  grid-template-columns: clamp(30px, 4vw, 55px) 1fr clamp(20px, 4vw, 35px);
   align-items: center;
-  gap: 15px;
-  padding: 24px 10px;
+  gap: 10px;
+  padding: clamp(16px, 3vw, 24px) 5px;
   transition: background 0.25s ease;
 }
 
@@ -4385,20 +4338,21 @@ body {
 }
 
 .issue-number {
-  font-size: 12px;
-  color: #d4af37; /* Gold Numbers */
+  font-size: clamp(11px, 2.5vw, 12px);
+  color: #d4af37;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
 .issue-title {
-  font-size: 16px;
+  font-size: clamp(14px, 3.5vw, 16px);
   font-weight: 700;
   color: #ffffff;
+  line-height: 1.4;
 }
 
 .issue-arrow {
-  font-size: 25px;
+  font-size: clamp(18px, 4vw, 25px);
   font-weight: 300;
   color: #d4af37;
   text-align: center;
@@ -4410,16 +4364,17 @@ body {
 }
 
 .issue-solution {
-  margin: 0 10px 22px 80px;
-  padding: 22px 25px;
-  border-left: 3px solid #d4af37; /* Gold accent line */
+  /* मार्जिन लेफ्ट को डायनामिक किया ताकि मोबाइल पर खाली स्पेस ज्यादा न छूटे */
+  margin: 0 5px 20px clamp(40px, 6vw, 80px);
+  padding: clamp(15px, 3vw, 22px) clamp(15px, 3vw, 25px);
+  border-left: 3px solid #d4af37;
   background: #161616;
 }
 
 .issue-solution strong {
   display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
+  margin-bottom: 6px;
+  font-size: clamp(11px, 2.5vw, 13px);
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #d4af37;
@@ -4428,37 +4383,16 @@ body {
 .issue-solution p {
   margin: 0;
   color: #cccccc;
-  font-size: 15px;
-  line-height: 1.85;
+  font-size: clamp(13px, 3.5vw, 15px);
+  line-height: 1.7;
 }
 
-@media (max-width: 700px) {
-  .chief-issues-section {
-    margin-top: 55px;
-    padding-top: 45px;
-  }
-
-  .chief-issue summary {
-    grid-template-columns: 38px 1fr 25px;
-    gap: 10px;
-    padding: 21px 5px;
-  }
-
-  .issue-title {
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  .issue-solution {
-    margin-left: 48px;
-    padding: 18px;
-  }
-
-  .issue-solution p {
-    font-size: 14px;
+/* छोटे मोबाइल स्क्रीन्स के लिए अतिरिक्त सेफ्टी */
+@media (max-width: 480px) {
+  .chief-contact-button {
+    width: 100%; /* बहुत छोटे फोन पर बटन पूरा फैल जाएगा ताकि दबाने में आसानी हो */
   }
 }
-
 </style>
 </head>
 
