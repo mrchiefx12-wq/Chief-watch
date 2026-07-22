@@ -2579,40 +2579,44 @@ if (match) {
     return;
 }
 
-/* APPROVE / ACTIVATE VOUCHER (Smart Context Support) */
-
+/* APPROVE / ACTIVATE VOUCHER (With Full Custom Variations & Memory Support) */
 
 let possibleUser = "";
 
-// 1. Agar Command me Name Bola gaya ho (e.g., "activate xyz", "activate voucher xyz", "xyz voucher activate")
-if (/^(?:arch\s+)?(?:activate\s+voucher|activate|approve|approved)\s+(.+)$/i.test(command)) {
-    possibleUser = command.match(/^(?:arch\s+)?(?:activate\s+voucher|activate|approve|approved)\s+(.+)$/i)[1];
+// 1. Name bola gaya ho (e.g., "activate xyz voucher", "activate voucher xyz", "arch activate xyz", etc.)
+if (/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i.test(command)) {
+    possibleUser = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)[1];
 } 
-else if (/^(?:arch\s+)?(.+?)\s+(?:ka\s+)?voucher\s+activate(?:\s+(?:ker\s+de|ker\s+do|ker|karo|kero|kardo))?$/i.test(command)) {
-    possibleUser = command.match(/^(?:arch\s+)?(.+?)\s+(?:ka\s+)?voucher\s+activate(?:\s+(?:ker\s+de|ker\s+do|ker|karo|kero|kardo))?$/i)[1];
+// 2. Name starting/middle me ho (e.g., "xyz voucher activate", "xyz ka voucher activate ker do")
+else if (/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i.test(command)) {
+    possibleUser = command.match(/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i)[1];
 }
 
-possibleUser = possibleUser ? possibleUser.trim() : "";
-
-// Case A: Name command me hi mila
 if (possibleUser) {
-    lastSearchedUser = possibleUser; // Update last searched user
-    approveUserRequest(possibleUser);
-    return;
-} 
+    // Extra filler words clean karke exact username nikalna
+    let targetUser = possibleUser.replace(/\b(?:voucher|request|user|ka|ki)\b/gi, '')
+                                .replace(/\s+/g, ' ')
+                                .trim();
 
-// Case B: Jab aap sirf "activate", "approve", ya "arch activate" bologe
+    if (targetUser) {
+        window.lastSearchedUser = targetUser; // Memory update
+        approveUserRequest(targetUser);
+        return;
+    }
+}
+
+// Case B: Jab aap sirf "activate", "approve", ya "activate voucher" bologe (No name spoken)
 if (/^(?:arch\s+)?(?:activate|activate\s+voucher|approve|approved)$/i.test(command)) {
-    if (lastSearchedUser) {
-        // Puraane search kiye gaye user ko hi activate karega
-        approveUserRequest(lastSearchedUser);
+    if (window.lastSearchedUser) {
+        // Purane search kiye gaye user ko hi activate karega
+        approveUserRequest(window.lastSearchedUser);
     } else {
         addAIMessage("Pehle kisi user ka request ya voucher search karein, ya user name saath me bolein.");
     }
     return;
 }
 
-/* APPROVE / ACTIVATE PATTERN WITH USER NAME (Fixed) */
+/* APPROVE / ACTIVATE PATTERN WITH USER NAME */
 
 match = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)
      || command.match(/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i);
@@ -2620,23 +2624,16 @@ match = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)
 if (match) {
     let rawUser = match[1].trim();
 
-    // Cleaning logic: 'voucher', 'request', 'ka', 'ki' jaise extra sabdo ko user name se hatane ke liye
+    // Extra words remove karna
     let targetUser = rawUser.replace(/\b(?:voucher|request|user|ka|ki)\b/gi, '').trim();
-
-    // Spaces clean karna
     targetUser = targetUser.replace(/\s+/g, ' ').trim();
 
     if (targetUser) {
-        // Search memory update
         window.lastSearchedUser = targetUser;
-
-        // Function call
         approveUserRequest(targetUser);
         return;
     }
 }
-
-
 /* NEW WATCH DETAIL COMMAND (With Space/Hyphen Auto-Fix) */
 
 match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+(?:ki\s+)?detail|\s+detail\s+(?:bata|btao|dikha|dikhhao))?$/i);
