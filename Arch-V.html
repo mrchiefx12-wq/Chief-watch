@@ -79,11 +79,47 @@ letter-spacing:1px;
 }
 
 .arch-online{
+display:flex;
+align-items:center;
+gap:12px;
+font-size:10px;
+}
+
+.listening-indicator{
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:4px 10px;
+border-radius:20px;
+background:rgba(201, 109, 109, 0.15);
+border:1px solid rgba(255, 77, 77, 0.4);
+color:#ff6b6b;
+font-size:9px;
+font-weight:600;
+letter-spacing:1px;
+animation:pulse 1.8s infinite;
+}
+
+.listening-indicator span{
+width:7px;
+height:7px;
+border-radius:50%;
+background:#ff4d4d;
+box-shadow:0 0 8px #ff4d4d;
+}
+
+@keyframes pulse {
+0%{ opacity: 0.7; }
+50%{ opacity: 1; }
+100%{ opacity: 0.7; }
+}
+
+.db-status{
 color:#cdb16d;
 font-size:8px;
 }
 
-.arch-online span{
+.db-status span{
 width:7px;
 height:7px;
 display:inline-block;
@@ -412,28 +448,6 @@ justify-content:center;
 font-size:14px;
 }
 
-.mic-btn{
-width:38px;
-height:38px;
-border:1px solid rgba(205,177,109,.4);
-border-radius:50%;
-cursor:pointer;
-background:#1c1c1c;
-color:#d8b568;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:15px;
-transition:.2s;
-}
-
-.mic-btn.active{
-background:#c96d6d;
-color:#fff;
-border-color:#ff4d4d;
-box-shadow:0 0 10px rgba(201,109,109,0.5);
-}
-
 /* LOCK */
 
 #archLock{
@@ -549,6 +563,12 @@ font-size:5px;
 
 .arch-online{
 font-size:6px;
+gap:6px;
+}
+
+.listening-indicator{
+padding:2px 6px;
+font-size:7px;
 }
 
 .chat-area{
@@ -639,7 +659,7 @@ padding:7px;
 padding:5px 6px 5px 11px;
 }
 
-.send-btn, .mic-btn{
+.send-btn{
 width:34px;
 height:34px;
 }
@@ -701,8 +721,15 @@ FIREBASE INTELLIGENCE ASSISTANT
 </div>
 
 <div class="arch-online">
-<span></span>
-LIVE DATABASE SYNC
+
+<div id="voiceStatus" class="listening-indicator">
+<span></span> LISTENING...
+</div>
+
+<div class="db-status">
+<span></span> LIVE
+</div>
+
 </div>
 
 </header>
@@ -721,7 +748,7 @@ ARCH-V COMMANDS
 </div>
 
 <div class="quick-hint">
-Pehle user ya watch code likho, phir command select karo.
+ARCH-V is listening automatically. Speak your command or type below.
 </div>
 
 <div class="quick-commands">
@@ -761,13 +788,9 @@ WATCH DETAIL
 
 <input
 id="commandInput"
-placeholder="Pehle user ya watch code likho ya mic button dabayein..."
+placeholder="Aap bolo, ARCH-V automatic sun raha hai..."
 onkeydown="if(event.key==='Enter')sendCommand()"
 >
-
-<button id="micBtn" class="mic-btn" onclick="toggleVoiceInput()" title="Voice Command">
-🎙️
-</button>
 
 <button class="send-btn" onclick="sendCommand()">
 ➤
@@ -794,6 +817,8 @@ document.getElementById("archPassword").value;
 if(password === ARCHV_PASSWORD){
 
 document.getElementById("archLock").style.display="none";
+// Start voice recognition as soon as unlocked
+initAutoVoice();
 
 }else{
 
@@ -1176,7 +1201,33 @@ return;
 }
 
 
-/* APPROVE */
+/* APPROVE DIRECTLY VIA VOICE COMMAND */
+
+match=command.match(
+/^(?:approve|approv|approved)\s*(.+)?$/i
+);
+
+if(match){
+
+const possibleUser = match[1] ? match[1].trim() : "";
+
+if(possibleUser) {
+    approveUserRequest(possibleUser);
+} else {
+    // Search if there is any pending request user in current view or active users
+    const pendingUser = Object.keys(liveUsers).find(u => liveUsers[u]?.pendingRequest?.status === "pending");
+    if(pendingUser) {
+        approveUserRequest(pendingUser);
+    } else {
+        addAIMessage("Kis user ki request approve karni hai? User ID saath me bolo (e.g., 'approve michael')");
+    }
+}
+
+return;
+
+}
+
+/* APPROVE PATTERN WITH USER NAME */
 
 match=command.match(
 /^(.+?)\s*(?:user\s*)?(?:ki|ka)\s*(?:pending\s*)?request\s*(?:approve|approved)\s*(?:karo|kero|ker do|kardo|do)?$/i
@@ -1407,12 +1458,6 @@ username+" ki request already "+request.status+" hai."
 return;
 
 }
-
-const approved=confirm(
-"Request approve karein?\n\nUser: "+username
-);
-
-if(!approved)return;
 
 try{
 
@@ -1802,70 +1847,63 @@ return html;
 }
 
 
-/* ================= VOICE COMMAND ENGINE ================= */
+/* ================= AUTOMATIC ALWAYS-ON VOICE ENGINE ================= */
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition;
 
-if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.lang = 'hi-IN'; // Hinglish & Hindi Support
+function initAutoVoice() {
 
-    let isListening = false;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    function toggleVoiceInput() {
-        const micBtn = document.getElementById("micBtn");
-        if (!isListening) {
-            try {
-                recognition.start();
-                isListening = true;
-                micBtn.classList.add("active");
-                micBtn.innerText = "🛑";
-            } catch (err) {
-                console.error("Recognition start error:", err);
-            }
-        } else {
-            recognition.stop();
-            isListening = false;
-            micBtn.classList.remove("active");
-            micBtn.innerText = "🎙️";
-        }
+    if (!SpeechRecognition) {
+        console.log("Web Speech API not supported.");
+        document.getElementById("voiceStatus").innerText = "MIC NOT SUPPORTED";
+        return;
     }
 
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US'; // Pure English transcription taaki 'michael', 'approve' sahi type ho
+
+    recognition.onstart = function() {
+        console.log("ARCH-V Voice Auto-ON");
+        document.getElementById("voiceStatus").style.display = "inline-flex";
+    };
+
     recognition.onresult = function(event) {
-        let transcript = event.results[0][0].transcript;
+        const lastIndex = event.results.length - 1;
+        let transcript = event.results[lastIndex][0].transcript;
         
-        // Dot (.) hatane ke liye clean up
         transcript = transcript.replace(/\./g, '').trim();
 
-        const input = document.getElementById("commandInput");
-        input.value = transcript;
-
-        const micBtn = document.getElementById("micBtn");
-        micBtn.classList.remove("active");
-        micBtn.innerText = "🎙️";
-        isListening = false;
-
-        // Auto Send Command
-        sendCommand();
+        if (transcript) {
+            console.log("Voice Captured:", transcript);
+            const input = document.getElementById("commandInput");
+            input.value = transcript;
+            sendCommand();
+        }
     };
 
     recognition.onerror = function(event) {
         console.error("Speech Recognition Error:", event.error);
-        const micBtn = document.getElementById("micBtn");
-        micBtn.classList.remove("active");
-        micBtn.innerText = "🎙️";
-        isListening = false;
     };
 
     recognition.onend = function() {
-        const micBtn = document.getElementById("micBtn");
-        micBtn.classList.remove("active");
-        micBtn.innerText = "🎙️";
-        isListening = false;
+        // Automatically restart speech recognition whenever it stops
+        console.log("Restarting voice engine...");
+        try {
+            recognition.start();
+        } catch(e) {
+            setTimeout(() => { recognition.start(); }, 1000);
+        }
     };
-} else {
-    console.log("Web Speech API is not supported in this browser.");
+
+    try {
+        recognition.start();
+    } catch(e) {
+        console.log("Auto-start error:", e);
+    }
 }
 
 </script>
