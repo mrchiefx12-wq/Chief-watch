@@ -114,6 +114,26 @@ box-shadow:0 0 8px #ff4d4d;
 100%{ opacity: 0.7; }
 }
 
+/* REFRESH OVERLAY / ALERT */
+#micErrorBanner {
+display:none;
+position:fixed;
+top:70px;
+left:50%;
+transform:translateX(-50%);
+z-index:99999;
+background:#8b0000;
+color:#fff;
+padding:8px 16px;
+border-radius:8px;
+border:1px solid #ff4d4d;
+font-size:11px;
+font-weight:600;
+cursor:pointer;
+box-shadow:0 0 15px rgba(255, 0, 0, 0.6);
+letter-spacing:1px;
+}
+
 .db-status{
 color:#cdb16d;
 font-size:8px;
@@ -670,6 +690,10 @@ height:34px;
 
 <body>
 
+<div id="micErrorBanner" onclick="location.reload()">
+⚠️ MIC OFF - CLICK TO REFRESH PAGE 🔄
+</div>
+
 <div id="archLock">
 
 <div class="lock-card">
@@ -817,7 +841,6 @@ document.getElementById("archPassword").value;
 if(password === ARCHV_PASSWORD){
 
 document.getElementById("archLock").style.display="none";
-// Password unlock hote hi voice recognition ON ho jayega
 initAutoVoice();
 
 }else{
@@ -909,22 +932,45 @@ liveWatches = snapshot.val() || {};
 );
 
 
-/* ================= TEXT TO SPEECH (VOICE OUTPUT) ================= */
+/* ================= TEXT TO SPEECH (CLEAR HINGLISH VOICE) ================= */
 
 function speakText(text) {
     if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Stop previous voice speech
+        window.speechSynthesis.cancel(); // Previous voice sound ko stop karega
 
-        // Remove HTML tags so it speaks clean text only
-        const cleanText = text.replace(/<[^>]*>?/gm, '');
+        // Clean text (HTML tags aur special symbols hatane ke liye)
+        let cleanText = text.replace(/<[^>]*>?/gm, '');
+        cleanText = cleanText.replace(/[*_#]/g, ''); 
 
         const utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.lang = 'hi-IN'; // Hindi-English Hinglish voice accent
-        utterance.rate = 1.0;     // Normal Speed
-        utterance.pitch = 0.95;   // Deep/Cool voice pitch
+
+        // 1. Language ko Indian English (en-IN) set kar rahe hain jisse Hinglish accent clear aaye
+        utterance.lang = 'en-IN'; 
+        utterance.rate = 0.95;    // Pitch aur clarity ke liye thodi natural speed (0.95)
+        utterance.pitch = 1.0;    // Clear voice tone
+
+        // 2. Chrome/Edge me Indian Voice Select Karna
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Browser me se Best Indian Voice dhoondhna (e.g., Google Indian English, Rishi, Neerja, etc.)
+        const indianVoice = voices.find(voice => 
+            (voice.lang === 'en-IN' || voice.lang === 'hi-IN') && 
+            (voice.name.includes('India') || voice.name.includes('Google') || voice.name.includes('Natural'))
+        );
+
+        if (indianVoice) {
+            utterance.voice = indianVoice;
+        }
 
         window.speechSynthesis.speak(utterance);
     }
+}
+
+// Voices Load karne ke liye Listener (Chrome Browser Support)
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+    };
 }
 
 
@@ -982,7 +1028,6 @@ scrollChat();
 
 function addAIMessage(text,html=""){
 
-// AI BOLEGA AUTOMATICALLY
 speakText(text);
 
 const div=document.createElement("div");
@@ -1115,14 +1160,12 @@ if (/^(hi|hello|hello\s+bro|hi\s+bhai|hello\s+bhai|hi\s+bro)$/i.test(command)) {
 
 /* 2. DYNAMIC CASUAL TALK ROUTERS */
 
-// Kesa he / Kese ho
 if (/^(kesa\s+he|kese\s+ho)$/i.test(command)) {
     addAIMessage("Me thik hu aap betao kese ho kika database handle kerna he aaj");
     return;
 }
 
 
-// Missing User ID/Parameter Queries
 if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta|user\s+ki\s+voucher\s+detail\s+bta|user\s+ki\s+pending\s+request\s+bta|user\s+ki\s+reqest\s+bta|data\s+bta|detail\s+bta|voucher\s+bta|request\s+bta|coin\s+bta|user\s+ke\s+coin\s+bta|watch\s+detail\s+bta|user\s+ki\s+watch\s+detail\s+bta|user\s+ka\s+name\s+bta|name\s+bta)$/i.test(command)) {
     addAIMessage("aap jis bi user ka data chate he uska id name betaye fir me aapko uska current data bta paunga jo aapne muj se abi pucha");
     return;
@@ -1866,61 +1909,128 @@ return html;
 
 let recognition;
 
+let isMicActive = false;
+
+function startMicSafely() {
+
+    if (!recognition) return;
+
+    try {
+
+        document.getElementById("micErrorBanner").style.display = "none";
+
+        recognition.start();
+
+        isMicActive = true;
+
+    } catch (e) {
+
+        console.log("Mic already active or busy:", e);
+
+    }
+
+}
+
 function initAutoVoice() {
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-        console.log("Web Speech API not supported.");
+
         document.getElementById("voiceStatus").innerText = "MIC NOT SUPPORTED";
+
         return;
+
     }
 
     recognition = new SpeechRecognition();
+
     recognition.continuous = true;
+
     recognition.interimResults = false;
-    recognition.lang = 'en-US'; // Pure English transcription
+
+    recognition.lang = 'en-US'; 
 
     recognition.onstart = function() {
-        console.log("ARCH-V Voice Auto-ON");
+
+        isMicActive = true;
+
         document.getElementById("voiceStatus").style.display = "inline-flex";
+
+        document.getElementById("micErrorBanner").style.display = "none";
+
     };
 
     recognition.onresult = function(event) {
+
         const lastIndex = event.results.length - 1;
+
         let transcript = event.results[lastIndex][0].transcript;
-        
+
         transcript = transcript.replace(/\./g, '').trim();
 
         if (transcript) {
-            console.log("Voice Captured:", transcript);
+
             const input = document.getElementById("commandInput");
+
             input.value = transcript;
+
             sendCommand();
+
         }
+
     };
 
     recognition.onerror = function(event) {
-        console.error("Speech Recognition Error:", event.error);
+
+        console.error("Mic Error:", event.error);
+
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+
+            document.getElementById("micErrorBanner").style.display = "block";
+
+        }
+
     };
 
     recognition.onend = function() {
-        // Continuous restart so mic remains active
-        try {
-            recognition.start();
-        } catch(e) {
-            setTimeout(() => { recognition.start(); }, 1000);
+
+        isMicActive = false;
+
+        // Auto restart if page is still visible
+
+        if (!document.hidden) {
+
+            setTimeout(() => { startMicSafely(); }, 500);
+
         }
+
     };
 
-    try {
-        recognition.start();
-    } catch(e) {
-        console.log("Auto-start error:", e);
-    }
+    startMicSafely();
+
+    // AUTO RESTART MIC WHEN RETURNING TO WINDOW / TAB FOCUS
+
+    document.addEventListener("visibilitychange", function() {
+
+        if (!document.hidden) {
+
+            startMicSafely();
+
+        }
+
+    });
+
+    window.addEventListener("focus", function() {
+
+        startMicSafely();
+
+    });
+
 }
 
 </script>
 
 </body>
+
 </html>
