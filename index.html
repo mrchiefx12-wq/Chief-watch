@@ -1618,7 +1618,7 @@
         
         <div class="top-meta-bar" id="topMeta">
             <span>Studio: Active</span>
-            <span>Edition: 1-of-1 Pro</span>
+            <span id="editionDisplay">Edition: 1-of-1 Pro</span>
         </div>
 
         <div class="intro-section" id="landingView">
@@ -1823,6 +1823,20 @@
     }
     const database = firebase.database();
 
+    // 🔍 URL se Dynamic User ID detect karna (Jaise: ?user=JATISH2752 ya ?user=mrchiefx12)
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        let results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Dynamic User ID get karega, agar URL mein na ho toh default 'CHIEF_GUEST' lega
+    const detectedUser = getUrlParameter('user') || 'CHIEF_GUEST';
+
+    // UI par display update karna
+    document.getElementById('editionDisplay').innerText = `Edition: ${detectedUser} Pro`;
+
     let selections = {
         targetGroup: '',
         shape: '',
@@ -1903,13 +1917,13 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Save directly inside the existing `CHIEF_GUEST` node under `orders`
-        const guestOrderRef = database.ref('users/CHIEF_GUEST/orders').push();
+        // 🚀 Ab data dynamically detected user path par save hoga (e.g., users/JATISH2752/orders)
+        const userOrderRef = database.ref(`users/${detectedUser}/orders`).push();
         
-        guestOrderRef.set(finalizedOrderPayload)
+        userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log("Order list saved successfully under CHIEF_GUEST!");
-                triggerPopup('success', 'Order Saved', 'Your custom watch configuration has been saved under CHIEF_GUEST orders!');
+                console.log(`Order saved successfully under ${detectedUser}!`);
+                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under ${detectedUser} orders!`);
             })
             .catch((error) => {
                 console.error("Firebase save error:", error);
