@@ -817,7 +817,7 @@ document.getElementById("archPassword").value;
 if(password === ARCHV_PASSWORD){
 
 document.getElementById("archLock").style.display="none";
-// Start voice recognition as soon as unlocked
+// Password unlock hote hi voice recognition ON ho jayega
 initAutoVoice();
 
 }else{
@@ -909,6 +909,25 @@ liveWatches = snapshot.val() || {};
 );
 
 
+/* ================= TEXT TO SPEECH (VOICE OUTPUT) ================= */
+
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Stop previous voice speech
+
+        // Remove HTML tags so it speaks clean text only
+        const cleanText = text.replace(/<[^>]*>?/gm, '');
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'hi-IN'; // Hindi-English Hinglish voice accent
+        utterance.rate = 1.0;     // Normal Speed
+        utterance.pitch = 0.95;   // Deep/Cool voice pitch
+
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+
 /* ================= ESCAPE ================= */
 
 function escapeHTML(value){
@@ -962,6 +981,9 @@ scrollChat();
 /* ================= AI MESSAGE ================= */
 
 function addAIMessage(text,html=""){
+
+// AI BOLEGA AUTOMATICALLY
+speakText(text);
 
 const div=document.createElement("div");
 
@@ -1100,8 +1122,7 @@ if (/^(kesa\s+he|kese\s+ho)$/i.test(command)) {
 }
 
 
-
-// Missing User ID/Parameter Queries (user ka data bta, data bta, etc.)
+// Missing User ID/Parameter Queries
 if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta|user\s+ki\s+voucher\s+detail\s+bta|user\s+ki\s+pending\s+request\s+bta|user\s+ki\s+reqest\s+bta|data\s+bta|detail\s+bta|voucher\s+bta|request\s+bta|coin\s+bta|user\s+ke\s+coin\s+bta|watch\s+detail\s+bta|user\s+ki\s+watch\s+detail\s+bta|user\s+ka\s+name\s+bta|name\s+bta)$/i.test(command)) {
     addAIMessage("aap jis bi user ka data chate he uska id name betaye fir me aapko uska current data bta paunga jo aapne muj se abi pucha");
     return;
@@ -1214,12 +1235,11 @@ const possibleUser = match[1] ? match[1].trim() : "";
 if(possibleUser) {
     approveUserRequest(possibleUser);
 } else {
-    // Search if there is any pending request user in current view or active users
     const pendingUser = Object.keys(liveUsers).find(u => liveUsers[u]?.pendingRequest?.status === "pending");
     if(pendingUser) {
         approveUserRequest(pendingUser);
     } else {
-        addAIMessage("Kis user ki request approve karni hai? User ID saath me bolo (e.g., 'approve michael')");
+        addAIMessage("Kis user ki request approve karni hai? User ID saath me bolo");
     }
 }
 
@@ -1273,7 +1293,7 @@ const username=findUser(searchName);
 if(!username){
 
 addAIMessage(
-"User \""+searchName+"\" users database me nahi mila."
+"User "+searchName+" users database me nahi mila."
 );
 
 return;
@@ -1286,7 +1306,7 @@ addAIMessage(
 
 username+" ka "+
 
-(full?"full Firebase data":"Firebase data"),
+(full?"full Firebase data":"Firebase data mil gaya hai."),
 
 `
 
@@ -1331,7 +1351,7 @@ return;
 
 addAIMessage(
 
-username+" ka active voucher:",
+username+" ka active voucher details:",
 
 `
 
@@ -1381,7 +1401,7 @@ return;
 
 addAIMessage(
 
-username+" ki pending voucher request:",
+username+" ki pending voucher request aayi hai.",
 
 `
 
@@ -1467,16 +1487,14 @@ await db.ref(
 
 addAIMessage(
 
-"✓ REQUEST APPROVED\n\n"+
-"User: "+username+"\n"+
-"Firebase status: pending → approved"
+"Request approve ho gayi hai user "+username+" ki."
 
 );
 
 }catch(error){
 
 addAIMessage(
-"Firebase update failed:\n\n"+error.message
+"Firebase update failed."
 );
 
 }
@@ -1523,7 +1541,7 @@ const coins=liveUsers[username].coins || 0;
 
 addAIMessage(
 
-username+" ke current coins: "+coins,
+username+" ke current coins "+coins+" hain.",
 
 coinButtons(username)
 
@@ -1613,10 +1631,7 @@ await db.ref(
 
 addAIMessage(
 
-"COINS UPDATED\n\n"+
-"User: "+username+"\n"+
-"Old: "+current+"\n"+
-"New: "+newValue
+"Coins update ho gaye hain. User: "+username+" New Value: "+newValue
 
 );
 
@@ -1644,7 +1659,7 @@ addAIMessage(
 username+
 " ke coins Firebase me "+
 value+
-" kar diye gaye."
+" kar diye gaye hain."
 
 );
 
@@ -1663,9 +1678,9 @@ if(!watch){
 
 addAIMessage(
 
-"Watch code \""+
+"Watch code "+
 code+
-"\" nahi mila."
+" nahi mila."
 
 );
 
@@ -1675,7 +1690,7 @@ return;
 
 addAIMessage(
 
-code+" ki watch detail:",
+code+" ki watch details:",
 
 `
 
@@ -1864,7 +1879,7 @@ function initAutoVoice() {
     recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = false;
-    recognition.lang = 'en-US'; // Pure English transcription taaki 'michael', 'approve' sahi type ho
+    recognition.lang = 'en-US'; // Pure English transcription
 
     recognition.onstart = function() {
         console.log("ARCH-V Voice Auto-ON");
@@ -1890,8 +1905,7 @@ function initAutoVoice() {
     };
 
     recognition.onend = function() {
-        // Automatically restart speech recognition whenever it stops
-        console.log("Restarting voice engine...");
+        // Continuous restart so mic remains active
         try {
             recognition.start();
         } catch(e) {
