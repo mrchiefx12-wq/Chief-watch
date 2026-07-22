@@ -1870,11 +1870,12 @@ return html;
 }
 
 
-/* ================= CONTINUOUS VOICE INPUT ================= */
+/* ================= CONTINUOUS VOICE INPUT WITH DELAY TIMER ================= */
 
 let recognition;
 let isMicActive = false;
 let audioCtx = null;
+let speechTimer = null; // Timer variable added
 
 function keepAudioPipelineActive() {
     try {
@@ -1922,17 +1923,27 @@ function initAutoVoice() {
     };
 
     recognition.onresult = function(event) {
-        const lastIndex = event.results.length - 1;
+        let fullTranscript = '';
 
-        if (event.results[lastIndex].isFinal) {
-            let transcript = event.results[lastIndex][0].transcript;
-            transcript = transcript.replace(/\./g, '').trim();
+        // Sabhi spoken words ko ek saath combine karenge
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            fullTranscript += event.results[i][0].transcript + ' ';
+        }
 
-            if (transcript) {
-                const input = document.getElementById("commandInput");
-                input.value = transcript;
+        fullTranscript = fullTranscript.replace(/\./g, '').trim();
+
+        if (fullTranscript) {
+            const input = document.getElementById("commandInput");
+            input.value = fullTranscript;
+
+            // Purana timer cancel karein agar aap abhi bhi bol rahe hain
+            if (speechTimer) clearTimeout(speechTimer);
+
+            // 1200ms (1.2 Seconds) rukega jab aap bolna band kar doge, tabhi command bhejega
+            speechTimer = setTimeout(() => {
                 sendCommand();
-            }
+                speechTimer = null;
+            }, 1200);
         }
     };
 
@@ -1962,8 +1973,3 @@ function initAutoVoice() {
     });
 
 }
-
-</script>
-
-</body>
-</html>
