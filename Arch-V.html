@@ -944,6 +944,14 @@ function speakText(text) {
 
     if (!('speechSynthesis' in window)) return;
 
+    // AI bolne se pehle mic ko band karega taaki apni aawaaz na sune
+    if (recognition && isMicActive) {
+        try {
+            recognition.abort();
+            isMicActive = false;
+        } catch(e) {}
+    }
+
     let cleanText = text.replace(/<[^>]*>?/gm, '');
     cleanText = cleanText.replace(/[*_#]/g, '').trim();
 
@@ -951,14 +959,15 @@ function speakText(text) {
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
 
-    // Dynamic Indian Accent setup for crisp Hinglish & English
     utterance.lang = 'en-IN'; 
-    utterance.rate = 1.25;    // Super Fast & Energetic Speed
+    
+    // ⚡ YAHAN SE SPEED CONTROL HOGI (Apne hisab se 1.4, 1.6 ya 1.8 set kar lo)
+    utterance.rate = 1.6;  
+    
     utterance.pitch = 1.0;
 
     const voices = window.speechSynthesis.getVoices();
     
-    // Automatic Best Indian English / Natural Voice Auto-Picker
     const selectedVoice = voices.find(v => 
         (v.lang === 'en-IN' || v.lang === 'hi-IN') && 
         (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('India') || v.name.includes('Rishi') || v.name.includes('Neerja'))
@@ -968,13 +977,20 @@ function speakText(text) {
         utterance.voice = selectedVoice;
     }
 
-    window.speechSynthesis.speak(utterance);
-}
-
-if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
+    // AI bolna khatam karega tabhi mic dobara on hoga
+    utterance.onend = function() {
+        setTimeout(() => {
+            startMicSafely();
+        }, 200);
     };
+
+    utterance.onerror = function() {
+        setTimeout(() => {
+            startMicSafely();
+        }, 200);
+    };
+
+    window.speechSynthesis.speak(utterance);
 }
 
 
