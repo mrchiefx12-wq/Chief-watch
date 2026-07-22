@@ -1091,6 +1091,7 @@ return similar || null;
 /* ================= COMMAND ENGINE ================= */
 
 function sendCommand(){
+    
 
 const input=
 document.getElementById("commandInput");
@@ -2516,12 +2517,21 @@ if (match) {
 }
 
 
-/* PENDING REQUEST (Multiple Variations Support) */
+/* PENDING REQUEST & VOUCHER SEARCH (Saves searched user) */
 
-match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ki\s+(?:pending\s+)?reqest|request(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?(?:\s+ki|\s+ka)?\s*(?:pending\s+)?(?:reqest|request|voucher)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
 if (match) {
-    showPendingRequest(match[1].trim());
+    const userName = match[1].trim();
+    
+    // Unwanted filler words cleanup
+    const cleanUser = userName.replace(/^(?:ka|ki|user)\s+/i, '').trim();
+
+    // User ka name temporary variable me save kar lo
+    lastSearchedUser = cleanUser;
+
+    // Search aur Display Function Call
+    showPendingRequest(cleanUser);
     return;
 }
 
@@ -2554,29 +2564,36 @@ if (match) {
     return;
 }
 
-/* APPROVE / ACTIVATE VOUCHER (Requires Explicit User Name) */
+/* APPROVE / ACTIVATE VOUCHER (Smart Context Support) */
+let lastSearchedUser = ""; // Puraane search kiye gaye user ka name save rakhne ke liye
 
-// Pattern: Checks for keywords like approve, activate, voucher active, etc.
-match = command.match(/^(?:arch\s+)?(?:approve|approv|approved|activate|active)\s*(?:voucher|request)?\s*(.+)?$/i) 
-     || command.match(/^(?:arch\s+)?(.+?)\s*(?:ka|ki)?\s*voucher\s*(?:active|activate)\s*(?:karo|kero|ker\s+do|kardo|do)?$/i);
+let possibleUser = "";
 
-if (match) {
+// 1. Agar Command me Name Bola gaya ho (e.g., "activate xyz", "activate voucher xyz", "xyz voucher activate")
+if (/^(?:arch\s+)?(?:activate\s+voucher|activate|approve|approved)\s+(.+)$/i.test(command)) {
+    possibleUser = command.match(/^(?:arch\s+)?(?:activate\s+voucher|activate|approve|approved)\s+(.+)$/i)[1];
+} 
+else if (/^(?:arch\s+)?(.+?)\s+(?:ka\s+)?voucher\s+activate(?:\s+(?:ker\s+de|ker\s+do|ker|karo|kero|kardo))?$/i.test(command)) {
+    possibleUser = command.match(/^(?:arch\s+)?(.+?)\s+(?:ka\s+)?voucher\s+activate(?:\s+(?:ker\s+de|ker\s+do|ker|karo|kero|kardo))?$/i)[1];
+}
 
-    // User name extract karne ke liye
-    let possibleUser = match[1] ? match[1].trim() : "";
+possibleUser = possibleUser ? possibleUser.trim() : "";
 
-    // Unwanted filler words ko clean karna
-    possibleUser = possibleUser.replace(/^(?:voucher|request|user|ka|ki)\s+/i, '')
-                               .replace(/\s+(?:voucher|request|active|activate|karo|kero|ker\s+do|kardo|do)$/i, '')
-                               .trim();
+// Case A: Name command me hi mila
+if (possibleUser) {
+    lastSearchedUser = possibleUser; // Update last searched user
+    approveUserRequest(possibleUser);
+    return;
+} 
 
-    // Jab tak valid user name nahi milega, tab tak activate nahi hoga
-    if (possibleUser) {
-        approveUserRequest(possibleUser);
+// Case B: Jab aap sirf "activate", "approve", ya "arch activate" bologe
+if (/^(?:arch\s+)?(?:activate|activate\s+voucher|approve|approved)$/i.test(command)) {
+    if (lastSearchedUser) {
+        // Puraane search kiye gaye user ko hi activate karega
+        approveUserRequest(lastSearchedUser);
     } else {
-        addAIMessage("Kis user ki request approve ya activate karni hai? Kripya user name saath me bolein.");
+        addAIMessage("Pehle kisi user ka request ya voucher search karein, ya user name saath me bolein.");
     }
-
     return;
 }
 
