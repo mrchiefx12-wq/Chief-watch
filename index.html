@@ -1923,137 +1923,694 @@
 </div>
         <div id="frag-history" class="embed-fragment">
             <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  /* 🚫 कुरुप स्क्रॉलबार बंद */
-  ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
-  * { box-sizing: border-box; -ms-overflow-style: none; scrollbar-width: none; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CHIEF Order History Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
 
-  /* 🌍 मास्टर बॉडी - जो ऊपर की वाइट स्पेस को कवर करेगी */
-  body, html {
-    margin: 0 !important;
-    padding: 0 !important;
-    height: 105% !important; 
-    width: 100%;
-    background-color: #000000 !important; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Montserrat', sans-serif;
-    overflow: hidden !important;
-  }
+    <style>
+        :root {
+            --gold: #F5C542;
+            --dark-gold: #C69524;
+            --gold-gradient: linear-gradient(135deg, #F5C542 0%, #D4AF37 50%, #997515 100%);
+            --black: #030303;
+            --surface: #0E0E0E;
+            --surface-card: #141414;
+            --border: rgba(245, 197, 66, 0.25);
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --text-main: #FFFFFF;
+            --text-muted: #AAAAAA;
+            --error: #FF4D4D;
+            --success: #10B981;
+        }
 
-  /* 🛠️ गूगल साइट्स के टॉप वाइट बार को ऊपर खींचकर छुपाने का जुगाड़ */
-  .main-wrapper {
-    width: 100%;
-    height: 100%;
-    margin-top: -45px; 
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000000;
-  }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-  /* 💎 प्रीमियम कार्ड डिज़ाइन */
-  .premium-card {
-    width: 100%;
-    max-width: 400px;
-    background: linear-gradient(145deg, #121212, #050505);
-    border: 1px solid rgba(212, 175, 55, 0.4); 
-    border-radius: 16px;
-    padding: 50px 25px;
-    text-align: center;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.1);
-    position: relative;
-  }
+        html, body {
+            background-color: var(--black) !important;
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100%;
+            height: 100%;
+            overflow: hidden !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-  .title {
-    font-size: 26px;
-    color: #fff;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 12px;
-    text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
-  }
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .history-wrapper-outer::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
 
-  .description {
-    color: #999;
-    font-size: 13px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-    letter-spacing: 0.5px;
-  }
+        .history-wrapper-outer {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px 14px 40px 14px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
-  /* ✨ लिक्विड गोल्ड ग्लो बटन */
-  .btn-gold {
-    display: inline-block;
-    width: 85%;
-    text-decoration: none;
-    color: #000;
-    background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728);
-    padding: 18px 0;
-    font-weight: 800;
-    font-size: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    border-radius: 4px;
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: none;
-  }
+        .history-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
 
-  .btn-gold:hover {
-    filter: brightness(1.1);
-  }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-top: 10px;
+        }
 
-  .btn-gold:active {
-    transform: scale(0.94);
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.7);
-  }
+        .header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.85rem;
+            letter-spacing: 6px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            font-weight: 700;
+        }
 
-  .footer-brand {
-    margin-top: 35px;
-    color: #444;
-    font-size: 9px;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-  }
+        .header p {
+            letter-spacing: 2.5px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin: 8px 0 0 0;
+            font-weight: 500;
+        }
 
-  /* 📱 मोबाइल के लिए थोड़ा एडजस्टमेंट */
-  @media (max-width: 768px) {
-    .main-wrapper { margin-top: -30px; }
-    .premium-card { padding: 40px 20px; }
-    .title { font-size: 22px; }
-  }
-</style>
+        /* Clean Sharp Loading Box (No blur) */
+        .loading-box {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 14px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .empty-state-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .empty-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .empty-description {
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .order-item-box {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+
+        .order-item-box.open {
+            border-color: var(--border);
+        }
+
+        .order-header-bar {
+            padding: 15px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            background: var(--surface);
+        }
+
+        .order-title-text {
+            color: var(--text-main);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-title-text i {
+            color: var(--gold);
+        }
+
+        .order-toggle-icon {
+            color: var(--gold);
+            font-size: 0.8rem;
+            transition: transform 0.2s ease;
+            background: rgba(245, 197, 66, 0.1);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .order-item-box.open .order-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .order-details-content {
+            display: none;
+            padding: 16px;
+            background: var(--surface-card);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .sub-section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .specs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
+
+        .specs-list li {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 6px;
+        }
+
+        .specs-list li span:last-child {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .pricing-status-box {
+            background: #090909;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .waiting-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .loading-circle {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(245, 197, 66, 0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .total-price-display {
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .cod-tag {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .tracking-timeline {
+            margin: 12px 0 4px 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .tracking-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.7rem;
+            color: #555;
+            margin-bottom: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .tracking-step.active {
+            color: var(--text-main);
+        }
+
+        .tracking-step i {
+            font-size: 0.85rem;
+            width: 22px;
+            height: 22px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+        }
+
+        .tracking-step.active i {
+            background: rgba(245, 197, 66, 0.15);
+            color: var(--gold);
+        }
+
+        .action-buttons-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-confirm {
+            background: var(--gold-gradient);
+            color: #000;
+        }
+
+        .btn-cancel {
+            background: #181111;
+            color: var(--error);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+        }
+
+        .terms-box {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            background: #090909;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 14px;
+        }
+
+        .chief-code-box {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .chief-code-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .chief-code-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .luxury-footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-bottom: 10px;
+        }
+        
+        .footer-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin: 0 0 4px 0;
+        }
+
+        .footer-copy {
+            font-size: 0.52rem;
+            color: #666;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        /* Clean Crisp Popup (No backdrop blur) */
+        .luxury-popup-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .luxury-popup-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .luxury-popup-card {
+            background: #141414;
+            border: 1px solid var(--border);
+            padding: 24px 20px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 320px;
+            width: 85%;
+        }
+
+        .popup-icon {
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .popup-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .popup-msg {
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+    </style>
 </head>
 <body>
 
-<div class="main-wrapper">
-  <div class="premium-card">
-    <div class="title">No History Yet</div>
-    
-    <div class="description">
-      Your journey with Chief has just begun.<br>
-      Explore our collection to start your story.
+<div class="history-wrapper-outer">
+    <div class="history-container">
+        
+        <div class="header">
+            <h1>CHIEF</h1>
+            <p>Private Registry History</p>
+        </div>
+
+        <!-- Orders Container -->
+        <div id="ordersContainer">
+            <div class="loading-box">
+                <div class="loading-circle" style="margin: 0 auto 8px auto;"></div>
+                Loading vault history...
+            </div>
+        </div>
+
+        <!-- Chief Code Box -->
+        <div class="chief-code-box">
+            <div class="chief-code-title"><i class="fa-solid fa-fingerprint"></i> CHIEF CODE</div>
+            <p class="chief-code-desc">
+                Your watch features a secret CHIEF CODE that will be revealed upon receiving your order. We hope your timepiece receives a unique and rare serial number, as rare editions are true collectible masterpieces.
+            </p>
+        </div>
+
+        <div class="luxury-footer">
+            <p class="footer-tag">MR CHIEF INDIA</p>
+            <p class="footer-copy">© 2026 Secure Firebase Vault</p>
+        </div>
+
     </div>
-
-    <a href="https://mrchiefx12-wq.github.io/Chief-watch/" 
-       target="_blank" 
-       rel="noopener noreferrer"
-       class="btn-gold">
-      Back to Home
-    </a>
-
-    <div class="footer-brand">MR CHIEF INDIA</div>
-  </div>
 </div>
+
+<!-- Popup Notification Modal -->
+<div class="luxury-popup-overlay" id="luxuryPopup">
+    <div class="luxury-popup-card">
+        <div class="popup-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="popup-title" id="popupTitle">Success</div>
+        <div class="popup-msg" id="popupMsg">Action completed successfully.</div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBPg9unSvYAs_NI2CiIvJd69PtBt1hrr5I",
+        authDomain: "chief-login12.firebaseapp.com",
+        databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
+        projectId: "chief-login12",
+        storageBucket: "chief-login12.appspot.com",
+        messagingSenderId: "334157325641",
+        appId: "1:334157325641:web:c9b2d4048105e71011e698",
+        measurementId: "G-CB9F743N3M"
+    };
+
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+    const ordersRef = database.ref('users/CHIEF_GUEST/orders');
+
+    ordersRef.on('value', (snapshot) => {
+        const container = document.getElementById('ordersContainer');
+        container.innerHTML = '';
+
+        if (!snapshot.exists()) {
+            container.innerHTML = `
+                <div class="empty-state-card">
+                    <div class="empty-title">NO HISTORY YET</div>
+                    <div class="empty-description">
+                        Your journey with Chief has just begun.<br>
+                        Your custom orders will appear here once placed.
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        const ordersData = snapshot.val();
+        let validOrdersCount = 0;
+        
+        Object.keys(ordersData).forEach((orderKey) => {
+            const order = ordersData[orderKey];
+            
+            if (order.status === 'Cancelled') {
+                return; 
+            }
+
+            validOrdersCount++;
+
+            const totalPrice = order.totalPrice;
+            const deliveryCharge = order.deliveryCharge || '0';
+            const orderStatus = order.orderStatus || 'Pending';
+
+            let pricingBlock = '';
+            if (!totalPrice) {
+                pricingBlock = `
+                    <div class="waiting-box">
+                        <div class="loading-circle"></div>
+                        <span>Waiting for total price from Admin...</span>
+                    </div>
+                `;
+            } else {
+                pricingBlock = `
+                    <div class="total-price-display">₹${totalPrice}</div>
+                    <div class="cod-tag"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery &bull; Delivery: ₹${deliveryCharge}</div>
+                `;
+            }
+
+            let actionButtonsBlock = '';
+            if (!order.isConfirmed) {
+                actionButtonsBlock = `
+                    <div class="action-buttons-group">
+                        ${totalPrice ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
+                        <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel</button>
+                    </div>
+                `;
+            } else {
+                const isPacked = orderStatus === 'Packed' || orderStatus === 'Shipped' || orderStatus === 'Delivered';
+                const isShipped = orderStatus === 'Shipped' || orderStatus === 'Delivered';
+                const isDelivered = orderStatus === 'Delivered';
+
+                actionButtonsBlock = `
+                    <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
+                        <div class="sub-section-title"><i class="fa-solid fa-truck-fast"></i> Order Tracking Pipeline</div>
+                        <ul class="tracking-timeline">
+                            <li class="tracking-step active"><i class="fa-solid fa-circle-check"></i> Confirmed by User</li>
+                            <li class="tracking-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box-archive"></i> Item Packed in Vault</li>
+                            <li class="tracking-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched / Shipped</li>
+                            <li class="tracking-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-award"></i> Successfully Delivered</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            const orderBox = document.createElement('div');
+            orderBox.className = 'order-item-box';
+            orderBox.innerHTML = `
+                <div class="order-header-bar" onclick="toggleOrderAccordion(this)">
+                    <div class="order-title-text">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
+                    </div>
+                    <div class="order-toggle-icon">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="order-details-content">
+                    <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
+                    <ul class="specs-list">
+                        <li><span>Target Edition:</span><span>${order.targetSegment || 'N/A'}</span></li>
+                        <li><span>Case Shape:</span><span>${order.caseShape || 'N/A'}</span></li>
+                        <li><span>Dial Color:</span><span>${order.dialColor || 'N/A'}</span></li>
+                        <li><span>Top Border:</span><span>${order.topBorderStyle || 'N/A'} (${order.topBorderColor || 'N/A'})</span></li>
+                        <li><span>Strap Material:</span><span>${order.strapMaterial || 'N/A'}</span></li>
+                        <li><span>Mechanism:</span><span>${order.mechanismInsideLook || 'N/A'}</span></li>
+                        <li><span>Location:</span><span>${order.ownerLocation || 'N/A'}</span></li>
+                    </ul>
+
+                    <div class="sub-section-title"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
+                    <div class="pricing-status-box">
+                        ${pricingBlock}
+                    </div>
+
+                    ${actionButtonsBlock}
+
+                    <div class="terms-box">
+                        <b>Terms & Conditions:</b> All Chief luxury timepieces are precision-crafted custom editions created strictly to individual specifications. Production initiates immediately under absolute vault privacy upon confirmation.
+                    </div>
+                </div>
+            `;
+            container.appendChild(orderBox);
+        });
+
+        if (validOrdersCount === 0) {
+            container.innerHTML = `
+                <div class="empty-state-card">
+                    <div class="empty-title">NO HISTORY YET</div>
+                    <div class="empty-description">
+                        Your journey with Chief has just begun.<br>
+                        Your custom orders will appear here once placed.
+                    </div>
+                </div>
+            `;
+        }
+    }, (error) => {
+        console.error("Firebase read error: ", error);
+        document.getElementById('ordersContainer').innerHTML = `
+            <div class="empty-state-card">
+                <div class="empty-title">CONNECTION ERROR</div>
+                <div class="empty-description">Unable to sync with the secure vault.</div>
+            </div>
+        `;
+    });
+
+    function toggleOrderAccordion(headerElement) {
+        const parentBox = headerElement.parentElement;
+        const content = parentBox.querySelector('.order-details-content');
+        const isOpen = parentBox.classList.contains('open');
+        
+        document.querySelectorAll('.order-item-box').forEach(box => {
+            box.classList.remove('open');
+            box.querySelector('.order-details-content').style.display = 'none';
+        });
+
+        if (!isOpen) {
+            parentBox.classList.add('open');
+            content.style.display = 'block';
+        }
+    }
+
+    function triggerPopup(title, message) {
+        const overlay = document.getElementById('luxuryPopup');
+        document.getElementById('popupTitle').innerText = title;
+        document.getElementById('popupMsg').innerText = message;
+        overlay.classList.add('show');
+        setTimeout(() => { overlay.classList.remove('show'); }, 2000);
+    }
+
+    function cancelOrder(orderKey) {
+        if(confirm("Are you sure you want to cancel this custom order?")) {
+            database.ref(`users/CHIEF_GUEST/orders/${orderKey}`).update({
+                status: 'Cancelled'
+            }).then(() => {
+                triggerPopup('Order Cancelled', 'Your order has been removed from active registries.');
+            });
+        }
+    }
+
+    function confirmOrder(orderKey) {
+        database.ref(`users/CHIEF_GUEST/orders/${orderKey}`).update({
+            isConfirmed: true,
+            orderStatus: 'Confirmed'
+        }).then(() => {
+            triggerPopup('Order Confirmed!', 'Thank you. Your watch is now locked for master crafting.');
+        });
+    }
+</script>
 
 </body>
 </html>
