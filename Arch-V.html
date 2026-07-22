@@ -2486,9 +2486,9 @@ if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta
 
   
 
-/* USER DATA (Multiple Variations Support) */
+/* USER DATA (Multiple Variations Support + 'xyz data' Support) */
 
-match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ka\s+data(?:\s+(?:bata|btao|dikha|bta|dikhhao))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?(?:\s+ka)?\s+data(?:\s+(?:bata|btao|dikha|bta|dikhhao))?$/i);
 
 if (match) {
     showUserData(match[1].trim(), false);
@@ -2498,7 +2498,7 @@ if (match) {
 
 /* FULL DATA */
 
-match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ka\s+full\s+data(?:\s+(?:bata|btao|dikha|dikhhao))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ka\s+full\s+data(?:\s+(?:bata|btao|dikha|dikhhao))?$/i);
 
 if (match) {
     showUserData(match[1].trim(), true);
@@ -2508,7 +2508,7 @@ if (match) {
 
 /* USER VOUCHER (Multiple Variations Support) */
 
-match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ka\s+voucher(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ka\s+voucher(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
 if (match) {
     showActiveVoucher(match[1].trim());
@@ -2518,7 +2518,7 @@ if (match) {
 
 /* PENDING REQUEST (Multiple Variations Support) */
 
-match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ki\s+(?:pending\s+)?reqest|request(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ki\s+(?:pending\s+)?reqest|request(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
 if (match) {
     showPendingRequest(match[1].trim());
@@ -2528,7 +2528,7 @@ if (match) {
 
 /* USER COINS (Multiple Variations Support) */
 
-match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ke\s+(?:coins|coin)(?:\s+(?:bata|btao|dikha|dikhhao|kitne\s+hain|kitne\s+he))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ke\s+(?:coins|coin)(?:\s+(?:bata|btao|dikha|dikhhao|kitne\s+hain|kitne\s+he))?$/i);
 
 if (match) {
     showCoins(match[1].trim());
@@ -2536,14 +2536,17 @@ if (match) {
 }
 
 
-/* SET COINS (Multiple Variations Support + English "set coin" Command) */
+/* SET COINS (With 'currency', 'paise', 'money', 'balance' & 'arch' Support) */
 
-// Pattern 1: English format (e.g., "arch v xyz set coin 100" ya "xyz set coin 100")
-match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+set\s+(?:coins|coin)\s+(\d+)$/i);
+// Keywords regex pattern for all variations
+const coinKeywords = '(?:coins|coin|coines|currency|paise|money|balance)';
+
+// Pattern 1: English format (e.g., "arch xyz set balance 100" ya "xyz set money 500")
+match = command.match(new RegExp(`^(?:arch\\s+)?(.+?)(?:\\s+user)?\\s+set\\s+${coinKeywords}\\s+(\\d+)$`, 'i'));
 
 if (!match) {
-    // Pattern 2: Hindi/Hinglish format (e.g., "arch v xyz user ke coins 100 kar do / kardo / kerd do")
-    match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ke\s+(?:coins|coin|coines)\s+(\d+)\s*(?:kar\s+do|kardo|karde|ker\s+do|kerdo|kar\s+de)$/i);
+    // Pattern 2: Hindi/Hinglish format (e.g., "arch xyz ke paise 100 kar do" ya "xyz ke balance 500 kardo")
+    match = command.match(new RegExp(`^(?:arch\\s+)?(.+?)(?:\\s+user)?\\s+ke\\s+${coinKeywords}\\s+(\\d+)\\s*(?:kar\\s+do|kardo|karde|ker\\s+do|kerdo|kar\\s+de)$`, 'i'));
 }
 
 if (match) {
@@ -2551,35 +2554,30 @@ if (match) {
     return;
 }
 
-
-/* APPROVE / ACTIVATE VOUCHER (Flexible Voice Command Support) */
+/* APPROVE / ACTIVATE VOUCHER (Requires Explicit User Name) */
 
 // Pattern: Checks for keywords like approve, activate, voucher active, etc.
-match = command.match(/^(?:arch\s*v\s+)?(?:approve|approv|approved|activate|active)\s*(?:voucher|request)?\s*(.+)?$/i) 
-     || command.match(/^(?:arch\s*v\s+)?(.+?)\s*(?:ka|ki)?\s*voucher\s*(?:active|activate)\s*(?:karo|kero|ker\s+do|kardo|do)?$/i);
+match = command.match(/^(?:arch\s+)?(?:approve|approv|approved|activate|active)\s*(?:voucher|request)?\s*(.+)?$/i) 
+     || command.match(/^(?:arch\s+)?(.+?)\s*(?:ka|ki)?\s*voucher\s*(?:active|activate)\s*(?:karo|kero|ker\s+do|kardo|do)?$/i);
 
-if(match){
+if (match) {
 
-    // User name extract karne ke liye (agar command me bola gaya ho)
+    // User name extract karne ke liye
     let possibleUser = match[1] ? match[1].trim() : "";
 
     // Unwanted filler words ko clean karna
-    possibleUser = possibleUser.replace(/^(?:voucher|request|user|ka|ki)\s+/i, '').replace(/\s+(?:voucher|request|active|activate|karo|kero|ker\s+do|kardo|do)$/i, '').trim();
+    possibleUser = possibleUser.replace(/^(?:voucher|request|user|ka|ki)\s+/i, '')
+                               .replace(/\s+(?:voucher|request|active|activate|karo|kero|ker\s+do|kardo|do)$/i, '')
+                               .trim();
 
-    if(possibleUser) {
+    // Jab tak valid user name nahi milega, tab tak activate nahi hoga
+    if (possibleUser) {
         approveUserRequest(possibleUser);
     } else {
-        // Agar user name nahi bola, toh automatic pehle pending user ko dhoondhega
-        const pendingUser = Object.keys(liveUsers).find(u => liveUsers[u]?.pendingRequest?.status === "pending");
-        if(pendingUser) {
-            approveUserRequest(pendingUser);
-        } else {
-            addAIMessage("Kis user ki request approve ya activate karni hai? User name saath me bolo.");
-        }
+        addAIMessage("Kis user ki request approve ya activate karni hai? Kripya user name saath me bolein.");
     }
 
     return;
-
 }
 
 /* APPROVE PATTERN WITH USER NAME */
