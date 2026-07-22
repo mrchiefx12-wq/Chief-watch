@@ -2507,17 +2507,32 @@ if (match) {
 }
 
 
-/* USER VOUCHER (Multiple Variations Support) */
+/* USER VOUCHER (With All Custom Variations & Context Support) */
 
-match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ka\s+voucher(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
+match = command.match(/^(?:arch\s+)?(?:voucher\s+(.+?)|(.+?)\s+voucher)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i)
+     || command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ka\s+voucher(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
 if (match) {
-    showActiveVoucher(match[1].trim());
-    return;
+    // Group 1, Group 2, ya Group 3 me se user name extract karna
+    let rawUser = match[1] || match[2] || match[3] || "";
+    
+    // Unwanted filler words ko clean karna
+    let cleanUser = rawUser.replace(/^(?:ka|ki|user)\s+/i, '')
+                           .replace(/\s+(?:ka|ki|user)$/i, '')
+                           .trim();
+
+    if (cleanUser) {
+        // Target user ko save kar rahe hain taaki baad me direct "activate" bole toh chal jaye
+        window.lastSearchedUser = cleanUser;
+
+        showActiveVoucher(cleanUser);
+        return;
+    }
 }
 
 
 /* PENDING REQUEST & VOUCHER SEARCH (Saves searched user) */
+let lastSearchedUser = ""; // Puraane search kiye gaye user ka name save rakhne ke liye
 
 match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?(?:\s+ki|\s+ka)?\s*(?:pending\s+)?(?:reqest|request|voucher)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
@@ -2565,7 +2580,7 @@ if (match) {
 }
 
 /* APPROVE / ACTIVATE VOUCHER (Smart Context Support) */
-let lastSearchedUser = ""; // Puraane search kiye gaye user ka name save rakhne ke liye
+
 
 let possibleUser = "";
 
@@ -2597,18 +2612,34 @@ if (/^(?:arch\s+)?(?:activate|activate\s+voucher|approve|approved)$/i.test(comma
     return;
 }
 
-/* APPROVE PATTERN WITH USER NAME */
+/* APPROVE / ACTIVATE PATTERN WITH USER NAME */
 
-match=command.match(
-/^(.+?)\s*(?:user\s*)?(?:ki|ka)\s*(?:pending\s*)?request\s*(?:approve|approved)\s*(?:karo|kero|ker do|kardo|do)?$/i
-);
+// Pattern 1: Purana pattern (e.g., "xyz ki request approve karo")
+match = command.match(/^(.+?)\s*(?:user\s*)?(?:ki|ka)\s*(?:pending\s*)?request\s*(?:approve|approved)\s*(?:karo|kero|ker\s+do|kardo|do)?$/i);
 
-if(match){
+// Pattern 2: Naye variations (e.g., "activate xyz voucher", "activate voucher xyz", "voucher activate xyz", etc.)
+if (!match) {
+    match = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(?:voucher\s+)?(.+?)(?:\s+voucher)?$/i)
+         || command.match(/^(?:arch\s+)?(?:voucher\s+)?(.+?)\s+(?:voucher\s+)?(?:activate|active|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i);
+}
 
-approveUserRequest(match[1]);
+if (match) {
+    // Extracted user name clean karna
+    let targetUser = match[1].trim();
 
-return;
+    // Extra unwanted words remove karna
+    targetUser = targetUser.replace(/^(?:voucher|request|user|ka|ki)\s+/i, '')
+                           .replace(/\s+(?:voucher|request|user|ka|ki)$/i, '')
+                           .trim();
 
+    if (targetUser) {
+        // Last searched user save kar lo
+        window.lastSearchedUser = targetUser;
+
+        // Approve/Activate function call
+        approveUserRequest(targetUser);
+        return;
+    }
 }
 
 
