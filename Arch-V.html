@@ -1870,108 +1870,62 @@ return html;
 }
 
 
-/* ================= CONTINUOUS VOICE INPUT WITH DELAY TIMER ================= */
+/* ================= AUTOMATIC ALWAYS-ON VOICE ENGINE ================= */
 
 let recognition;
-let isMicActive = false;
-let audioCtx = null;
-let speechTimer = null; // Timer variable added
-
-function keepAudioPipelineActive() {
-    try {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            gain.gain.value = 0.000001; 
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-        }
-    } catch(e) {}
-}
-
-function startMicSafely() {
-    if (!recognition) return;
-    try {
-        document.getElementById("micErrorBanner").style.display = "none";
-        recognition.start();
-        isMicActive = true;
-    } catch (e) {}
-}
 
 function initAutoVoice() {
-
-    keepAudioPipelineActive();
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
+        console.log("Web Speech API not supported.");
         document.getElementById("voiceStatus").innerText = "MIC NOT SUPPORTED";
         return;
     }
 
     recognition = new SpeechRecognition();
     recognition.continuous = true;
-    recognition.interimResults = true; 
-    recognition.lang = 'en-US'; 
+    recognition.interimResults = false;
+    recognition.lang = 'en-US'; // Pure English transcription
 
     recognition.onstart = function() {
-        isMicActive = true;
+        console.log("ARCH-V Voice Auto-ON");
         document.getElementById("voiceStatus").style.display = "inline-flex";
-        document.getElementById("micErrorBanner").style.display = "none";
     };
 
     recognition.onresult = function(event) {
-        let fullTranscript = '';
+        const lastIndex = event.results.length - 1;
+        let transcript = event.results[lastIndex][0].transcript;
+        
+        transcript = transcript.replace(/\./g, '').trim();
 
-        // Sabhi spoken words ko ek saath combine karenge
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-            fullTranscript += event.results[i][0].transcript + ' ';
-        }
-
-        fullTranscript = fullTranscript.replace(/\./g, '').trim();
-
-        if (fullTranscript) {
+        if (transcript) {
+            console.log("Voice Captured:", transcript);
             const input = document.getElementById("commandInput");
-            input.value = fullTranscript;
-
-            // Purana timer cancel karein agar aap abhi bhi bol rahe hain
-            if (speechTimer) clearTimeout(speechTimer);
-
-            // 1200ms (1.2 Seconds) rukega jab aap bolna band kar doge, tabhi command bhejega
-            speechTimer = setTimeout(() => {
-                sendCommand();
-                speechTimer = null;
-            }, 1200);
+            input.value = transcript;
+            sendCommand();
         }
     };
 
     recognition.onerror = function(event) {
-        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-            document.getElementById("micErrorBanner").style.display = "block";
-        }
+        console.error("Speech Recognition Error:", event.error);
     };
 
     recognition.onend = function() {
-        isMicActive = false;
-        if (!document.hidden) {
-            setTimeout(() => { startMicSafely(); }, 150);
+        // Continuous restart so mic remains active
+        try {
+            recognition.start();
+        } catch(e) {
+            setTimeout(() => { recognition.start(); }, 1000);
         }
     };
 
-    startMicSafely();
-
-    document.addEventListener("visibilitychange", function() {
-        if (!document.hidden) {
-            startMicSafely();
-        }
-    });
-
-    window.addEventListener("focus", function() {
-        startMicSafely();
-    });
-
+    try {
+        recognition.start();
+    } catch(e) {
+        console.log("Auto-start error:", e);
+    }
 }
 
 </script>
