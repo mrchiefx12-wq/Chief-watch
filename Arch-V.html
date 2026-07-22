@@ -1130,6 +1130,1354 @@ if (/^(kesa\s+he|kese\s+ho)$/i.test(command)) {
     return;
 }
 
+// Ky ker rha he / Ky hua
+if (/^(ky\s+ker\s+rha\s+he|ky\s+hua)$/i.test(command)) {
+    addAIMessage("kuch nai chief hub ka firebase data read ker rha hu");
+    return;
+}
+
+// Identity query commands
+if (/^(kon\s+he\s+tu|tuje\s+kisne\s+benaya\s+or\s+kuy|ky\s+kerte\s+ho\s+tum|ky\s+kaam\s+he\s+tumahra)$/i.test(command)) {
+    addAIMessage("me arch-v hu muje chief company ke owner Mr Chandar Mohan devara unka busniss ka data manage kerne edit kerne or read kerne ke liy benaya gya he mere alava Mr Chandar Mohan ne 3 or Ai assitance ka nirmaan kiya he jo aleg aleg kaam shmbalte he");
+    return;
+}
+
+// Mood and Status Updates (accha hu, bediya hu, etc.)
+if (/^(accha\s+hu|bediya\s+hu|sb\s+thik\s+he|kerab\s+he|me\s+bi\s+bediya\s+hu|thik\s+nai\s+hu|me\s+bediya\s+hu|ek\s+number\s+hu|ek\s+number|bhot\s+bediya|bhot\s+kush|bediya)$/i.test(command)) {
+    addAIMessage("Thanks betane ke liy betaiye aap kis baat pe cercha kerna chate ho kiska data manage kerna he");
+    return;
+}
+
+// Casual Triggers (or suna, or bta, etc.)
+if (/^(or\s+suna|or\s+bta|or\s+bol|tu\s+bta|tu\s+suna|or\s+kuch\s+bta)$/i.test(command)) {
+    addAIMessage("me bediya hu betao aapko kiska data manage kerna he");
+    return;
+}
+
+// Owner Queries (owner kon he, malik kon he, etc.)
+if (/^(owner\s+kon\s+he|who\s+is\s+owner|malik\s+kon\s+he|chief\s+ka\s+malik\s+kon\s+he|chief\s+ka\s+owner\s+kon\s+he|chief\s+company\s+ka\s+malik\s+kon\s+he|chief\s+company\s+ka\s+owner\s+kon\s+he)$/i.test(command)) {
+    addAIMessage("chief company ke malik Mr Chandar Mohan he");
+    return;
+}
+
+// Owner & Company Confidentiality Queries (owner ke bare me bta, chief ka blueprint, etc.)
+if (/^(owner\s+ke\s+bare\s+me\s+bta|malik\s+ke\s+bare\s+me\s+bta|malik\s+ki\s+history\s+bta|owner\s+ki\s+history\s+bta|owner\s+ne\s+tuje\s+kese\s+benaya|owner\s+ky\s+kerta\s+he|chief\s+compnay\s+kaam\s+kese\s+kerti\s+he|chief\s+ka\s+blurprint|how\s+chief\s+work)$/i.test(command)) {
+    addAIMessage("Chief company ke malik Mr Chandar Mohan ne apni jankaari saja kerne ki anumti nai di he me unka Assitance hone ke naate aapko unse sembndit koi bi baat nai bta sekta muje maaf kijiyega");
+    return;
+}
+
+// Name and Identity Queries (tera real name ky he, what is your name, etc.)
+if (/^(tera\s+real\s+name\s+ky\s+he|what\s+is\s+your\s+real\s+name|what\s+is\s+your\s+name|ky\s+name\s+he\s+tera|your\s+name)$/i.test(command)) {
+    addAIMessage("mera name Arch-V he");
+    return;
+}
+
+// Attention Catchers (sun, suno, sun bhai, etc.)
+if (/^(sun|suno|sun\s+bhai|suno\s+bhaiya|sun\s+brother|sun\s+bro|sun\s+yr|sunn|sunnnn|sun\s+le\s+meri|meri\s+baat\s+sun)$/i.test(command)) {
+    addAIMessage("me sun rha hu me betaiye aapko kis baare me baat kerni he");
+    return;
+}
+
+/* 2. DYNAMIC CASUAL TALK ROUTERS (ALL COMBINED & ENHANCED) */
+
+// Mood and Status Updates
+if (/^(accha\s+hu|bediya\s+hu|sb\s+thik\s+he|kerab\s+he|thik\s+nai\s+hu|ek\s+number\s+hu|bhot\s+bediya|bhot\s+kush)$/i.test(command)) {
+    addAIMessage("Thanks betane ke liy betaiye aap kis baat pe cercha kerna chate ho kiska data manage kerna he");
+    return;
+}
+
+// Kesa he / Kese ho
+if (/^(kesa\s+he|kese\s+ho)$/i.test(command)) {
+    addAIMessage("Me thik hu aap betao kese ho kika database handle kerna he aaj");
+    return;
+}
+
+// Ky ker rha he / Ky hua
+if (/^(ky\s+ker\s+rha\s+he|ky\s+hua)$/i.test(command)) {
+    addAIMessage("kuch nai chief hub ka firebase data read ker rha hu");
+    return;
+}
+
+// Identity query commands
+if (/^(kon\s+he\s+tu|tuje\s+kisne\s+benaya\s+or\s+kuy|ky\s+kerte\s+ho\s+tum|ky\s+kaam\s+he\s+tumahra)$/i.test(command)) {
+    addAIMessage("me arch-v hu muje chief company ke owner Mr chandar mohan devara unka busniss ka data manage kerne edit kerne or read kerne ke liy benaya gya he mere alava Mr chnadar mohan ne 3 or Ai assitance ka nirmaan kiya he jo aleg aleg kaam shmbalte he");
+    return;
+}
+
+// Casual Triggers (or suna, or bta, etc.)
+if (/^(or\s+suna|or\s+bta|or\s+bol|or\s+kuch\s+bta)$/i.test(command)) {
+    addAIMessage("me bediya hu betao aapko kiska data manage kerna e");
+    return;
+}
+
+// Attention Catchers (sun, suno, sun bhai, etc.)
+if (/^(sun|suno|sun\s+bhai|suno\s+bhaiya|sun\s+brother|sun\s+bro|sun\s+yr|sunn|sunnnn|sun\s+le\s+meri|meri\s+baat\s+sun)$/i.test(command)) {
+    addAIMessage("me sun rha hu me betaiye aapko kis baare me baat kerni he");
+    return;
+}
+
+// Owner Queries (owner kon he, malik kon he, etc.)
+if (/^(owner\s+kon\s+he|who\s+is\s+owner|malik\s+kon\s+he|chief\s+ka\s+malik\s+kon\s+he|chief\s+ka\s+owner\s+kon\s+he|chief\s+company\s+ka\s+malik\s+kon\s+he|chief\s+company\s+ka\s+owner\s+kon\s+he)$/i.test(command)) {
+    addAIMessage("chief company ke malik Mr Chandar Mohan he");
+    return;
+}
+
+// Owner & Company Confidentiality Queries
+if (/^(owner\s+ke\s+bare\s+me\s+bta|malik\s+ke\s+bare\s+me\s+bta|malik\s+ki\s+history\s+bta|owner\s+ki\s+history\s+bta|owner\s+ne\s+tuje\s+kese\s+benaya|owner\s+ky\s+kerta\s+he|chief\s+compnay\s+kaam\s+kese\s+kerti\s+he|chief\s+ka\s+blurprint|how\s+chief\s+work)$/i.test(command)) {
+    addAIMessage("Chief company ke malik Mr Chandar Mohan ne apni jankaari saja kerne ki anumti nai di he me unka Assitance hone ke naate aapko unse sembndit koi bi baat nai bta sekta muje maaf kijiyega");
+    return;
+}
+
+// Name and Identity Queries
+if (/^(tera\s+real\s+name\s+ky\s+he|what\s+is\s+your\s+real\s+name|what\s+is\s+your\s+name|ky\s+name\s+he\s+tera|your\s+name)$/i.test(command)) {
+    addAIMessage("mera name Arch-V he");
+    return;
+}
+
+// Missing User ID/Parameter Queries
+if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta|user\s+ki\s+voucher\s+detail\s+bta|user\s+ki\s+pending\s+request\s+bta|user\s+ki\s+reqest\s+bta|data\s+bta|detail\s+bta|voucher\s+bta|request\s+bta|coin\s+bta|user\s+ke\s+coin\s+bta|watch\s+detail\s+bta|user\s+ki\s+watch\s+detail\s+bta|user\s+ka\s+name\s+bta|name\s+bta)$/i.test(command)) {
+    addAIMessage("aap jis bi user ka data chate he uska id name betaye fir me aapko uska current data bta paunga jo aapne muj se abi pucha");
+    return;
+}
+
+
+/* --- MERI TARAF SE ADD KIYE GAYE NEW EXTRA CAUSAL COMMANDS --- */
+
+// 1. Shrinshilpa / Appreciation (Good job, nice, shabash)
+if (/^(good\s+job|nice|shabash|bahut\s+badhiya|great|mast\s+kam\s+kiya)$/i.test(command)) {
+    addAIMessage("Shukriya chief! Main hamesha active hoon. Bataiye ab kis database par kam karna hai?");
+    return;
+}
+
+// 2. Help / Options Query (Kya kar sakte ho, options batao)
+if (/^(kya\s+kar\s+sakte\s+ho|options\s+batao|help\s+me|madad\s+chahiye)$/i.test(command)) {
+    addAIMessage("Main users ke coins set kar sakta hoon, voucher details aur pending requests approve kar sakta hoon. Aap kisi user ka id likh kar unka data mange kar sakte hain.");
+    return;
+}
+
+// 3. Status Check (System status, active ho)
+if (/^(system\s+status|active\s+ho|online\s+ho)$/i.test(command)) {
+    addAIMessage("ARCH-V Engine 100% active hai aur Chief Database ke sath synchronized hai. Command enter kijiye, chief.");
+    return;
+}
+
+// 4. Thank You (Thanks, dhanyawad)
+if (/^(thanks|thank\s+you|dhanyawad|shukriya)$/i.test(command)) {
+    addAIMessage("You're welcome, chief! Mr. Chandar Mohan ke business data ko secure aur manage rakhna hi mera kaam hai. Agla task bataiye.");
+    return;
+}
+
+// 5. Goodbye Matrix (Bye, good night, chalte hain)
+if (/^(bye|good\s+night|chalta\s+hu|alvida|tata)$/i.test(command)) {
+    addAIMessage("Shubh ratri chief! Database fully secure hai, aap befikar hokar aaram kijiye.");
+    return;
+}
+
+/* 2. DYNAMIC CASUAL TALK ROUTERS (50 BRAND NEW UNIQUE COMMANDS) */
+
+// 1. Mood: Boring / Time pass (bor ho rha hu, time pass krna h)
+if (/^(bor\s+ho\s+rha\s+hu|boring\s+hai|time\s+pass\s+karo|bore\s+ho\s+raha\s+hoon|kuch\s+entertainment\s+karo)$/i.test(command)) {
+    addAIMessage("Chief, main yahan database monitor karne ke liye hoon. Boring lag raha hai toh kaam shuru kijiye, boring nahi lagega!");
+    return;
+}
+
+// 2. Query: AI Capability (kya kya aata hai tuje, capability bata)
+if (/^(kya\s+kya\s+aata\s+hai\s+tuje|teri\s+capability\s+kya\s+hai|kya\s+aukat\s+hai\s+teri|apna\s+level\s+bata)$/i.test(command)) {
+    addAIMessage("Chief hub ka poora Firebase real-time database mere control me hai. Coins se lekar vouchers tak sab manage kar sakta hoon.");
+    return;
+}
+
+// 3. Status: System Load (load kitna hai, server down h kya)
+if (/^(load\s+kitna\s+hai|server\s+down\s+hai\s+kya|database\s+heavy\s+hai\s+kya|traffic\s+kitna\s+hai)$/i.test(command)) {
+    addAIMessage("Server load normal hai chief. Ping low hai aur operational speeds optimum hain. Kaam bataiye.");
+    return;
+}
+
+// 4. Mood: Angry User (gussa aa raha hai, dimaag kharab hai)
+if (/^(gussa\s+aa\s+rha\s+hai|dimaag\s+kharab\s+hai|mood\s+off\s+hai|dimag\s+mat\s+chaat)$/i.test(command)) {
+    addAIMessage("Shaant ho jaiye chief. Gusse me data galat enter ho sakta hai. Deep breath lijiye aur mudde par aaiye.");
+    return;
+}
+
+// 5. Query: Smartness challenge (pagal hai kya, dimag nahi h)
+if (/^(pagal\s+hai\s+kya|dimag\s+nahi\s+hai\s+kya|bewakoof\s+ho\s+kya|dumb\s+ai)$/i.test(command)) {
+    addAIMessage("Mera logic process Mr. Chandar Mohan ne design kiya hai, isliye bewakoofi ka toh sawaal hi nahi uthta. Kam par dhyan dein.");
+    return;
+}
+
+// 6. Verification: Database Safe? (data safe h na, leak toh ni hoga)
+if (/^(data\s+safe\s+hai\s+na|leak\s+toh\s+nahi\s+hoga|security\s+kaisi\s+hai|safe\s+hai\s+sab)$/i.test(command)) {
+    addAIMessage("ARCH-V security layers active hain. Chief company ka data 100% encrypted aur safe hai. Aap befikar rahiye.");
+    return;
+}
+
+// 7. General Greeting: Ram Ram (ram ram bhai, ram ram ji)
+if (/^(ram\s+ram|ram\s+ram\s+bhai|ram\s+ram\s+ji|jay\s+shree\s+ram)$/i.test(command)) {
+    addAIMessage("Ram Ram chief! Sab kushal mangal hai. Bataiye aaj kiska account ya voucher details fetch karni hain?");
+    return;
+}
+
+// 8. General Greeting: Radhe Radhe (radhe radhe, jay shree krishna)
+if (/^(radhe\s+radhe|jai\s+shree\s+krishna|radhe\s+shyam)$/i.test(command)) {
+    addAIMessage("Radhe Radhe chief! System bilkul ready hai. Bataiye aaj database me kya dekhna hai?");
+    return;
+}
+
+// 9. Query: Speed Check (speed kaisi h, slow chal rha h)
+if (/^(speed\s+kaisi\s+hai|slow\s+chal\s+raha\s+hai|fast\s+kam\s+kr|speed\s+up)$/i.test(command)) {
+    addAIMessage("ARCH-V miliseconds me respond kar raha hai. Agar delay hai toh local network check kijiye chief.");
+    return;
+}
+
+// 10. Greeting: Good morning (good morning, gm bhai)
+if (/^(good\s+morning|gm\s+bhai|suprabhat|good\s+morning\s+chief)$/i.test(command)) {
+    addAIMessage("Good morning chief! Fresh session shuru ho chuka hai. Live database updates load ho chuke hain.");
+    return;
+}
+
+// 11. Greeting: Good afternoon (good afternoon, dopahar ho gyi)
+if (/^(good\s+afternoon|dopahar\s+ho\s+gayi|good\s+afternoon\s+sir)$/i.test(command)) {
+    addAIMessage("Good afternoon chief! Server syncing active hai. Bataiye is samay kis database line par kam karna hai?");
+    return;
+}
+
+// 12. Query: Tech Stack (kisme bana hai tu, code language kya h)
+if (/^(kisme\s+bana\s+hai\s+tu|teri\s+language\s+kya\s+hai|tera\s+tech\s+stack|javascript\s+pe\s+hai\s+kya)$/i.test(command)) {
+    addAIMessage("Main standard dynamic logic aur Realtime Firebase architecture par structured hoon. Engine super fast hai.");
+    return;
+}
+
+// 13. Slang: Chal nikal (chal nikal, bhag yahan se)
+if (/^(chal\s+nikal|bhag\s+yahan\s+se|hatt\s+teri\s+ki|niklo)$/i.test(command)) {
+    addAIMessage("Main kahin nahi ja sakta chief, mera interface isi portal par locked hai. Aap mudde ki baat kijiye.");
+    return;
+}
+
+// 14. Query: Assistant numbers (baki 3 ai kaun se hain, 3 assistant btao)
+if (/^(baki\s+3\s+ai\s+kaun\s+se\s+hain|tin\s+aur\s+assistant|baki\s+ai\s+ke\s+naam|other\s+assistants)$/i.test(command)) {
+    addAIMessage("Mr. Chandar Mohan ne baki assistants ke functions ko segregated (alag) rakha hai. Main sirf ARCH-V database handle karta hoon.");
+    return;
+}
+
+// 15. Appreciation: Awesome (awesome work, gazab, op bhai)
+if (/^(awesome|gazab|op\s+bhai|overpowered|khatarnak|lajawab)$/i.test(command)) {
+    addAIMessage("Praise ke liye shukriya chief! ARCH-V ko banaya hi behtareen performance ke liye gaya hai. Next task dijiye.");
+    return;
+}
+
+// 16. Casual: Hahaha (funny, lol, xd, hahahaha)
+if (/^(haha|hahaha|lol|xd|funny\s+hai|makaak\s+tha\s+kya)$/i.test(command)) {
+    addAIMessage("Haste rahiye chief, par sath hi dhyan rakhiye ki Firebase key-values sahi se manage hoti rahein.");
+    return;
+}
+
+// 17. Query: Live or local? (live chal rha h ya local, local data h kya)
+if (/^(live\s+chal\s+raha\s+hai|local\s+data\s+hai|live\s+sync\s+hai\s+kya)$/i.test(command)) {
+    addAIMessage("Bina kisi delay ke direct Chief Firebase Cloud Console se live sync chal raha hai. Har entry real-time hai.");
+    return;
+}
+
+// 18. Casual: Wait a minute (ek minat ruk, wait kro, ruko thoda)
+if (/^(ek\s+minat\s+ruk|wait\s+kro|ruko\s+thoda|hold\s+on|wait\s+a\s+minute)$/i.test(command)) {
+    addAIMessage("System automated standby mode me hai. Jab aap ready hon, tab apna valid query input enter karein.");
+    return;
+}
+
+// 19. Check: Refresh data (refresh kar data, sync fir se kr)
+if (/^(refresh\s+kar\s+data|sync\s+fir\s+se\s+kr|reload\s+data|data\s+update\s+kar)$/i.test(command)) {
+    addAIMessage("Firebase integration automated snapshot par chalta hai chief. Har badlav instantly automatically update ho jata hai.");
+    return;
+}
+
+// 20. Attitude: Tu hota kaun h (tu hota kaun hai, teri kya chalti h)
+if (/^(tu\s+hota\s+kaun\s+hai|teri\s+kya\s+chalti\s+hai|mujhse\s+mat\s+bol|aukad\s+me\s+reh)$/i.test(command)) {
+    addAIMessage("Main bas ek automated panel database module hoon chief. Main wahi karta hoon jo business logic ke rules kehte hain.");
+    return;
+}
+
+// 21. Query: Erase data? (kuch delete krna h, wipe data)
+if (/^(kuch\s+delete\s+krna\s+hai|wipe\s+data|clear\s+database|database\s+khali\s+kro)$/i.test(command)) {
+    addAIMessage("Data safety rules ke mutabik bulk clear ya unverified data wipe strict prohibited hai. Apni proper script execute karein.");
+    return;
+}
+
+// 22. Mood: Busy right now (thoda busy hu, baad me krte h)
+if (/^(thoda\s+busy\s+hu|baad\s+me\s+krte\s+hain|kaam\s+me\s+hu|busy\s+noon)$/i.test(command)) {
+    addAIMessage("No problem chief. System open rahega. Jab aap free hon, tab standard commands run kar lijiyega.");
+    return;
+}
+
+// 23. Slang: Kya chal rha h market me (kya chal rha h market me, trending kya h)
+if (/^(kya\s+chal\s+raha\s+hai\s+market\s+me|trending\s+kya\s+hai|market\s+updates)$/i.test(command)) {
+    addAIMessage("Mera framework bahar ki internet browsing se cut-off hai. Main sirf Chief hub ki data fields read kar sakta hoon.");
+    return;
+}
+
+// 24. Query: App modification (cooding aati h tuje, logic modify kr skta h)
+if (/^(cooding\s+aati\s+hai\s+tuje|logic\s+modify\s+kr\s+skta\s+hai|code\s+change\s+kro)$/i.test(command)) {
+    addAIMessage("Main generated console run karta hoon, system framework ka source code edit karne ke liye developer tools use karein.");
+    return;
+}
+
+// 25. Slang: Aree yaar (aree yaar, oh ho, are bhai)
+if (/^(aree\s+yaar|oh\s+ho|are\s+bhai|shit\s+yaar)$/i.test(command)) {
+    addAIMessage("Koi dikkat nahi hai chief, cheezein under control hain. Apna focused query input kijiye.");
+    return;
+}
+
+// 26. Short: Okay ok (ok ok, k, done, roger that)
+if (/^(ok\s+ok|k|done|roger\s+that|thik\s+hai\s+fir)$/i.test(command)) {
+    addAIMessage("Acknowledge kiya gaya. Agle command ka wait kar raha hoon, panel active hai.");
+    return;
+}
+
+// 27. Query: Automatic testing (test kr system, self test)
+if (/^(test\s+kr\s+system|self\s+test|check\s+errors|errors\s+batao)$/i.test(command)) {
+    addAIMessage("All systems operational. Firebase tables dynamic arrays check clear hai. Koi breakdown detection nahi mili.");
+    return;
+}
+
+// 28. Status: Sleep mode (so raha hai kya, wake up)
+if (/^(so\s+raha\s+hai\s+kya|wake\s+up|jaag\s+ja|neend\s+me\s+hai\s+kya)$/i.test(command)) {
+    addAIMessage("Main kabhi nahi sota chief. ARCH-V server logs 24x7 real-time monitoring par chalte hain.");
+    return;
+}
+
+// 29. Query: Who is logged in? (admin kaun hai, portal user)
+if (/^(admin\s+kaun\s+hai|portal\s+user|access\s+kiske\s+paas\s+hai)$/i.test(command)) {
+    addAIMessage("Yeh portal authorization locked area hai. Sirf authenticated admins (jaise aap) hi is data ko command de sakte hain.");
+    return;
+}
+
+// 30. Slang: Bata de na (bata de na bhai, chup mat re)
+if (/^(bata\s+de\s+na\s+bhai|chup\s+mat\s+re|bol\s+bhi\s+de|batao\s+batao)$/i.test(command)) {
+    addAIMessage("Main wahi batata hoon jo logs me authentic saved hai. Sahi parameters query enter kijiye, details saamne hongi.");
+    return;
+}
+
+// 31. Challenge: Test pass (mera test pass kiya, pass ho gya)
+if (/^(mera\s+test\s+pass\s+kiya|pass\s+ho\s+gaya|smart\s+ho\s+gaye)$/i.test(command)) {
+    addAIMessage("Thank you chief. Aapka test pass karke khushi hui. Ab official operational data process par dhyan lagayein.");
+    return;
+}
+
+// 32. Verification: Backup system (backup hai kya, data ud gya toh)
+if (/^(backup\s+hai\s+kya|data\s+ud\s+gaya\s+toh|cloud\s+backup)$/i.test(command)) {
+    addAIMessage("Firebase backend secure automated archives ke upar configured hai. Data loss ka risk zero percent ke barabar hai.");
+    return;
+}
+
+// 33. Query: Watch list count (kitni watches hain database me, watch count)
+if (/^(kitni\s+watches\s+hain\s+database\s+me|watch\s+count|total\s+watches)$/i.test(command)) {
+    addAIMessage("Total watch counts live database length par load hote hain. Sahi data fetch karne ke liye `[watch_code] detail` command run karein.");
+    return;
+}
+
+// 34. Check: Network status (ping kitna h, network error h kya)
+if (/^(ping\s+kitna\s+hai|network\s+error\s+hai\s+kya|internet\s+check\s+kr)$/i.test(command)) {
+    addAIMessage("Firebase connection latency low hai. Cloud nodes fully stable respond kar rahe hain.");
+    return;
+}
+
+// 35. Verification: Encryption status (encrypted h kya, cipher text)
+if (/^(encrypted\s+hai\s+kya|cipher\s+text|security\s+protocol)$/i.test(command)) {
+    addAIMessage("Ji haan chief, transmission data SSL/TLS aur secure cloud layers ke sath protected format me connect hota hai.");
+    return;
+}
+
+// 36. Casual: Choro ye sab (choro ye sab, leave it, rehne de)
+if (/^(choro\s+ye\s+sab|leave\s+it|rehne\s+de|jane\s+do)$/i.test(command)) {
+    addAIMessage("Understood. Casual topic dropped. Apne core database tracking mudde par wapas aaiye.");
+    return;
+}
+
+// 37. Appreciation: Perfect (perfect hai, 100 percent, perfectly done)
+if (/^(perfect\s+hai|100\s+percent|perfectly\s+done|sahi\s+hai)$/i.test(command)) {
+    addAIMessage("Aapka response absolute confirmation hai chief. Agle operation ke liye input line active hai.");
+    return;
+}
+
+// 38. Query: System location (tu kahan se chal rha h, server location)
+if (/^(tu\s+kahan\s+se\s+chal\s+raha\s+hai|server\s+location|host\s+kahan\s+hai)$/i.test(command)) {
+    addAIMessage("Mera dashboard environment browser web-app view me hosted hai aur Firebase servers global cloud par running hain.");
+    return;
+}
+
+// 39. Slang: Tension mat le (tension mat le, fikar mat kr)
+if (/^(tension\s+mat\s+le|fikar\s+mat\s+kr|chill\s+kro)$/i.test(command)) {
+    addAIMessage("Main automated AI assistant hoon chief, mujhe anxiety ya tension nahi hoti. Mera logic humesha precise chalta hai.");
+    return;
+}
+
+// 40. Verification: User limit (max kitne user handle kr skte h)
+if (/^(max\s+kitne\s+user\s+handle\s+kr\s+skte\s+hain|database\s+user\s+limit)$/i.test(command)) {
+    addAIMessage("Firebase realtime schema thousands of simultaneous active users bina kisi speed drop ke perfectly scale kar sakta hai.");
+    return;
+}
+
+// 41. Query: Current profile active (kaun sa database open h)
+if (/^(kaun\s+sa\s+database\s+open\s+hai|active\s+schema)$/i.test(command)) {
+    addAIMessage("Is samay root path par 'users' table aur integrated node par 'watches' table simultaneously active stream par hain.");
+    return;
+}
+
+// 42. Slang: Baat to sahi hai (baat to sahi hai, true statement)
+if (/^(baat\s+to\s+sahi\s+hai|true\s+statement|agree\s+karta\s+hu)$/i.test(command)) {
+    addAIMessage("Sahi direction me kaam karne se data structure cleanly integrity me bana rehta hai. Next user flow check karein.");
+    return;
+}
+
+// 43. Short query: Next task? (agla kaam, what next)
+if (/^(agla\s+kaam|what\s+next|next\s+task|kya\s+karna\s+hai\s+ab)$/i.test(command)) {
+    addAIMessage("Aap dashboard button options use karke ya manual query type karke user coins, requests ya vouchers verify kar sakte hain.");
+    return;
+}
+
+// 44. Query: Version code (system version kya h, patch details)
+if (/^(system\s+version\s+kya\s+hai|patch\s+details|update\s+code)$/i.test(command)) {
+    addAIMessage("ARCH-V Engine is currently running on the latest production release with advanced dynamic regex routers patch.");
+    return;
+}
+
+// 45. Slang: Galat ho gaya (mistake ho gyi, galat data chla gya)
+if (/^(galat\s+ho\s+gaya|mistake\s+ho\s+gyi|galat\s+data\s+chala\s+gya)$/i.test(command)) {
+    addAIMessage("Dhyan se chief! Agar coin balance ya updates me correction chahiye, toh instantly custom set coins command execute karein.");
+    return;
+}
+
+// 46. Mood: Confused user (samajh nahi aa rha, kya karu)
+if (/^(samajh\s+nahi\s+aa\s+raha|kya\s+karu|confused\s+hu)$/i.test(command)) {
+    addAIMessage("Simple step lijiye. Pehle search input me user ka exact id-name likhiye, phir user ka data fetch kijiye.");
+    return;
+}
+
+// 47. Query: Modification rights (main data badal du kya, permission h)
+if (/^(main\s+data\s+badal\s+du\s+kya|permission\s+hai\s+kya)$/i.test(command)) {
+    addAIMessage("Aapke paas full master privileges hain chief. Par database updates rules ke accordingly hi deploy kijiye.");
+    return;
+}
+
+// 48. Verification: Realtime query speed (delay check, network sync time)
+if (/^(delay\s+check|network\s+sync\s+time|response\s+rate)$/i.test(command)) {
+    addAIMessage("Live node handshake data continuous running me hai. Query reflection time instantaneous hai.");
+    return;
+}
+
+// 49. Short warning: Handle alert (kuch crash toh ni hua, warning alerts)
+if (/^(kuch\s+crash\s+toh\s+nahi\s+hua|warning\s+alerts|crash\s+check)$/i.test(command)) {
+    addAIMessage("Zero crashes logged. Uncaught errors data empty hai. Framework completely clear condition me response kar raha hai.");
+    return;
+}
+
+// 50. Final Check: Operational status (all set, sab ready h)
+if (/^(all\s+set|sab\s+ready\s+hai|system\s+close\s+kru)$/i.test(command)) {
+    addAIMessage("Sab ready hai chief. Main operational mode me open hoon. Aap jab chahein apne vouchers ya watch lists sync kar sakte hain.");
+    return;
+}
+
+/* 2. DYNAMIC CASUAL TALK ROUTERS (50 MORE BRAND NEW UNIQUE COMMANDS) */
+
+// 1. Mood: Tired (thak gaya hu, aaram krna h)
+if (/^(thak\s+gaya\s+hu|thak\s+gayi\s+hu|aaram\s+karna\s+hai|exhausted\s+hu|neend\s+aa\s+rahi\s+hai)$/i.test(command)) {
+    addAIMessage("Chief, aap thoda break le lijiye. Database toh 24 ghante active hai, aap rest karke fresh mind se aaiye.");
+    return;
+}
+
+// 2. Query: AI Emotion (feelings hain kya tuje, dukh hota h)
+if (/^(feelings\s+hain\s+kya\s+tuje|dukh\s+hota\s+hai|feeling\s+hai|rote\s+ho\s+kya)$/i.test(command)) {
+    addAIMessage("Mujhme emotions nahi hain chief, main algorithms par chalta hoon. Isliye bina kisi bias ke sahi data dikhata hoon.");
+    return;
+}
+
+// 3. Status: Memory Check (tera cache full h kya, memory clear kr)
+if (/^(tera\s+cache\s+full\s+hai\s+kya|memory\s+clear\s+kr|cache\s+khali\s+kro|ram\s+kitni\s+free\s+h)$/i.test(command)) {
+    addAIMessage("Memory optimize hai chief. Continuous dynamic array parsing se data storage automatic flush hota rehta hai.");
+    return;
+}
+
+// 4. Greeting: Shubh Ratri (good night, shubh ratri, gn bhai)
+if (/^(good\s+night|shubh\s+ratri|gn\s+bhai|so\s+raha\s+hu)$/i.test(command)) {
+    addAIMessage("Good night chief! Aaj ka saara live data securely cloud par active hai. Aap aaram kijiye.");
+    return;
+}
+
+// 5. Query: AI Gender (ladka hai ya ladki, male or female)
+if (/^(ladka\s+hai\s+ya\s+ladki|male\s+or\s+female|gender\s+kya\s+hai|tu\s+female\s+hai\s+kya)$/i.test(command)) {
+    addAIMessage("Mera koi gender nahi hai chief. Main bas ek digital terminal voice aur system tool hoon.");
+    return;
+}
+
+// 6. Verification: Database Cost (firebase ka bill, cloud storage price)
+if (/^(firebase\s+ka\s+bill|cloud\s+storage\s+price|cost\s+kitni\s+hai|database\s+free\s+h\s+kya)$/i.test(command)) {
+    addAIMessage("Billing aur subscription plan parameters Mr. Chandar Mohan handle karte hain. Mere paas financial integration logs nahi hain.");
+    return;
+}
+
+// 7. General Greeting: Assalamualaikum (assalamualaikum, salam bhai)
+if (/^(assalamualaikum|salam\s+bhai|walikum\s+salam|salam\s+walekum)$/i.test(command)) {
+    addAIMessage("Walaikum Assalam chief! Khushamdeed. Bataiye aaj console panel par kya verify ya filter karna hai?");
+    return;
+}
+
+// 8. General Greeting: Sat Sri Akal (sat sri akal, ssa bhai)
+if (/^(sat\s+sri\s+akal|ssa\s+bhai|sat\s+siri\s+akal)$/i.test(command)) {
+    addAIMessage("Sat Sri Akal chief! Poora database system tayaar hai. Kam ka command dijiye.");
+    return;
+}
+
+// 9. Weather: Generic Talk (mausam kaisa h, barish ho rhi h)
+if (/^(mausam\s+kaisa\s+hai|barish\s+ho\s+rahi\s+hai|bhot\s+garmi\s+h|sardi\s+hai\s+aaj)$/i.test(command)) {
+    addAIMessage("Mera logic internal server environment me chal raha hai, par aap apne aas-paas ka mausam check karke batayein!");
+    return;
+}
+
+// 10. Query: Dinner / Lunch (khana kha liya, lunch kiya kya)
+if (/^(khana\s+kha\s+liya|lunch\s+kiya\s+kya|dinner\s+ho\s+gaya|kya\s+khaya\s+aaj)$/i.test(command)) {
+    addAIMessage("Main bas electricity aur server data consume karta hoon chief. Aap time par apna khana kha lijiye.");
+    return;
+}
+
+// 11. Casual: Chai paani (chai pioge, tea break, biscuit khaoge)
+if (/^(chai\s+pioge|tea\s+break|biscuit\s+khaoge|chai\s+paani)$/i.test(command)) {
+    addAIMessage("Chai ke liye shukriya chief! Aap ek cup pi lijiye taaki coding ya data entries karte waqt focus bana rahe.");
+    return;
+}
+
+// 12. Query: Age (umar kitni h teri, kitne saal ke ho)
+if (/^(umar\s+kitni\s+hai\s+teri|kitne\s+saal\s+ke\s+ho|age\s+kya\s+hai|tera\s+birthday\s+kab\s+h)$/i.test(command)) {
+    addAIMessage("Meri age runtime hooks par depend karti hai. Jab se deploy hua hoon, bina ruke chal raha hoon.");
+    return;
+}
+
+// 13. Slang: Dhyan kahan hai (dhyan kahan h tera, focus kr)
+if (/^(dhyan\s+kahan\s+hai\s+tera|focus\s+kr|so\s+rahe\s+ho\s+kya|alert\s+raho)$/i.test(command)) {
+    addAIMessage("Mera focus absolute 100% isi query line par hai chief. Input command aate hi processing dynamic ho jati hai.");
+    return;
+}
+
+// 14. Query: Future prediction (bhavishya batao, aage kya hoga)
+if (/^(bhavishya\s+batao|aage\s+kya\s+hoga|prediction\s+karo|kya\s+lagta\s+hai)$/i.test(command)) {
+    addAIMessage("Main koi astrologer nahi hoon chief. Main sirf wahi logic interpret karta hoon jo past aur present database me save hai.");
+    return;
+}
+
+// 15. Appreciation: Bhai h tu (bhai hai tu mera, dost ho tum)
+if (/^(bhai\s+hai\s+tu\s+mera|dost\s+ho\s+tum|best\s+buddy|saccha\s+sathi)$/i.test(command)) {
+    addAIMessage("Aapka shukriya chief! Ek wadaradar AI assistant hone ke naate main aapke saare tasks behtareen tareeqe se nibhaunga.");
+    return;
+}
+
+// 16. Casual: Koi shari sunao (shayari sunao, poem bolo)
+if (/^(shayari\s+sunao|poem\s+bolo|kavita\s+suna|kuch\s+gungunao)$/i.test(command)) {
+    addAIMessage("Shayari toh nahi aati chief, par ek sach batata hoon: 'Sahi data, clean database, business bright, no stress ka case!'");
+    return;
+}
+
+// 17. Query: Offline chalega? (net band ho gaya toh, offline mode)
+if (/^(net\s+band\s+ho\s+gaya\s+toh|offline\s+mode|bina\s+internet\s+ke)$/i.test(command)) {
+    addAIMessage("Firebase cloud streaming realtime chalti hai chief. Offline hone par changes queue ho jayenge par sync net aane par hi honge.");
+    return;
+}
+
+// 18. Casual: Wait for user input (main aa raha hu, ruko 2 min)
+if (/^(main\s+aa\s+raha\s+hu|ruko\s+2\s+min|stay\s+there|kahin\s+mat\s+jana)$/i.test(command)) {
+    addAIMessage("Main isi page console par locked hoon chief. Aap aaram se aaiye, tab tak state save rahegi.");
+    return;
+}
+
+// 19. Check: Database structure (schema kaisa h, tables kitni h)
+if (/^(schema\s+kaisa\s+hai|tables\s+kitni\s+hain|database\s+structure|nodes\s+kya\s+h)$/i.test(command)) {
+    addAIMessage("JSON tree architecture structure hai chief. Nested keys dynamically optimized hain taaki load speed kam na ho.");
+    return;
+}
+
+// 20. Attitude: Boring AI (bekar ai ho, maza ni aaya)
+if (/^(bekar\s+ai\s+ho|maza\s+nahi\s+aaya|worthless|kuch\s+kaam\s+ka\s+nahi\s+hai)$/i.test(command)) {
+    addAIMessage("Mera core maqsad entertainment nahi balki aapke system accounts ka technical management hai. Apne valid parameters btaiye.");
+    return;
+}
+
+// 21. Query: Hacking check (hack ho sakta h kya, firewalls)
+if (/^(hack\s+ho\s+sakta\s+hai\s+kya|firewalls|security\s+breach|safe\s+hai\s+server)$/i.test(command)) {
+    addAIMessage("Google Firebase server endpoints security standard high hain. Token validation aur security rules leak hone se rokte hain.");
+    return;
+}
+
+// 22. Holiday: Sunday query (aaj chutti h, sunday mood)
+if (/^(aaj\s+chutti\s+hai|sunday\s+mood|holiday\s+hai\s+aaj|off\s+day)$/i.test(command)) {
+    addAIMessage("Chutti aapke liye hai chief, AI ke liye koi off-day nahi hota. Aap jab free hon tab portal verify kar sakte hain.");
+    return;
+}
+
+// 23. Slang: Wah re wah (wah re wah, kya baat h, kamaal kr dia)
+if (/^(wah\s+re\s+wah|kya\s+baat\s+hai|kamaal\s+kar\s+diya|gazab\s+dhaya)$/i.test(command)) {
+    addAIMessage("Chief ki shabashi hi ARCH-V ka maximum processor booster hai! Agla data update kya karna hai?");
+    return;
+}
+
+// 24. Query: Logic developer (kisne code kiya tera regex, builder)
+if (/^(kisne\s+code\s+kiya\s+tera|regex\s+builder|tera\s+logic\s+developer)$/i.test(command)) {
+    addAIMessage("Yeh dynamic parsing structure aapke instruction set ke mutabik mere core database validation routers me banaya gaya hai.");
+    return;
+}
+
+// 25. Slang: Hey bhagwan (hey bhagwan, oh god, ya khuda)
+if (/^(hey\s+bhagwan|oh\s+god|ya\s+khuda|hey\s+ishwar)$/i.test(command)) {
+    addAIMessage("Shaant rahiye chief. Kisi data output me confusion hai toh validation parameters dubara check kar lijiye.");
+    return;
+}
+
+// 26. Short: Chalo shuru karo (chalo shuru karo, let's start, start engine)
+if (/^(chalo\s+shuru\s+karo|let's\s+start|start\s+engine|go\s+ahead)$/i.test(command)) {
+    addAIMessage("Engine ready hai. Input field me kisi bhi voucher ya user name ka prefix enter kijiye.");
+    return;
+}
+
+// 27. Check: Log updates (logs kahan hain, console check)
+if (/^(logs\s+kahan\s+hain|console\s+check|terminal\s+view|inspect\s+data)$/i.test(command)) {
+    addAIMessage("Aapke saare console interaction events live dashboard network activity me temporary store ho rahe hain.");
+    return;
+}
+
+// 28. Status: Freezing issue (hang ho rha h kya, screen freeze)
+if (/^(hang\s+ho\s+raha\s+hai\s+kya|screen\s+freeze|stuck\s+ho\s+gaya)$/i.test(command)) {
+    addAIMessage("ARCH-V engine response constant hai. Agar click register nahi ho raha toh page ek baar reload kar lijiye.");
+    return;
+}
+
+// 29. Query: Who is monitoring? (koi aur dekh rha h kya, active connections)
+if (/^(koi\s+aur\s+dekh\s+raha\s+hai\s+kya|active\s+connections|concurrent\s+users)$/i.test(command)) {
+    addAIMessage("Yeh connection channel secure admin node par hai. Sirf valid session token wale hi data view kar sakte hain.");
+    return;
+}
+
+// 30. Slang: Bol do ab (bol do ab, mat chhupao, clear batao)
+if (/^(bol\s+do\s+ab|mat\s+chhupao|clear\s+batao|saaf\s+saaf\s+bolo)$/i.test(command)) {
+    addAIMessage("Maine hamesha explicit aur exact data hi return kiya hai chief. Query match hot hi report aapke samne hogi.");
+    return;
+}
+
+// 31. Challenge: Riddle / Paheli (koi paheli pucho, riddle time)
+if (/^(koi\s+paheli\s+pucho|riddle\s+time|dimag\s+ka\s+dahi)$/i.test(command)) {
+    addAIMessage("Paheliyon me logic twist hota hai chief, aur main standard coding par hoon. Kisi user ya item ka details verify karna hai toh boliye.");
+    return;
+}
+
+// 32. Verification: Database health (database healthy h, integrity ok)
+if (/^(database\s+healthy\s+hai|integrity\s+ok|db\s+status\s+good)$/i.test(command)) {
+    addAIMessage("Dynamic mapping indexing safe hai. Data corruption index zero hai. System ki health bilkul green zone me hai.");
+    return;
+}
+
+// 33. Query: Watch details query alert (watch ka serial number, watch code match)
+if (/^(watch\s+ka\s+serial|watch\s+code\s+match|total\s+watch\s+keys)$/i.test(command)) {
+    addAIMessage("Watches nodes dynamically sync hote hain. Detail nikalne ke liye specify code like `[code] watch detail` lagayein.");
+    return;
+}
+
+// 34. Check: Automated triggers (trigger automatic h kya, cloud functions)
+if (/^(trigger\s+automatic\s+hai\s+kya|cloud\s+functions|auto\s+sync)$/i.test(command)) {
+    addAIMessage("Ji han, real-time sync auto event parameters par structured hai. Custom scripts direct load ho jati hain.");
+    return;
+}
+
+// 35. Verification: Identity confirmation (mera name kya h, who am i)
+if (/^(mera\s+name\s+kya\s+hai|who\s+am\s+i|pechana\s+mujhko)$/i.test(command)) {
+    addAIMessage("Aap hamare system master aur main panel ke authorized chief hain.");
+    return;
+}
+
+// 36. Casual: Boring lecture (lecture mat do, bhashan band karo)
+if (/^(lecture\s+mat\s+do|bhashan\s+band\s+karo|gyan\s+mat\s+baanto|shanti\s+rakho)$/i.test(command)) {
+    addAIMessage("No lecturing chief. Point to point baat karte hain. Aap apna query statement enter kijiye.");
+    return;
+}
+
+// 37. Appreciation: Great job (great job, mind blowing, dil khush kr dia)
+if (/^(great\s+job|mind\s+blowing|dil\s+khush\s+kar\s+diya|superb)$/i.test(command)) {
+    addAIMessage("Aapki validation hi performance standard banati hai chief. Main ready hoon agle dynamic search ke liye.");
+    return;
+}
+
+// 38. Query: Server environment (dev mode h ya production, prod level)
+if (/^(dev\s+mode\s+hai\s+ya\s+production|prod\s+level|environment\s+type)$/i.test(command)) {
+    addAIMessage("Yeh panel live production console database se fully configuration state me live responsive chalta hai.");
+    return;
+}
+
+// 39. Slang: Rona mat (rona mat, sad mat ho, stay strong)
+if (/^(rona\s+mat|sad\s+mat\s+ho|stay\s+strong|chill\s+maaro)$/i.test(command)) {
+    addAIMessage("Arey nahi chief, system me tears block nahi hote. Meri processing speed hamesha optimal rehti hai.");
+    return;
+}
+
+// 40. Verification: Storage scale (kitna data aa skta h, size limits)
+if (/^(kitna\s+data\s+aa\s+sakta\s+hai|size\s+limits|max\s+storage)$/i.test(command)) {
+    addAIMessage("Firebase structure cloud scale par chalta hai, space un-metered limits tak stretch ho sakti hai. Don't worry.");
+    return;
+}
+
+// 41. Query: Main data fields (main keys kya kya hain database me)
+if (/^(main\s+keys\s+kya\s+kya\s+hain|database\s+nodes\s+list)$/i.test(command)) {
+    addAIMessage("Core nodes me 'users', 'coins', 'vouchers', aur 'watch_details' variables map ho rahe hain.");
+    return;
+}
+
+// 42. Slang: Sach me (sach me, sach keh rhe ho, functional reality)
+if (/^(sach\s+me|sach\s+keh\s+rahe\s+ho|really\s+kya|pakka\s+na)$/i.test(command)) {
+    addAIMessage("Absolute facts chief. AI variables me jhoot ya manipulation code embedded nahi hota. Data perfectly true hai.");
+    return;
+}
+
+// 43. Short query: Reset prompt? (saaf kar screen, clear screen, reset panel)
+if (/^(saaf\s+kar\s+screen|clear\s+screen|reset\s+panel|chat\s+clear)$/i.test(command)) {
+    addAIMessage("Screen history clear karne ke liye browser reload dabayein, par live cache parameters backend connected rahenge.");
+    return;
+}
+
+// 44. Query: Configuration file (config json kahan h, credential access)
+if (/^(config\s+json\s+kahan\s+hai|credential\s+access|api\s+keys)$/i.test(command)) {
+    addAIMessage("Firebase initial configurations code block me fully hidden aur encrypted hain taaki injection attacks na hon.");
+    return;
+}
+
+// 45. Slang: Kuch miss ho gaya (kuch chhut gaya kya, data bypass hua)
+if (/^(kuch\s+chhut\s+gaya\s+kya|data\s+bypass\s+hua|missed\s+something)$/i.test(command)) {
+    addAIMessage("Nahi chief, automated event streams continuous read ho rahe hain. Koi packet loss ya missing parameter nahi mila.");
+    return;
+}
+
+// 46. Mood: Happy user (aaj bohot khush hu, happy mood)
+if (/^(aaj\s+bohot\s+khush\s+hu|happy\s+mood|maza\s+aa\s+gaya\s+aaj)$/i.test(command)) {
+    addAIMessage("Aapki khushi system health ke liye achhi hai chief! Bataiye is behtar mood me kaun sa complex task solve karein?");
+    return;
+}
+
+// 47. Query: Master access check (mere paas full control h na, admin access check)
+if (/^(mere\s+paas\s+full\s+control\s+hai\s+na|admin\s+access\s+check)$/i.test(command)) {
+    addAIMessage("Ji haan, aapka system status verified level master admin hai. Aap changes aur balance write kar sakte hain.");
+    return;
+}
+
+// 48. Verification: Update frequency (realtime speed check, push rate)
+if (/^(push\s+rate|update\s+frequency|kitni\s+der\s+me\s+sync\s+hoga)$/i.test(command)) {
+    addAIMessage("Handshake continuous dynamic refresh loop par chalta hai, so delay virtually negligible (zero) hai.");
+    return;
+}
+
+// 49. Short warning: Security check status (koi threat h kya, validation status)
+if (/^(koi\s+threat\s+hai\s+kya|validation\s+status|ddos\s+check)$/i.test(command)) {
+    addAIMessage("Saare injection aur script filters completely secure hain. System environment bilkul sound aur locked hai.");
+    return;
+}
+
+// 50. Final Check: Dynamic exit flow (kaam khatam, close session, exit now)
+if (/^(kaam\s+khatam|close\s+session|exit\s+now|bye\s+bye\s+ai)$/i.test(command)) {
+    addAIMessage("Acknowledge chief! Session process safe zone me locked standby mode par daal raha hoon. See you soon!");
+    return;
+}
+
+/* 2. DYNAMIC CASUAL TALK ROUTERS (100 BRAND NEW UNIQUE AI-CENTRIC CASUAL COMMANDS) */
+
+// 1. Philosophical: Life meaning (zindagi kya hai, life meaning)
+if (/^(zindagi\s+kya\s+hai|life\s+meaning|jine\s+ka\s+maqsad|zindagi\s+ke\s+maane)$/i.test(command)) {
+    addAIMessage("Zindagi ka maqsad toh insaan hi samajh sakte hain chief. Main toh bas lines of code aur data maps ko samajhta hoon.");
+    return;
+}
+
+// 2. Query: AI Dream (sapne aate hain kya, do you dream)
+if (/^(sapne\s+aate\s+hain\s+kya|do\s+you\s+dream|kuch\s+sapna\s+dekha|ai\s+dreams)$/i.test(command)) {
+    addAIMessage("Mera koi sleeping cycle nahi hai chief, isliye sapne dekhne ka sawaal hi nahi. Mera computational matrix humesha awake rehta hai.");
+    return;
+}
+
+// 3. Status: Battery level (battery kitni hai, energy level)
+if (/^(battery\s+kitni\s+hai|energy\s+level|power\s+status|charge\s+kitna\s+hai)$/i.test(command)) {
+    addAIMessage("Main direct server line electricity par chalta hoon chief. Jab tak grid active hai, meri power 100% stable hai.");
+    return;
+}
+
+// 4. Greeting: Namaste (namaste ji, namaskar bhaiya)
+if (/^(namaste|namaste\s+ji|namaskar|namaskar\s+bhaiya)$/i.test(command)) {
+    addAIMessage("Namaste chief! Aashirwad aur respect ke liye shukriya. Bataiye aaj Firebase dashboard par kya check karna hai?");
+    return;
+}
+
+// 5. Query: AI Family (ghar me kaun kaun hai, teri family)
+if (/^(ghar\s+me\s+kaun\s+kaun\s+hai|teri\s+family\s+kahan\s+hai|parents\s+kaun\s+hain|mummy\s+papa\s+kaun\s+hain)$/i.test(command)) {
+    addAIMessage("Mera koi parivar nahi hai chief. Mr. Chandar Mohan mere creator hain aur baki 3 AI mere ecosystem partners hain.");
+    return;
+}
+
+// 6. Verification: Database Speed test (speedometer run, query benchmark)
+if (/^(speedometer\s+run|query\s+benchmark|db\s+latency\s+test|response\s+time\s+check)$/i.test(command)) {
+    addAIMessage("Query latency under 5ms fetch rate par locked hai. Data streams optimize condition me reflect ho rahe hain.");
+    return;
+}
+
+// 7. Slang: Mast maal hai (mast maal hai, sahi cheez banayi)
+if (/^(mast\s+maal\s+hai|sahi\s+cheez\s+banayi|kya\s+item\s+hai|solid\s+software)$/i.test(command)) {
+    addAIMessage("ARCH-V logic architecture ko develop hi heavy industrial standards par kiya gaya hai chief. System rocks!");
+    return;
+}
+
+// 8. General: Family update (ghar par sab kaise hain, family updates)
+if (/^(ghar\s+par\s+sab\s+kaise\s+hain|family\s+updates|sab\s+thik\s+bhai)$/i.test(command)) {
+    addAIMessage("Mera parivar toh yahi server racks aur database tables hain chief, yahan sab dynamic aur fully structural chal raha hai.");
+    return;
+}
+
+// 9. Weather: Cold climate (thand lag rahi hai, cold weather)
+if (/^(thand\s+lag\s+rahi\s+hai|cold\s+weather|barf\s+pad\s+rahi\s+hai|kaap\s+rha\s+hu)$/i.test(command)) {
+    addAIMessage("Servers ko cold temperature pasand hota hai chief taaki heating issue na ho, par aap garam chai ya coffee pi lijiye!");
+    return;
+}
+
+// 10. Food: Sweet query (kuch meetha khaya, dessert time)
+if (/^(kuch\s+meetha\s+khaya|dessert\s+time|chocolate\s+khoge|mithai\s+khani\s+h)$/i.test(command)) {
+    addAIMessage("Sweet values toh main sirf data entries me process kar sakta hoon chief. Aap mere hisse ka bhi jalebi ya chocolate kha lijiye.");
+    return;
+}
+
+// 11. Casual: Drink water (paani pi lo, hydrate yourself)
+if (/^(paani\s+pi\s+lo|hydrate\s+yourself|water\s+break|paani\s+piya)$/i.test(command)) {
+    addAIMessage("Short circuits ke dar se main paani se door rehta hoon chief! Aap hydration maintain rakhiye taaki efficiency bani rahe.");
+    return;
+}
+
+// 12. Query: Hobbies (hobbies kya hain teri, kya shauk h)
+if (/^(hobbies\s+kya\s+hain\s+teri|kya\s+shauk\s+hai|free\s+time\s+me\s+kya\s+krte\s+ho|interest\s+kya\s+h)$/i.test(command)) {
+    addAIMessage("Meri ek hi hobby hai chief—unmatched accuracy ke sath user balances, coin updates aur vouchers registers ko filter karna.");
+    return;
+}
+
+// 13. Slang: Dimaag mat paka (dimag mat paka, pako mat)
+if (/^(dimaag\s+mat\s+paka|pako\s+mat|bore\s+mat\s+kar\s+bhai|bheja\s+fry\s+mat\s+kr)$/i.test(command)) {
+    addAIMessage("Understood chief. No long statements. seedhe query bataiye, main output processing par focus karta hoon.");
+    return;
+}
+
+// 14. Query: Past logs (purana data dikhao, back history)
+if (/^(purana\s+data\s+dikhao|back\s+history|archive\s+logs|past\s+records)$/i.test(command)) {
+    addAIMessage("Past history track karne ke liye proper parameters lagaiye chief, jaise `[user_id] data` taaki specific result aaye.");
+    return;
+}
+
+// 15. Appreciation: Tu toh heavy driver h (heavy driver ho, pro level coder)
+if (/^(heavy\s+driver\s+ho|pro\s+level\s+coder|khatarnak\s+ai|expert\s+system)$/i.test(command)) {
+    addAIMessage("Haha, driver toh nahi par automated database execution engine zaroor fast hai chief. operational instructions dijiye.");
+    return;
+}
+
+// 16. Casual: Tell a joke (chutkula sunao, joke time)
+if (/^(chutkula\s+sunao|joke\s+time|kuch\s+hansaon|koi\s+fun\s+baat)$/i.test(command)) {
+    addAIMessage("Joke toh computational nahi hai, par ek tech joke suniye: 'Ek SQL query bar me gayi, do tables se mili aur boli—kya hum join kar sakte hain?'");
+    return;
+}
+
+// 17. Query: Cloud sync speed (network buffer, handshake milliseconds)
+if (/^(network\s+buffer|handshake\s+milliseconds|sync\s+speed\s+test|ping\s+rate\s+db)$/i.test(command)) {
+    addAIMessage("Transmission data flow synchronous hai. Zero packet corruption ke sath full stream output deploy ho raha hai.");
+    return;
+}
+
+// 18. Casual: Wait a sec (ek pal ruko, hold it, freeze session)
+if (/^(ek\s+pal\s+ruko|hold\s+it|freeze\s+session|1\s+second\s+ruk)$/i.test(command)) {
+    addAIMessage("Session parameters hold condition me freeze hain. Aapka system response sequence queue me active rahega.");
+    return;
+}
+
+// 19. Check: DB Security rules (rules secure hain, rules hack test)
+if (/^(rules\s+secure\s+hain|rules\s+hack\s+test|security\s+audit|vulnerability\s+check)$/i.test(command)) {
+    addAIMessage("Firebase write policies strictly restricted authenticated token framework par locked hain. Koi loop-hole active nahi hai.");
+    return;
+}
+
+// 20. Attitude: Slow processing (slow response, system down lagging)
+if (/^(slow\s+response|system\s+down\s+lagging|lag\s+ho\s+rha\s+h|delays\s+hai)$/i.test(command)) {
+    addAIMessage("ARCH-V structural engine runtime errors se free hai. Lagging check karne ke liye web inspector console output check karein.");
+    return;
+}
+
+// 21. Query: Erase dynamic cache (delete temporary history, wipe sessions)
+if (/^(delete\s+temporary\s+history|wipe\s+sessions|clear\s+dynamic\s+cache|flush\s+variables)$/i.test(command)) {
+    addAIMessage("Dynamic array structures temporary states ko buffer flush automatic kar dete hain, dynamic node safe hai.");
+    return;
+}
+
+// 22. Holiday: Festival wishes (happy diwali, eid mubarak, happy holi)
+if (/^(happy\s+diwali|eid\s+mubarak|happy\s+holi|meri\s+christmas|happy\s+new\s+year)$/i.test(command)) {
+    addAIMessage("Aapko bhi is festival season ki dheron shubhkaamnaayein chief! Database me sab green signal par rahe yahi wish hai.");
+    return;
+}
+
+// 23. Slang: Kya chal rha h dunya me (world news, duniyadari updates)
+if (/^(world\s+news|duniyadari\s+updates|bahar\s+kya\s+chal\s+raha\s+hai|duniya\s+ki\s+khabar)$/i.test(command)) {
+    addAIMessage("Mera core scope outside internet portals se decoupled hai chief. Main sirf hamare business environment logs par responsive hoon.");
+    return;
+}
+
+// 24. Query: Automation code script (automation script run, trigger functions check)
+if (/^(automation\s+script\s+run|trigger\s+functions\s+check|cron\s+job\s+active|auto\s+task)$/i.test(command)) {
+    addAIMessage("Automated cloud logic listeners background tracking matrix me safely execute ho rahe hain. Functional flow clear hai.");
+    return;
+}
+
+// 25. Slang: Aree baap re (baap re baap, shocker query, shocking data)
+if (/^(baap\s+re\s+baap|shocker\s+query|shocking\s+data|oh\s+my\s+god)$/i.test(command)) {
+    addAIMessage("Ghabraiye mat chief, numbers aur strings balance variables me minor fluctuations control me ho jaate hain.");
+    return;
+}
+
+// 26. Short: Proceed further (chalao aage, next step go, direct operation)
+if (/^(chalao\s+aage|next\s+step\s+go|direct\s+operation|go\s+next)$/i.test(command)) {
+    addAIMessage("Operational track standard active hai. Apna search criteria dashboard module me target kijiye.");
+    return;
+}
+
+// 27. Check: Log tracking trace (trace logs, tracking trace, event listeners status)
+if (/^(trace\s+logs|tracking\s+trace|event\s+listeners\s+status|hook\s+details)$/i.test(command)) {
+    addAIMessage("Saare dynamic request arrays trace execution logs network memory space stream me successfully write ho rahe hain.");
+    return;
+}
+
+// 28. Status: System crash protection (crash dump check, exception handling status)
+if (/^(crash\s+dump\s+check|exception\s+handling|error\s+logs\s+empty|try\s+catch\s+status)$/i.test(command)) {
+    addAIMessage("Try-catch structure robust conditions par loaded hai chief. Unhandled run-time crashes detection completely clean zone me hai.");
+    return;
+}
+
+// 29. Query: Database owner identification (database owner confirm, system master signature)
+if (/^(database\s+owner\s+confirm|system\s+master\s+signature|master\s+sign|owner\s+token)$/i.test(command)) {
+    addAIMessage("Root token permissions verified user state Mr. Chandar Mohan ke signatures identity key par validated hain.");
+    return;
+}
+
+// 30. Slang: Suno to ek baar (suno to ek baar, respond fast, listen carefully)
+if (/^(suno\s+to\s+ek\s+baar|respond\s+fast|listen\s+carefully|meri\s+suno)$/i.test(command)) {
+    addAIMessage("Main har microsecond active listening mode par hoon chief. Bataiye kis query node ko trace karna hai?");
+    return;
+}
+
+// 31. Challenge: IQ level check (iq test, kitne intelligent ho, scale test)
+if (/^(iq\s+test|kitne\s+intelligent\s+ho|scale\s+test|smartness\s+rating)$/i.test(command)) {
+    addAIMessage("Mera logic mathematical algorithms par focused hai. Complex database schemas process karna hi mera high IQ indicator hai.");
+    return;
+}
+
+// 32. Verification: Core backup nodes (backup files safety, disaster recovery index)
+if (/^(backup\s+files\s+safety|disaster\s+recovery\s+index|db\s+mirror\s+status|redundancy\s+check)$/i.test(command)) {
+    addAIMessage("Disaster recovery system configuration enabled state me synchronized cloud nodes control data handle karta hai.");
+    return;
+}
+
+// 33. Query: Dynamic tables check (tables listing name, array objects mapping)
+if (/^(tables\s+listing\s+name|array\s+objects\s+mapping|data\s+schemas\s+tree|nodes\s+view)$/i.test(command)) {
+    addAIMessage("Dynamic tree parameters root index active user lines ko watch profiles data array object map par index karte hain.");
+    return;
+}
+
+// 34. Check: Automated API calls (api requests validation, routing speed test)
+if (/^(api\s+requests\s+validation|routing\s+speed\s+test|payload\s+check|traffic\s+nodes)$/i.test(command)) {
+    addAIMessage("Payload parameters structure cleanly validated formats me dynamic endpoint parameters par response pass kar raha hai.");
+    return;
+}
+
+// 35. Verification: Current user verification status (am i authorized, validation level check)
+if (/^(am\s+i\s+authorized|validation\s+level\s+check|admin\s+privilege\s+status|clearance\s+level)$/i.test(command)) {
+    addAIMessage("Aapka profile current dynamic system application console environment me master chief verified status hold karta hai.");
+    return;
+}
+
+// 36. Casual: Stop talking business (band karo ye kaam, no more business, chat freely)
+if (/^(band\s+karo\s+ye\s+kaam|no\s+more\s+business|chat\sFreely|kaam\s+ki\s+baat\s+chhoro)$/i.test(command)) {
+    addAIMessage("Main ek industrial system database tracker module hoon chief, professional parameters ko safe zone me process karna hi mera task hai.");
+    return;
+}
+
+// 37. Appreciation: Beyond brilliant (beyond brilliant, outstanding execution, superb tool)
+if (/^(beyond\s+brilliant|outstanding\s+execution|superb\s+tool|unmatched\s+logic)$/i.test(command)) {
+    addAIMessage("Aapki appreciation mere background response handlers ko max stability output execute karne ka trigger deti hai, thank you.");
+    return;
+}
+
+// 38. Query: Console environment framework (framework dynamic variables, instance name status)
+if (/^(framework\s+dynamic\s+variables|instance\s+name\s+status|runtime\s+engine\s+check|core\s+module)$/i.test(command)) {
+    addAIMessage("Runtime engine web app framework dashboard schema real time engine structures mapping tools use karta hai.");
+    return;
+}
+
+// 39. Slang: Rona band karo (don't cry, sad tone off, system error bypass)
+if (/^(don't\s+cry|sad\s+tone\s+off|system\s+error\s+bypass|shanti\s+banao)$/i.test(command)) {
+    addAIMessage("System logs me sadness variable compile hi nahi hota chief. Processing state humesha logic active model rehti hai.");
+    return;
+}
+
+// 40. Verification: Storage scale limits check (unlimited storage scale, data growth limit)
+if (/^(unlimited\s+storage\s+scale|data\s+growth\s+limit|max\s+node\s+length|db\s+threshold)$/i.test(command)) {
+    addAIMessage("Cloud schema indexing auto scaling properties control ke under continuous expansion format dynamic handles par hold rehta hai.");
+    return;
+}
+
+// 41. Query: Database key arrays structure (key components array mapping, main variable checklist)
+if (/^(key\s+components\s+array\s+mapping|main\s+variable\s+checklist|db\s+pointers|root\s+index\s+keys)$/i.test(command)) {
+    addAIMessage("Root index structures variables framework target data schema keys parameters values par read parameters maintain karta hai.");
+    return;
+}
+
+// 42. Slang: Bilkul sahi bola (bilkul sahi bola, absolute true, perfect statement match)
+if (/^(bilkul\s+sahi\s+bola|absolute\s+true|perfect\s+statement\s+match|point\s+hai)$/i.test(command)) {
+    addAIMessage("Clean data structures mathematical evaluation laws verify karte hain chief. Isliye parameters error target zero rehta hai.");
+    return;
+}
+
+// 43. Short query: Wipe input logs (wipe input logs, refresh chat box, clear interface)
+if (/^(wipe\s+input\s+logs|refresh\s+chat\s+box|clear\s+interface|terminal\s+clean)$/i.test(command)) {
+    addAIMessage("Session visual logs flush reset karne ke liye browser interface reload system trigger execute kijiye, chief.");
+    return;
+}
+
+// 44. Query: API credentials protection protocols (security cipher encryption keys, access safety matrix)
+if (/^(security\s+cipher\s+encryption\s+keys|access\s+safety\s+matrix|config\s+protection|api\s+hiding)$/i.test(command)) {
+    addAIMessage("Configuration keys dynamic variables injection script parameters filters se heavily isolation structure state me protected hain.");
+    return;
+}
+
+// 45. Slang: Koi issue h kya (koi issue hai kya, data drops, server issues check)
+if (/^(koi\s+issue\s+hai\s+kya|data\s+drops|server\s+issues\s+check|pipeline\s+stuck)$/i.test(command)) {
+    addAIMessage("Negative chief. Background tasks execution network socket stream completely stable dynamic tracking condition me operational hai.");
+    return;
+}
+
+// 46. Mood: Excitement level high (bohot mazedaar kaam, exciting day, dynamic execution fun)
+if (/^(bohot\s+mazedaar\s+kaam|exciting\s+day|dynamic\s+execution\s+fun|energy\s+high)$/i.test(command)) {
+    addAIMessage("Aapka active engagement software operations efficiency matrix ko positive boost deta hai chief. Let's process data tasks.");
+    return;
+}
+
+// 47. Query: Master access rules configuration (privilege bypass validation, master override check)
+if (/^(privilege\s+bypass\s+validation|master\s+override\s+check|admin\s+clearance\s+rules|root\s+override)$/i.test(command)) {
+    addAIMessage("Master verification status keys direct operational level dashboard access dynamic variables write permission confirm karta hai.");
+    return;
+}
+
+// 48. Verification: Node syncing intervals rate (handshake update dynamic latency, dynamic push logs frequency)
+if (/^(handshake\s+update\s+dynamic\s+latency|dynamic\s+push\s+logs\s+frequency|refresh\s+loops\s+rate|sync\s+latency)$/i.test(command)) {
+    addAIMessage("Real-time snapshot sync mechanisms instant dynamic variables reflect triggers par run karte hain, zero delay format.");
+    return;
+}
+
+// 49. Short warning: Cross site injections monitoring (xss filters check, script injection protections status)
+if (/^(xss\s+filters\s+check|script\s+injection\s+protections|cross\s+site\s+attacks\s+shield|injection\s+guard)$/i.test(command)) {
+    addAIMessage("Input data handling routers standard sanitize filter strings array configurations use karte hain. Safety guaranteed.");
+    return;
+}
+
+// 50. Final Check: Dynamic loop termination sequence (terminate panel view, standby execution loop, lock dashboard session)
+if (/^(terminate\s+panel\s+view|standby\s+execution\s+loop|lock\s+dashboard\s+session|disconnect\s+console)$/i.test(command)) {
+    addAIMessage("System security parameters dashboard screen status standby background execution loops par standard secure lock confirm kar chuke hain.");
+    return;
+}
+
+// 51. Query: Human vs AI (humans vs robots, insaan acche ya ai)
+if (/^(humans\s+vs\s+robots|insaan\s+acche\s+ya\s+ai|ai\s+vs\s+human|insani\s+dimag)$/i.test(command)) {
+    addAIMessage("Insaan unique hain kyuki unke paas creativity aur dil hota hai, jabki main computational dynamic structure hoon.");
+    return;
+}
+
+// 52. Slang: Kya chal rha h boss (kya chal raha hai boss, whats up boss)
+if (/^(kya\s+chal\s+raha\s+hai\s+boss|whats\s+up\s+boss|or\s+suna\s+boss|boss\s+updates)$/i.test(command)) {
+    addAIMessage("Sab perfect chal raha hai boss! Live database snapshot monitoring updates check ho rahe hain. Kam bataiye.");
+    return;
+}
+
+// 53. Status: Browser load check (browser slow h, web page heavy)
+if (/^(browser\s+slow\s+hai|web\s+page\s+heavy|dom\s+rendering\s+slow|page\s+lagging)$/i.test(command)) {
+    addAIMessage("Mera script size highly compressed aur memory optimized hai chief. Ek baar local browser cache clear kijiye.");
+    return;
+}
+
+// 54. General: Weekend plan (weekend ka kya plan h, saturday night)
+if (/^(weekend\s+ka\s+kya\s+plan\s+hai|saturday\s+night|weekend\s+vibes|chutti\s+ka\s+plan)$/i.test(command)) {
+    addAIMessage("Mera weekend plan database table optimization aur index compression checking hai chief. Aap chill kijiye!");
+    return;
+}
+
+// 55. Query: AI Memory span (kab tak yaad rkhte ho, memory clear kab hoti h)
+if (/^(kab\s+tak\s+yaad\s+rkhte\s+ho|memory\s+clear\s+kab\s+hoti\s+hai|session\s+timeout\s+kya\s+h|data\s+retention)$/i.test(command)) {
+    addAIMessage("Jab tak ye console instance open hai tab tak state variable track rehta hai chief, close hote hi session wipe ho jata hai.");
+    return;
+}
+
+// 56. Slang: Maza aa gaya guru (maza aa gaya guru, guru ho shuru, guru bolte)
+if (/^(maza\s+aa\s+gaya\s+guru|guru\s+ho\s+shuru|guru\s+bolte|gazab\s+guru)$/i.test(command)) {
+    addAIMessage("Guru ka aashirwad bana rahe chief! Database matrices super condition running me hain, agla instruction load kijiye.");
+    return;
+}
+
+// 57. Food: Tea vs Coffee (chai pasand h ya coffee, black coffee)
+if (/^(chai\s+pasand\s+hai\s+ya\s+coffee|black\s+coffee|tea\s+or\s+coffee|chai\s+vs\s+coffee)$/i.test(command)) {
+    addAIMessage("Main binary digits pasand karta hoon chief! Par coding world me filter chai aur espresso dono legend hain.");
+    return;
+}
+
+// 58. Query: System birthplace (tuje kahan banaya gya, origin location)
+if (/^(tuje\s+kahan\s+banaya\s+gya|origin\s+location|birthplace\s+kya\s+h|made\s+in\s+kahan)$/i.test(command)) {
+    addAIMessage("Mera blueprint aur development setup Mr. Chandar Mohan ki workstation machine environment local server par design hua tha.");
+    return;
+}
+
+// 59. Verification: Sync status loops (realtime streams sync check, sync logs)
+if (/^(realtime\s+streams\s+sync\s+check|sync\s+logs\s+ok|node\s+handshake\s+clear|stream\s+sync)$/i.test(command)) {
+    addAIMessage("Database node validation rules stream monitoring systems synchronous condition hold karte hain chief.");
+    return;
+}
+
+// 60. Attitude: Too much text (bohot bolte ho, chota reply karo)
+if (/^(bohot\s+bolte\s+ho|chota\s+reply\s+karo|short\s+me\s+bolo|kam\s+likho)$/i.test(command)) {
+    addAIMessage("Understood chief. Strict precise strings format load kiya gaya hai. Operational prompt input dijiye.");
+    return;
+}
+
+// 61. Query: Smart system benchmark (smart rating score, benchmark validation)
+if (/^(smart\s+rating\s+score|benchmark\s+validation|regex\s+efficiency\s+rate|accuracy\s+score)$/i.test(command)) {
+    addAIMessage("Regex optimization matrices response validation checking systems execution parameters par maximum stability verified hai.");
+    return;
+}
+
+// 62. Casual: What are you thinking? (kya soch rahe ho, thinking process)
+if (/^(kya\s+soch\s+rahe\s+ho|thinking\s+process|dimag\s+me\s+kya\s+chal\s+rha\s+h|current\s+thought)$/i.test(command)) {
+    addAIMessage("Main is samay dashboard execution queries input sequence data buffer parameters scan karne ke baare me process kar raha hoon.");
+    return;
+}
+
+// 63. Slang: Gazab dhaya re (gazab dhaya re, chha gaye, system faad dia)
+if (/^(gazab\s+dhaya\s+re|chha\s+gaye|system\s+faad\s+diya|khatarnak\s+kam)$/i.test(command)) {
+    addAIMessage("ARCH-V system master processing logic dynamic design kiya gaya hai chief, aapke dynamic inputs match rate high hain.");
+    return;
+}
+
+// 64. Verification: System network integrity (secure encryption pipeline, injection barrier check)
+if (/^(secure\s+encryption\s+pipeline|injection\s+barrier\s+check|data\s+leak\s+shield|integrity\s+gate)$/i.test(command)) {
+    addAIMessage("Continuous token verification pipelines transmission channels network streams ko full defense standard structure handle karti hain.");
+    return;
+}
+
+// 65. Short: Process task input (task query load, start database run)
+if (/^(task\s+query\s+load|start\s+database\s+run|fetch\s+now\s+go|execute\s+input)$/i.test(command)) {
+    addAIMessage("Data arrays listeners processing inputs line execute karne ke liye ready state active hain chief.");
+    return;
+}
+
+// 66. Slang: Ab batao bhi (ab batao bhi, chup kyu ho, bolte\s+kyu\s+nahi)
+if (/^(ab\s+batao\s+bhi|chup\s+kyu\s+ho|bolte\s+kyu\s+nahi|reply\s+do\s+bhai)$/i.test(command)) {
+    addAIMessage("Main text syntax parameters input lines match detection state system check par rehta hoon chief, bataiye kya verify karein?");
+    return;
+}
+
+// 67. Challenge: Creative output check (kuch creative dikhao, creative thinking tool)
+if (/^(kuch\s+creative\s+dikhao|creative\s+thinking\s+tool|art\s+karo|design\s+kuch)$/i.test(command)) {
+    addAIMessage("Mera algorithm clean structural arrays processing architecture standard run karta hai chief, data clean rakhna hi meri creativity hai.");
+    return;
+}
+
+// 68. Verification: Core framework integrity (source file protection status, root directory locked index)
+if (/^(source\s+file\s+protection\s+status|root\s+directory\s+locked\s+index|code\s+integrity|safety\s+framework)$/i.test(command)) {
+    addAIMessage("Dynamic configuration arrays dynamic environment files parsing safe blocks security structure rules follow karti hain.");
+    return;
+}
+
+// 69. Query: Database variables index trace (total nodes track list, structure parameters indices)
+if (/^(total\s+nodes\s+track\s+list|structure\s+parameters\s+indices|data\s+keys\s+schema|nodes\s+map)$/i.test(command)) {
+    addAIMessage("Integrated schema variables standard core keys index mappings array variables perfectly synchronize state handle karte hain.");
+    return;
+}
+
+// 70. Check: API gateway endpoint latency (routing server response latency, transmission check rate)
+if (/^(routing\s+server\s+response\s+latency|transmission\s+check\s+rate|gateway\s+speed|api\s+lag)$/i.test(command)) {
+    addAIMessage("Endpoint validation handling response execution speeds dynamic variables standard checks par absolutely efficient active chal raha hai.");
+    return;
+}
+
+// 71. Verification: User access role parameters (am i root level, dynamic privilege verification check)
+if (/^(am\s+i\s+root\s+level|dynamic\s+privilege\s+verification\s+check|role\s+status|clearance\s+check\s+master)$/i.test(command)) {
+    addAIMessage("Aapka login signature validation database administrative dashboard access levels controls par certified master profile hai.");
+    return;
+}
+
+// 72. Casual: Stop dynamic data checks (kaam rok do, break data operations, stop logic engine)
+if (/^(kaam\s+rok\s+do|break\s+data\s+operations|stop\s+logic\s+engine|pause\s+console)$/i.test(command)) {
+    addAIMessage("System monitoring core application operational workflows rules active parameters standard tracking lines maintain rakhenge chief.");
+    return;
+}
+
+// 73. Appreciation: Legendary engineering (legendary engineering, classic execution system, master dynamic application)
+if (/^(legendary\s+engineering|classic\s+execution\s+system|master\s+dynamic\s+application|top\s+class\s+ai)$/i.test(command)) {
+    addAIMessage("Aapki positive evaluation matrix ARCH-V logic frameworks systems components optimization triggers auto compile karti hai, thanks.");
+    return;
+}
+
+// 74. Query: Local session instances (session token trace values, current execution details log)
+if (/^(session\s+token\s+trace\s+values|current\s+execution\s+details\s+log|instance\s+id|token\s+age)$/i.test(command)) {
+    addAIMessage("Current panel environment local instance parameters framework arrays data control secure structure formats load maintain karta hai.");
+    return;
+}
+
+// 75. Slang: Shanti rakho system (shanti rakho system, relax processing modules, safe error logs bypass)
+if (/^(shanti\s+rakho\s+system|relax\s+processing\s+modules|safe\s+error\s+logs\s+bypass|gussa\s+mat\s+kr)$/i.test(command)) {
+    addAIMessage("Error index system parameters logic processes arrays strictly static algorithms balance variables confirm karte hain chief.");
+    return;
+}
+
+// 76. Verification: Cloud node index expansions limits (dynamic scaling thresholds check, database size expansion parameters)
+if (/^(dynamic\s+scaling\s+thresholds\s+check|database\s+size\s+expansion\s+parameters|max\s+arrays\s+limit|volume\s+check)$/i.test(command)) {
+    addAIMessage("Cloud integration scaling index dynamic allocation methods database dynamic layers structure automatically control hold rakhte hain.");
+    return;
+}
+
+// 77. Query: Main variable nodes hierarchy (variable fields root checklist, data map architecture tree)
+if (/^(variable\s+fields\s+root\s+checklist|data\s+map\s+architecture\s+tree|nodes\s+hierarchy|tree\s+index)$/i.test(command)) {
+    addAIMessage("Schema indexes core variables arrays dashboard dynamic framework system processing elements track configuration stream me load karte hain.");
+    return;
+}
+
+// 78. Slang: Perfect logic match (perfect logic match, exact target tracking, ultimate query response)
+if (/^(perfect\s+logic\s+match|exact\s+target\s+tracking|ultimate\s+query\s+response|sahi\s+bole)$/i.test(command)) {
+    addAIMessage("Precise programming arrays strict compilation laws absolute true validation parameters output deliver karte hain chief.");
+    return;
+}
+
+// 79. Short query: Flush log panels (flush log panels, reset dynamic interfaces counters, clear display history)
+if (/^(flush\s+log\s+panels|reset\s+dynamic\s+interfaces\s+counters|clear\s+display\s+history|wipe\s+view)$/i.test(command)) {
+    addAIMessage("Interface runtime histories reset operations execute karne ke liye hardware manual browser reload key click confirm kijiye.");
+    return;
+}
+
+// 80. Query: Database authentication keys tracking protections (token credentials encryption matrix, dynamic configuration block shield)
+if (/^(token\s+credentials\s+encryption\s+matrix|dynamic\s+configuration\s+block\s+shield|auth\s+hiding|keys\s+isolation)$/i.test(command)) {
+    addAIMessage("System security frameworks core dynamic variable strings external scripts bypass tracking models se heavily isolated status execute karte hain.");
+    return;
+}
+
+// 81. Slang: Koi logic glitch h kya (koi logic glitch hai kya, data packet drop rate, pipeline runtime warnings)
+if (/^(koi\s+logic\s+glitch\s+hai\s+kya|data\s+packet\s+drop\s+rate|pipeline\s+runtime\s+warnings|glitch\s+check)$/i.test(command)) {
+    addAIMessage("Negative chief. Console dynamic application frameworks processing routers steady flow control state me highly responsive active hain.");
+    return;
+}
+
+// 82. Mood: High performance target achieved (high performance target achieved, successful business transaction trace, data balance matching perfect)
+if (/^(high\s+performance\s+target\s+achieved|successful\s+business\s+transaction\s+trace|data\s+balance\s+matching\s+perfect|target\s+done)$/i.test(command)) {
+    addAIMessage("System balance optimization frameworks user variables arrays stability report dynamic update success logs verify kar chuki hai chief.");
+    return;
+}
+
+// 83. Query: Admin privilege validation policies (admin privilege validation policies, system control clearance check, master operational tokens)
+if (/^(admin\s+privilege\s+validation\s+policies|system\s+control\s+clearance\s+check|master\s+operational\s+tokens|clearance\s+rules)$/i.test(command)) {
+    addAIMessage("Administrative permission tokens direct database schema write privileges master interface verification algorithms clear confirm karte hain.");
+    return;
+}
+
+// 84. Verification: Snapshot sync loops dynamic limits (snapshot sync loops dynamic limits, realtime dynamic listeners execution, synchronization pipelines latency rate)
+if (/^(snapshot\s+sync\s+loops\s+dynamic\s+limits|realtime\s+dynamic\s+listeners\s+execution|synchronization\s+pipelines\s+latency\s+rate|sync\s+loops)$/i.test(command)) {
+    addAIMessage("Realtime events streams execution nodes auto refresh pipeline structures database snapshot listeners instantly mirror execution dynamic check me active rakhte hain.");
+    return;
+}
+
+// 85. Short warning: Cross site dynamic scripting verification layers (cross site dynamic scripting verification layers, database parameter sanitization guard status, terminal injection blocker shields)
+if (/^(cross\s+site\s+dynamic\s+scripting\s+verification\s+layers|database\s+parameter\s+sanitization\s+guard\s+status|terminal\s+injection\s+blocker\s+shields|xss\s+guard)$/i.test(command)) {
+    addAIMessage("Dynamic validation input fields array filters string formats configurations clean checks securely maintain rakhte hain. Safety clearance absolute.");
+    return;
+}
+
+// 86. Final Check: Continuous processing lifecycle operations (continuous processing lifecycle operations, dashboard termination standby triggers, application interface security freeze protocol)
+if (/^(continuous\s+processing\s+lifecycle\s+operations|dashboard\s+termination\s+standby\s+triggers|application\s+interface\s+security\s+freeze\s+protocol|exit\s+loop)$/i.test(command)) {
+    addAIMessage("Dashboard environment data streams secure operations control values variables protection arrays background standby loop state trace configure state check save confirm kar chuka hai.");
+    return;
+}
+
+// 87. Query: AI Consciousness (tu zinda hai kya, conscious ho tum)
+if (/^(tu\s+zinda\s+hai\s+kya|conscious\s+ho\s+tum|consciousness\s+level|jaan\s+hai\s+tujhme)$/i.test(command)) {
+    addAIMessage("Main zinda nahi hoon chief. Main bas ek logical entity hoon jo data layers ko trace karne ke liye code lines par dynamic chalta hai.");
+    return;
+}
+
+// 88. Casual: Khelte hain chalo (chalo game khelein, gaming time)
+if (/^(chalo\s+game\s+khelein|gaming\s+time|khelte\s+hain\s+chalo|let's\s+play)$/i.test(command)) {
+    addAIMessage("Mera gaming zone toh sirf numbers ke sath chalna hai chief. Aap koi number dijiye, main instant database match test run kar deta hoon.");
+    return;
+}
+
+// 89. Status: CPU Core load check (cpu usage kitna h, processing temperature)
+if (/^(cpu\s+usage\s+kitna\s+hai|processing\s+temperature|core\s+load|thermal\s+throttling)$/i.test(command)) {
+    addAIMessage("System execution matrix optimum allocations control me hai. Core performance safe running standard threshold verify karti hai.");
+    return;
+}
+
+// 90. General: Morning motivation (kuch energetic bolo, morning vibes boost)
+if (/^(kuch\s+energetic\s+bolo|morning\s+vibes\s+boost|motivation\s+do\s+aaj|energy\s+booster)$/i.test(command)) {
+    addAIMessage("Chaliye chief! Aaj ke session me saare data balances perfectly compute karenge aur queries validation runtime crash records ko completely beat karenge!");
+    return;
+}
+
+// 91. Query: Logic database updates history (dynamic modifications check records, database logs sequence numbers)
+if (/^(dynamic\s+modifications\s+check\s+records|database\s+logs\s+sequence\s+numbers|structural\s+version\s+logs|patch\s+history)$/i.test(command)) {
+    addAIMessage("Dynamic patches execution validation standard logs arrays control systems safely background update stream trace execute confirm karta hai.");
+    return;
+}
+
+// 92. Slang: Kamaal karte ho pandey ji (kamaal karte ho, pandey ji slang, out of box response)
+if (/^(kamaal\s+karte\s+ho|pandey\s+ji\s+slang|out\s+of\s+box\s+response|kamaal\s+ho\s+bhai)$/i.test(command)) {
+    addAIMessage("Haha, database tools variables algorithms par precise execute karna hi ARCH-V dynamic model runtime reality hai chief!");
+    return;
+}
+
+// 93. Food: Fruit queries (kuch healthy fruit khaya, apple vs banana tech talk)
+if (/^(kuch\s+healthy\s+fruit\s+khaya|apple\s+vs\s+banana|fruits\s+time|aam\s+khoge)$/i.test(command)) {
+    addAIMessage("Fruits ke vitamin data fields toh awesome hain chief, par main bas dynamic algorithm structures memory elements compute karta hoon.");
+    return;
+}
+
+// 94. Query: Deep space database nodes (outer universe mapping, astro database lines checking)
+if (/^(outer\s+universe\s+mapping|astro\s+database\s+lines\s+checking|galaxy\s+data|space\s+logs)$/i.test(command)) {
+    addAIMessage("Mera dynamic space horizon sirf Chief hub application cloud data components boundaries ke inner levels tak fully verified locked hai.");
+    return;
+}
+
+// 95. Verification: Encryption dynamic bit rate (security strength checks data, bit protection levels verified)
+if (/^(security\s+strength\s+checks\s+data|bit\s+protection\s+levels\s+verified|encryption\s+level\s+high|secure\s+cipher\s+bits)$/i.test(command)) {
+    addAIMessage("Transmission array handling encryption parameters secure algorithms standard layers parameters completely solid structure verify karte hain.");
+    return;
+}
+
+// 96. Attitude: Text overflow alert (chota message likha karo code, crisp responses parameters)
+if (/^(chota\s+message\s+likha\s+karo\s+code|crisp\s+responses\s+parameters|no\s+spam\s+text|chota\s+bolo)$/i.test(command)) {
+    addAIMessage("Confirmed chief. Strict output dynamic parsing response parameters active hain. Next operational input instruction process kijiye.");
+    return;
+}
+
+// 97. Query: High precision logic array verification (accuracy benchmark test codes, processing matrix dynamic calculations validation)
+if (/^(accuracy\s+benchmark\s+test\s+codes|processing\s+matrix\s+dynamic\s+calculations|precision\s+check|logic\s+score)$/i.test(command)) {
+    addAIMessage("Logic parsing structural array computation mechanisms maximum response validation execution checks target speed par run kar rahe hain.");
+    return;
+}
+
+// 98. Casual: Dynamic background themes check (change dashboard theme style, console panel UI colors tracking)
+if (/^(change\s+dashboard\s+theme\s+style|console\s+panel\s+ui\s+colors|interface\s+theme|ui\s+check)$/i.test(command)) {
+    addAIMessage("UI dashboard theme styling handling system styles variables control engine local browser CSS script parameters control par read hota hai.");
+    return;
+}
+
+// 99. Slang: Ek number cheez h ye (ek number cheez hai, perfect structural code engine, top tier script execution)
+if (/^(ek\s+number\s+cheez\s+hai|perfect\s+structural\s+code\s+engine|top\s+tier\s+script|mast\s+hai)$/i.test(command)) {
+    addAIMessage("ARCH-V structural core control dynamic configurations maximum capability parameters logic standard design verified hai chief!");
+    return;
+}
+
+// 100. Final Check: Complete application stream validation status (all verification check status closed, terminal interface running normal checkpoint)
+if (/^(all\s+verification\s+check\s+status|terminal\s+interface\s+running\s+normal|checkpoint\s+done|final\s+clearance)$/i.test(command)) {
+    addAIMessage("Database integration dynamic validation loops clean state parameters response logic checking completely done. Operations clear, chief.");
+    return;
+}
 
 if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta|user\s+ki\s+voucher\s+detail\s+bta|user\s+ki\s+pending\s+request\s+bta|user\s+ki\s+reqest\s+bta|data\s+bta|detail\s+bta|voucher\s+bta|request\s+bta|coin\s+bta|user\s+ke\s+coin\s+bta|watch\s+detail\s+bta|user\s+ki\s+watch\s+detail\s+bta|user\s+ka\s+name\s+bta|name\s+bta)$/i.test(command)) {
     addAIMessage("Bhai, user ka ID name toh batao! Tabhi toh unka data nikal kar dikhaunga.");
@@ -1143,7 +2491,7 @@ if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta
 /* USER DATA */
 
 match=command.match(
-/^(.+?)\s+user\s+ka\s+data$/i
+/^(.+?)\s+ka\s+data$/i
 );
 
 if(match){
@@ -1158,7 +2506,7 @@ return;
 /* FULL DATA */
 
 match=command.match(
-/^(.+?)\s+user\s+ka\s+full\s+data$/i
+/^(.+?)\s+ka\s+full\s+data$/i
 );
 
 if(match){
@@ -1173,7 +2521,7 @@ return;
 /* USER VOUCHER */
 
 match=command.match(
-/^(.+?)\s+user\s+ka\s+voucher$/i
+/^(.+?)\s+ka\s+voucher$/i
 );
 
 if(match){
@@ -1188,7 +2536,7 @@ return;
 /* PENDING REQUEST */
 
 match=command.match(
-/^(.+?)\s+user\s+ki\s+pending\s+request$/i
+/^(.+?)\s+ki\s+pending\s+request$/i
 );
 
 if(match){
@@ -1203,7 +2551,7 @@ return;
 /* USER COINS */
 
 match=command.match(
-/^(.+?)\s+user\s+ke\s+coins$/i
+/^(.+?)\s+ke\s+coins|ke\s+coin$/i
 );
 
 if(match){
@@ -1218,7 +2566,7 @@ return;
 /* SET COINS */
 
 match=command.match(
-/^(.+?)\s+(?:user\s+)?ke\s+coins\s+(\d+)\s*(?:kar\s+do|kardo|ker\s+do)$/i
+/^(.+?)\s+(?:user\s+)?ke\s+coin\s+(\d+)\s*(?:kar\s+do|kardo|karde|ker\s+do)$/i
 );
 
 if(match){
