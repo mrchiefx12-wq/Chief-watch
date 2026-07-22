@@ -1059,6 +1059,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --gold: #D4AF37;
@@ -1070,7 +1074,6 @@
             --error: #D32F2F;
         }
 
-        /* 🚨 Global Reset & Scrollbar Hide (Pure page ke liye scrollbar band) */
         html, body {
             background-color: var(--black) !important;
             color: var(--white);
@@ -1079,12 +1082,11 @@
             padding: 0 !important;
             width: 100%;
             height: 100%;
-            overflow: hidden !important; /* Outer scroll disabled */
+            overflow: hidden !important;
             -webkit-font-smoothing: antialiased;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Sabhi browsers ke liye scrollbar completely invisible */
         html::-webkit-scrollbar,
         body::-webkit-scrollbar,
         .studio-wrapper-outer::-webkit-scrollbar {
@@ -1093,7 +1095,6 @@
             height: 0 !important;
         }
 
-        /* Continuous Scrolling Top Ticker */
         .ticker-wrap {
             width: 100%;
             background: #000000;
@@ -1128,16 +1129,15 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
-        /* 👑 Smooth Scroll Wrapper (Bina scrollbar ke smooth scrolling) */
         .studio-wrapper-outer {
             width: 100%;
             height: 100%;
-            overflow-y: auto; /* Internal scrolling active */
+            overflow-y: auto;
             overflow-x: hidden;
             box-sizing: border-box;
-            padding: 55px 15px 30px 15px; /* Added proper top padding for ticker */
-            -ms-overflow-style: none;  /* IE/Edge */
-            scrollbar-width: none;  /* Firefox */
+            padding: 55px 15px 30px 15px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         .studio-container {
@@ -1160,7 +1160,6 @@
             font-weight: 500;
         }
 
-        /* Luxury Intro Card */
         .intro-section {
             text-align: center;
             padding: 45px 20px;
@@ -1262,7 +1261,6 @@
             margin: 0;
         }
 
-        /* Main Configurator Content */
         .configurator-content {
             display: none;
             animation: fadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -1365,7 +1363,6 @@
             color: var(--white);
         }
 
-        /* Inputs Style */
         .input-group {
             margin-bottom: 12px;
         }
@@ -1435,7 +1432,6 @@
             box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
         }
 
-        /* Modals and Overlays */
         .luxury-popup-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -1507,10 +1503,9 @@
             font-weight: 300;
         }
 
-        /* 📱 RESPONSIVE AUTO-ADJUSTING FOR PHONES (No Oversized Elements) */
         @media (max-width: 768px) {
             .studio-wrapper-outer {
-                padding: 45px 12px 15px 12px; /* Ticker safe margin */
+                padding: 45px 12px 15px 12px;
             }
 
             .intro-section {
@@ -1565,18 +1560,12 @@
             }
 
             .options-grid {
-                grid-template-columns: repeat(3, 1fr) !important; /* Perfect 3 column grid for mobile screens */
+                grid-template-columns: repeat(3, 1fr) !important;
                 gap: 6px;
             }
 
-            /* For target segment (only 3 options) */
-            .options-grid:has(.option-card:nth-child(3):last-child) {
-                grid-template-columns: repeat(3, 1fr) !important;
-            }
-
-            /* For strap selections with 5 options */
             .options-grid:has(.option-card:nth-child(5)) {
-                grid-template-columns: repeat(2, 1fr) !important; /* Grid breaks to 2x2 perfectly */
+                grid-template-columns: repeat(2, 1fr) !important;
             }
 
             .option-card {
@@ -1635,12 +1624,12 @@
         <div class="intro-section" id="landingView">
             <h1 class="intro-logo">CHIEF</h1>
             <p class="intro-tagline">1-of-1 Luxury Configurator</p>
-      
+     
             <ul class="intro-features">
                 <li><i class="fa-solid fa-crown"></i> Craft Your Ultimate Timepiece</li>
                 <li><i class="fa-solid fa-gem"></i> Infinite Custom Colors (Type Anything)</li>
                 <li><i class="fa-solid fa-image"></i> Personalize with Custom Photo Dial</li>
-                <li><i class="fa-solid fa-bolt"></i> Direct VIP WhatsApp Registry</li>
+                <li><i class="fa-solid fa-bolt"></i> Direct Firebase Guest Registry</li>
             </ul>
             <button class="start-btn" onclick="startCustomizer()">Start Your Customization</button>
         </div>
@@ -1817,6 +1806,23 @@
 </div>
 
 <script>
+    // 🔥 Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
+        projectId: "chief-login12",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+
     let selections = {
         targetGroup: '',
         shape: '',
@@ -1853,7 +1859,7 @@
         }
 
         overlay.classList.add('show');
-        setTimeout(() => { overlay.classList.remove('show'); }, 2000);
+        setTimeout(() => { overlay.classList.remove('show'); }, 2500);
     }
 
     function submitOrder() {
@@ -1864,7 +1870,6 @@
         const state = document.getElementById('custState').value.trim();
         const city = document.getElementById('custCity').value.trim();
         
-        // Fetch typed colors dynamically
         const dialColorTyped = document.getElementById('customDialColorInput').value.trim();
         const borderColorTyped = document.getElementById('customBorderColorInput').value.trim();
 
@@ -1897,13 +1902,19 @@
             strapMaterial: selections.strap,
             mechanismInsideLook: selections.insideLook
         };
-        console.log("Database Engine System Ready Payload:", finalizedOrderPayload);
 
-        const msg = `*👑 NEW CHIEF 1-of-1 WATCH ORDER 👑*%0A-----------------------------------%0A👤 *Owner Name:* ${encodeURIComponent(name)}%0A📞 *Contact:* ${encodeURIComponent(contact)}%0A🎂 *Age Group/Age:* ${encodeURIComponent(age)}%0A📍 *Location:* ${encodeURIComponent(city)}, ${encodeURIComponent(state)}, ${encodeURIComponent(country)}%0A%0A🎯 *Edition Type:* ${encodeURIComponent(selections.targetGroup)}%0A📐 *Case Shape:* ${encodeURIComponent(selections.shape)}%0A🎨 *Dial Color:* ${encodeURIComponent(dialColorTyped)}%0A⚡ *Border Style:* ${encodeURIComponent(selections.borderStyle)}%0A✨ *Border Color:* ${encodeURIComponent(borderColorTyped)}%0A⛓️ *Strap Style:* ${encodeURIComponent(selections.strap)}%0A⚙️ *Inside Look:* ${encodeURIComponent(selections.insideLook)}%0A-----------------------------------%0A_Sent via CHIEF Configurator Studio_`;
-        const adminNumber = "918209444808"; 
-        window.open(`https://wa.me/${adminNumber}?text=${msg}`, '_blank');
-
-        triggerPopup('success', 'Order Received', 'We received your order! Our team will contact you by your number within 24 hours. Thank you for ordering.');
+        // 🚀 Save directly inside the existing `CHIEF_GUEST` node under `orders`
+        const guestOrderRef = database.ref('users/CHIEF_GUEST/orders').push();
+        
+        guestOrderRef.set(finalizedOrderPayload)
+            .then(() => {
+                console.log("Order list saved successfully under CHIEF_GUEST!");
+                triggerPopup('success', 'Order Saved', 'Your custom watch configuration has been saved under CHIEF_GUEST orders!');
+            })
+            .catch((error) => {
+                console.error("Firebase save error:", error);
+                triggerPopup('error', 'Save Failed', 'Could not save order to database. Please check connection.');
+            });
     }
 </script>
 
