@@ -2579,24 +2579,15 @@ if (match) {
     return;
 }
 
-/* APPROVE / ACTIVATE VOUCHER (With Full Custom Variations & Memory Support) */
+/* APPROVE / ACTIVATE VOUCHER (Complete Merged Logic) */
 
-let possibleUser = "";
+// 1. Command me User Name diya gaya ho (e.g., "activate xyz voucher", "activate voucher xyz", "xyz voucher activate")
+let match = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)
+         || command.match(/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i);
 
-// 1. Name bola gaya ho (e.g., "activate xyz voucher", "activate voucher xyz", "arch activate xyz", etc.)
-if (/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i.test(command)) {
-    possibleUser = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)[1];
-} 
-// 2. Name starting/middle me ho (e.g., "xyz voucher activate", "xyz ka voucher activate ker do")
-else if (/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i.test(command)) {
-    possibleUser = command.match(/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i)[1];
-}
-
-if (possibleUser) {
-    // Extra filler words clean karke exact username nikalna
-    let targetUser = possibleUser.replace(/\b(?:voucher|request|user|ka|ki)\b/gi, '')
-                                .replace(/\s+/g, ' ')
-                                .trim();
+if (match) {
+    let rawUser = match[1].trim();
+    let targetUser = rawUser.replace(/\b(?:voucher|request|user|ka|ki)\b/gi, '').replace(/\s+/g, ' ').trim();
 
     if (targetUser) {
         window.lastSearchedUser = targetUser; // Memory update
@@ -2605,41 +2596,14 @@ if (possibleUser) {
     }
 }
 
-// Case B: Jab aap sirf "activate", "approve", ya "activate voucher" bologe (No name spoken)
-if (/^(?:arch\s+)?(?:activate|activate\s+voucher|approve|approved)$/i.test(command)) {
-    if (window.lastSearchedUser) {
-        // Purane search kiye gaye user ko hi activate karega
-        approveUserRequest(window.lastSearchedUser);
-    } else {
-        addAIMessage("Pehle kisi user ka request ya voucher search karein, ya user name saath me bolein.");
-    }
-    return;
-}
-
-/* APPROVE / ACTIVATE VOUCHER (Only Specific Keywords + 5-Min Limit) */
-
-// 1. Agar Command me Name diya ho (e.g. "activate xyz voucher")
-match = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)
-     || command.match(/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i);
-
-if (match) {
-    let rawUser = match[1].trim();
-    let targetUser = rawUser.replace(/\b(?:voucher|request|user|ka|ki)\b/gi, '').replace(/\s+/g, ' ').trim();
-
-    if (targetUser) {
-        window.lastSearchedUser = targetUser;
-        approveUserRequest(targetUser);
-        return;
-    }
-}
-
-// 2. ONLY jab aap "activate", "approve", "activate voucher", ya "approved voucher" bologe
+// 2. Sirf Keyword bola ho (e.g., "activate", "approve", "activate voucher", "approved voucher")
 if (/^(?:arch\s+)?(?:activate|approved|activate\s+voucher|approved\s+voucher|approve\s+voucher)$/i.test(command.trim())) {
 
+    // Condition A: Agar 5 min ke andar koi Nayi (Latest) Pending Request aayi ho
     const pendingUsers = Object.keys(liveUsers || {}).filter(u => liveUsers[u]?.pendingRequest?.status === "pending");
 
     if (pendingUsers.length > 0) {
-        // Sabse latest request ka user find karna
+        // Sabse latest request identify karna
         const latestUser = pendingUsers.reduce((latest, current) => {
             const timeA = liveUsers[latest]?.pendingRequest?.timestamp || liveUsers[latest]?.pendingRequest?.createdAt || 0;
             const timeB = liveUsers[current]?.pendingRequest?.timestamp || liveUsers[current]?.pendingRequest?.createdAt || 0;
@@ -2648,22 +2612,28 @@ if (/^(?:arch\s+)?(?:activate|approved|activate\s+voucher|approved\s+voucher|app
 
         const requestTime = liveUsers[latestUser]?.pendingRequest?.timestamp || liveUsers[latestUser]?.pendingRequest?.createdAt;
         const currentTime = Date.now();
-        const fiveMinutes = 5 * 60 * 1000; // 5 min in ms
+        const fiveMinutes = 5 * 60 * 1000; // 5 min in milliseconds
 
-        // Sirf 5 minute ke andar aayi hui request hi approve hogi
+        // Check agar request 5 min ke andar ki hai
         if (requestTime && (currentTime - requestTime) <= fiveMinutes) {
             window.lastSearchedUser = latestUser;
             approveUserRequest(latestUser);
             return;
-        } else {
-            addAIMessage("Pichle 5 min me koi nayi request nahi aayi hai.");
-            return;
         }
-    } else {
-        addAIMessage("Koi pending request nahi milie.");
+    }
+
+    // Condition B: Agar 5 min me koi request nahi mili par pehle Search kiya hua user Memory me hai
+    if (window.lastSearchedUser) {
+        approveUserRequest(window.lastSearchedUser);
         return;
     }
+
+    // Condition C: Jab dono me se kuch na mile
+    addAIMessage("Pichle 5 min me koi nayi request nahi aayi hai aur na hi koi user search kiya gaya hai.");
+    return;
 }
+
+
 /* NEW WATCH DETAIL COMMAND (With Space/Hyphen Auto-Fix) */
 
 match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+(?:ki\s+)?detail|\s+detail\s+(?:bata|btao|dikha|dikhhao))?$/i);
