@@ -2507,46 +2507,21 @@ if (match) {
 }
 
 
-/* USER VOUCHER (With All Custom Variations & Context Support) */
+/* USER VOUCHER (Multiple Variations Support) */
 
-match = command.match(/^(?:arch\s+)?(?:voucher\s+(.+?)|(.+?)\s+voucher)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i)
-     || command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ka\s+voucher(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ka\s+voucher(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
 if (match) {
-    // Group 1, Group 2, ya Group 3 me se user name extract karna
-    let rawUser = match[1] || match[2] || match[3] || "";
-    
-    // Unwanted filler words ko clean karna
-    let cleanUser = rawUser.replace(/^(?:ka|ki|user)\s+/i, '')
-                           .replace(/\s+(?:ka|ki|user)$/i, '')
-                           .trim();
-
-    if (cleanUser) {
-        // Target user ko save kar rahe hain taaki baad me direct "activate" bole toh chal jaye
-        window.lastSearchedUser = cleanUser;
-
-        showActiveVoucher(cleanUser);
-        return;
-    }
+    showActiveVoucher(match[1].trim());
+    return;
 }
 
+/* PENDING REQUEST (Multiple Variations Support) */
 
-/* PENDING REQUEST & VOUCHER SEARCH (Saves searched user) */
-let lastSearchedUser = ""; // Puraane search kiye gaye user ka name save rakhne ke liye
-
-match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?(?:\s+ki|\s+ka)?\s*(?:pending\s+)?(?:reqest|request|voucher)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
+match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ki\s+(?:pending\s+)?reqest|request(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
 if (match) {
-    const userName = match[1].trim();
-    
-    // Unwanted filler words cleanup
-    const cleanUser = userName.replace(/^(?:ka|ki|user)\s+/i, '').trim();
-
-    // User ka name temporary variable me save kar lo
-    lastSearchedUser = cleanUser;
-
-    // Search aur Display Function Call
-    showPendingRequest(cleanUser);
+    showPendingRequest(match[1].trim());
     return;
 }
 
@@ -2579,47 +2554,35 @@ if (match) {
     return;
 }
 
-/* APPROVE / ACTIVATE VOUCHER (All In One) */
+/* APPROVE / ACTIVATE VOUCHER (Flexible Voice Command Support) */
 
-// 1. With User Name
-match = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)
-     || command.match(/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i);
+// Pattern: Checks for keywords like approve, activate, voucher active, etc.
+match = command.match(/^(?:arch\s*v\s+)?(?:approve|approv|approved|activate|active)\s*(?:voucher|request)?\s*(.+)?$/i) 
+     || command.match(/^(?:arch\s*v\s+)?(.+?)\s*(?:ka|ki)?\s*voucher\s*(?:active|activate)\s*(?:karo|kero|ker\s+do|kardo|do)?$/i);
 
-if (match) {
-    let user = match[1].replace(/\b(?:voucher|request|user|ka|ki)\b/gi, '').replace(/\s+/g, ' ').trim();
-    if (user) {
-        window.lastSearchedUser = user;
-        approveUserRequest(user);
-        return;
-    }
-}
+if(match){
 
-// 2. Direct Keywords Only (5-Min Limit + Memory Support)
-if (/^(?:arch\s+)?(?:activate|approved|activate\s+voucher|approved\s+voucher|approve\s+voucher)$/i.test(command.trim())) {
-    const pendingUsers = Object.keys(liveUsers || {}).filter(u => liveUsers[u]?.pendingRequest?.status === "pending");
-    
-    // Check 5-Min Latest Request
-    if (pendingUsers.length > 0) {
-        const latestUser = pendingUsers.reduce((a, b) => (liveUsers[b]?.pendingRequest?.timestamp || 0) > (liveUsers[a]?.pendingRequest?.timestamp || 0) ? b : a);
-        const reqTime = liveUsers[latestUser]?.pendingRequest?.timestamp || 0;
-        
-        if (reqTime && (Date.now() - reqTime) <= 5 * 60 * 1000) {
-            window.lastSearchedUser = latestUser;
-            approveUserRequest(latestUser);
-            return;
+    // User name extract karne ke liye (agar command me bola gaya ho)
+    let possibleUser = match[1] ? match[1].trim() : "";
+
+    // Unwanted filler words ko clean karna
+    possibleUser = possibleUser.replace(/^(?:voucher|request|user|ka|ki)\s+/i, '').replace(/\s+(?:voucher|request|active|activate|karo|kero|ker\s+do|kardo|do)$/i, '').trim();
+
+    if(possibleUser) {
+        approveUserRequest(possibleUser);
+    } else {
+        // Agar user name nahi bola, toh automatic pehle pending user ko dhoondhega
+        const pendingUser = Object.keys(liveUsers).find(u => liveUsers[u]?.pendingRequest?.status === "pending");
+        if(pendingUser) {
+            approveUserRequest(pendingUser);
+        } else {
+            addAIMessage("Kis user ki request approve ya activate karni hai? User name saath me bolo.");
         }
     }
 
-    // Check Searched Memory
-    if (window.lastSearchedUser) {
-        approveUserRequest(window.lastSearchedUser);
-        return;
-    }
-
-    addAIMessage("Koi 5 min purani request ya search user nahi mila.");
     return;
-}
 
+}
 
 /* NEW WATCH DETAIL COMMAND (With Space/Hyphen Auto-Fix) */
 
