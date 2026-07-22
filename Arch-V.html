@@ -931,66 +931,14 @@ liveWatches = snapshot.val() || {};
 );
 
 
-/* ================= HIGH-SPEED PERFECT HINGLISH + ENGLISH TTS ================= */
+/* ================= VOICE SPEAKING REMOVED (SILENT EXECUTION) ================= */
 
 function stopSpeaking() {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-    }
+    // Disabled
 }
 
 function speakText(text) {
-    stopSpeaking(); 
-
-    if (!('speechSynthesis' in window)) return;
-
-    // AI bolne se pehle mic ko band karega taaki apni aawaaz na sune
-    if (recognition && isMicActive) {
-        try {
-            recognition.abort();
-            isMicActive = false;
-        } catch(e) {}
-    }
-
-    let cleanText = text.replace(/<[^>]*>?/gm, '');
-    cleanText = cleanText.replace(/[*_#]/g, '').trim();
-
-    if (!cleanText) return;
-
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-
-    utterance.lang = 'en-IN'; 
-    
-    // ⚡ YAHAN SE SPEED CONTROL HOGI (Apne hisab se 1.4, 1.6 ya 1.8 set kar lo)
-    utterance.rate = 1.6;  
-    
-    utterance.pitch = 1.0;
-
-    const voices = window.speechSynthesis.getVoices();
-    
-    const selectedVoice = voices.find(v => 
-        (v.lang === 'en-IN' || v.lang === 'hi-IN') && 
-        (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('India') || v.name.includes('Rishi') || v.name.includes('Neerja'))
-    ) || voices.find(v => v.lang === 'en-IN');
-
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;
-    }
-
-    // AI bolna khatam karega tabhi mic dobara on hoga
-    utterance.onend = function() {
-        setTimeout(() => {
-            startMicSafely();
-        }, 200);
-    };
-
-    utterance.onerror = function() {
-        setTimeout(() => {
-            startMicSafely();
-        }, 200);
-    };
-
-    window.speechSynthesis.speak(utterance);
+    // Voice Output is fully disabled so ARCH-V executes commands silently on screen.
 }
 
 
@@ -1047,8 +995,6 @@ scrollChat();
 /* ================= AI MESSAGE ================= */
 
 function addAIMessage(text,html=""){
-
-speakText(text);
 
 const div=document.createElement("div");
 
@@ -1160,7 +1106,7 @@ input.value="";
 let match;
 
 
-/* 1. GREETINGS GEMINI STYLE */
+/* 1. GREETINGS */
 
 if (/^(hi|hello|hello\s+bro|hi\s+bhai|hello\s+bhai|hi\s+bro)$/i.test(command)) {
 
@@ -1339,7 +1285,7 @@ return;
 }
 
 
-/* 4. FALLBACK REFUSAL MATRIX */
+/* 4. FALLBACK */
 
 addAIMessage("Bhai, main database management assistant hoon. Direct command do, main kaam kar deta hoon!");
 
@@ -1924,13 +1870,12 @@ return html;
 }
 
 
-/* ================= NOISELESS ALWAYS-ON VOICE RECOGNITION ================= */
+/* ================= CONTINUOUS VOICE INPUT ================= */
 
 let recognition;
 let isMicActive = false;
 let audioCtx = null;
 
-// Audio context stream pipe active rakhta hai noise eliminate karne ke liye
 function keepAudioPipelineActive() {
     try {
         if (!audioCtx) {
@@ -1951,9 +1896,7 @@ function startMicSafely() {
         document.getElementById("micErrorBanner").style.display = "none";
         recognition.start();
         isMicActive = true;
-    } catch (e) {
-        // Already active
-    }
+    } catch (e) {}
 }
 
 function initAutoVoice() {
@@ -1976,11 +1919,6 @@ function initAutoVoice() {
         isMicActive = true;
         document.getElementById("voiceStatus").style.display = "inline-flex";
         document.getElementById("micErrorBanner").style.display = "none";
-    };
-
-    // REMOVED INTERRUPT FUNCTION (Poori baat bolega, beech me nahi rukega)
-    recognition.onspeechstart = function() {
-        // Silence override so it finishes speaking complete sentence
     };
 
     recognition.onresult = function(event) {
@@ -2007,7 +1945,7 @@ function initAutoVoice() {
     recognition.onend = function() {
         isMicActive = false;
         if (!document.hidden) {
-            setTimeout(() => { startMicSafely(); }, 200);
+            setTimeout(() => { startMicSafely(); }, 150);
         }
     };
 
