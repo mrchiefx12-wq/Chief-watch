@@ -2486,120 +2486,99 @@ if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta
 
   
 
-/* 3. CORE FIREBASE OPERATIONS */
+/* USER DATA (Multiple Variations Support) */
 
-/* USER DATA */
+match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ka\s+data(?:\s+(?:bata|btao|dikha|bta|dikhhao))?$/i);
 
-match=command.match(
-/^(.+?)\s+ka\s+data$/i
-);
-
-if(match){
-
-showUserData(match[1],false);
-
-return;
-
+if (match) {
+    showUserData(match[1].trim(), false);
+    return;
 }
 
 
 /* FULL DATA */
 
-match=command.match(
-/^(.+?)\s+ka\s+full\s+data$/i
-);
+match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ka\s+full\s+data(?:\s+(?:bata|btao|dikha|dikhhao))?$/i);
 
-if(match){
-
-showUserData(match[1],true);
-
-return;
-
+if (match) {
+    showUserData(match[1].trim(), true);
+    return;
 }
 
 
-/* USER VOUCHER */
+/* USER VOUCHER (Multiple Variations Support) */
 
-match=command.match(
-/^(.+?)\s+ka\s+voucher$/i
-);
+match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ka\s+voucher(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
-if(match){
-
-showActiveVoucher(match[1]);
-
-return;
-
+if (match) {
+    showActiveVoucher(match[1].trim());
+    return;
 }
 
 
-/* PENDING REQUEST */
+/* PENDING REQUEST (Multiple Variations Support) */
 
-match=command.match(
-/^(.+?)\s+ki\s+pending\s+request$/i
-);
+match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ki\s+(?:pending\s+)?reqest|request(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
-if(match){
-
-showPendingRequest(match[1]);
-
-return;
-
+if (match) {
+    showPendingRequest(match[1].trim());
+    return;
 }
 
 
-/* USER COINS */
+/* USER COINS (Multiple Variations Support) */
 
-match=command.match(
-/^(.+?)\s+ke\s+coins|ke\s+coin$/i
-);
+match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ke\s+(?:coins|coin)(?:\s+(?:bata|btao|dikha|dikhhao|kitne\s+hain|kitne\s+he))?$/i);
 
-if(match){
-
-showCoins(match[1]);
-
-return;
-
+if (match) {
+    showCoins(match[1].trim());
+    return;
 }
 
 
-/* SET COINS */
+/* SET COINS (Multiple Variations Support + English "set coin" Command) */
 
-match=command.match(
-/^(.+?)\s+(?:user\s+)?ke\s+coin\s+(\d+)\s*(?:kar\s+do|kardo|karde|ker\s+do)$/i
-);
+// Pattern 1: English format (e.g., "arch v xyz set coin 100" ya "xyz set coin 100")
+match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+set\s+(?:coins|coin)\s+(\d+)$/i);
 
-if(match){
+if (!match) {
+    // Pattern 2: Hindi/Hinglish format (e.g., "arch v xyz user ke coins 100 kar do / kardo / kerd do")
+    match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+user)?\s+ke\s+(?:coins|coin|coines)\s+(\d+)\s*(?:kar\s+do|kardo|karde|ker\s+do|kerdo|kar\s+de)$/i);
+}
 
-setCoins(match[1],Number(match[2]));
-
-return;
-
+if (match) {
+    setCoins(match[1].trim(), Number(match[2]));
+    return;
 }
 
 
-/* APPROVE DIRECTLY VIA VOICE COMMAND */
+/* APPROVE / ACTIVATE VOUCHER (Flexible Voice Command Support) */
 
-match=command.match(
-/^(?:approve|approv|approved)\s*(.+)?$/i
-);
+// Pattern: Checks for keywords like approve, activate, voucher active, etc.
+match = command.match(/^(?:arch\s*v\s+)?(?:approve|approv|approved|activate|active)\s*(?:voucher|request)?\s*(.+)?$/i) 
+     || command.match(/^(?:arch\s*v\s+)?(.+?)\s*(?:ka|ki)?\s*voucher\s*(?:active|activate)\s*(?:karo|kero|ker\s+do|kardo|do)?$/i);
 
 if(match){
 
-const possibleUser = match[1] ? match[1].trim() : "";
+    // User name extract karne ke liye (agar command me bola gaya ho)
+    let possibleUser = match[1] ? match[1].trim() : "";
 
-if(possibleUser) {
-    approveUserRequest(possibleUser);
-} else {
-    const pendingUser = Object.keys(liveUsers).find(u => liveUsers[u]?.pendingRequest?.status === "pending");
-    if(pendingUser) {
-        approveUserRequest(pendingUser);
+    // Unwanted filler words ko clean karna
+    possibleUser = possibleUser.replace(/^(?:voucher|request|user|ka|ki)\s+/i, '').replace(/\s+(?:voucher|request|active|activate|karo|kero|ker\s+do|kardo|do)$/i, '').trim();
+
+    if(possibleUser) {
+        approveUserRequest(possibleUser);
     } else {
-        addAIMessage("Kis user ki request approve karni hai? User ID name saath me bolo.");
+        // Agar user name nahi bola, toh automatic pehle pending user ko dhoondhega
+        const pendingUser = Object.keys(liveUsers).find(u => liveUsers[u]?.pendingRequest?.status === "pending");
+        if(pendingUser) {
+            approveUserRequest(pendingUser);
+        } else {
+            addAIMessage("Kis user ki request approve ya activate karni hai? User name saath me bolo.");
+        }
     }
-}
 
-return;
+    return;
 
 }
 
@@ -2618,18 +2597,24 @@ return;
 }
 
 
-/* NEW WATCH DETAIL COMMAND */
+/* NEW WATCH DETAIL COMMAND (With Space/Hyphen Auto-Fix) */
 
-match=command.match(
-/^(.+?)\s+detail$/i
-);
+match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+(?:ki\s+)?detail|\s+detail\s+(?:bata|btao|dikha|dikhhao))?$/i);
 
-if(match){
+if (match) {
+    let watchCode = match[1].trim();
 
-showWatchDetail(match[1]);
+    // 1. Spacing fix: "CHF - 001" ya "CHF 001" ko "CHF-001" me clean karne ke liye
+    // Letters aur digits ke beech ke saare spaces/hyphens ko ek single '-' se replace kar dega
+    watchCode = watchCode.replace(/([a-zA-Z]+)[\s\-]+(\d+)/g, '$1-$2').toUpperCase();
 
-return;
+    // 2. Extra double hyphens ko single hyphen me convert karega
+    watchCode = watchCode.replace(/\-+/g, '-');
 
+    // Watch detail function call
+    showWatchDetail(watchCode);
+
+    return;
 }
 
 
