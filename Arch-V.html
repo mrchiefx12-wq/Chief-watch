@@ -2519,11 +2519,14 @@ if (match) {
     }
 }
 
-/* 2. PENDING REQUEST (Only for viewing pending requests) */
-match = command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ki\s+(?:pending\s+)?(?:reqest|request)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
+/* 2. PENDING REQUEST (Viewing pending requests & vouchers) */
+match = command.match(/^(?:arch\s+)?(?:voucher\s+(.+?)|(.+?)\s+voucher)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i)
+     || command.match(/^(?:arch\s+)?(.+?)(?:\s+user)?\s+ki\s+(?:pending\s+)?(?:reqest|request)(?:\s+(?:bata|btao|dikha|dikhhao|detail|details))?$/i);
 
 if (match) {
-    let user = match[1].trim();
+    let rawUser = match[1] || match[2] || match[3] || "";
+    let user = rawUser.replace(/\b(?:ka|ki|user)\b/gi, '').trim();
+
     if (user) {
         window.lastSearchedUser = user;
         showPendingRequest(user);
@@ -2560,9 +2563,9 @@ if (match) {
     return;
 }
 
-/* 3. APPROVE / ACTIVATE VOUCHER (With Name OR Direct Keywords + 5-Min Limit) */
+/* 3. APPROVE / ACTIVATE VOUCHER */
 
-// Option A: Jab User Name Bol Ke Activate Karein
+// Option A: With Name
 match = command.match(/^(?:arch\s*v\s+|arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)
      || command.match(/^(?:arch\s*v\s+|arch\s+)?(.+?)\s+(?:ka|ki)?\s*(?:voucher\s+)?(?:activate|active|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i);
 
@@ -2577,11 +2580,10 @@ if (match) {
     }
 }
 
-// Option B: Sirf Direct Keywords (No Name Spoken)
+// Option B: Direct Keywords Only (5-Min Limit + Memory)
 if (/^(?:arch\s*v\s+|arch\s+)?(?:activate|active|approve|approved)(?:\s+voucher)?$/i.test(command.trim())) {
     const pendingUsers = Object.keys(liveUsers || {}).filter(u => liveUsers[u]?.pendingRequest?.status === "pending");
 
-    // Step 1: 5-Minute Ke Andar Aayi Latest Request Approve Karein
     if (pendingUsers.length > 0) {
         const latestUser = pendingUsers.reduce((a, b) => (liveUsers[b]?.pendingRequest?.timestamp || 0) > (liveUsers[a]?.pendingRequest?.timestamp || 0) ? b : a);
         const reqTime = liveUsers[latestUser]?.pendingRequest?.timestamp || 0;
@@ -2593,7 +2595,6 @@ if (/^(?:arch\s*v\s+|arch\s+)?(?:activate|active|approve|approved)(?:\s+voucher)
         }
     }
 
-    // Step 2: Agar 5 Min Me Nayi Request Nahi Mili Par Memory Me User Hai
     if (window.lastSearchedUser) {
         approveUserRequest(window.lastSearchedUser);
         return;
@@ -2602,7 +2603,6 @@ if (/^(?:arch\s*v\s+|arch\s+)?(?:activate|active|approve|approved)(?:\s+voucher)
     addAIMessage("Pichle 5 min me koi request nahi aayi aur na koi user search hua hai.");
     return;
 }
-
 /* NEW WATCH DETAIL COMMAND (With Space/Hyphen Auto-Fix) */
 
 match = command.match(/^(?:arch\s*v\s+)?(.+?)(?:\s+(?:ki\s+)?detail|\s+detail\s+(?:bata|btao|dikha|dikhhao))?$/i);
