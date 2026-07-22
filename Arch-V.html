@@ -932,44 +932,52 @@ liveWatches = snapshot.val() || {};
 );
 
 
-/* ================= TEXT TO SPEECH (FAST & HUMAN-LIKE HINGLISH) ================= */
+/* ================= ULTRA-FAST & CLEAR HUMAN HINGLISH VOICE (GOOGLE TTS) ================= */
+
+let currentAudio = null;
 
 function speakText(text) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Pehle se chal rahe speech ko instant rokega
-
-        // Clean text (HTML tags aur special markdown hatane ke liye)
-        let cleanText = text.replace(/<[^>]*>?/gm, '');
-        cleanText = cleanText.replace(/[*_#]/g, ''); 
-
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-
-        // Language settings
-        utterance.lang = 'hi-IN'; // Hindi voice engine Hinglish ko sabse natural bolta hai
-        utterance.rate = 1.2;     // SPEED FAST (1.2 Fast & Crisp response ke liye)
-        utterance.pitch = 1.0;    // Natural Human Pitch
-
-        // Browser me se Best Google / Natural Hindi Voice select karna
-        const voices = window.speechSynthesis.getVoices();
-        
-        const bestVoice = voices.find(voice => 
-            voice.lang.includes('hi') && 
-            (voice.name.includes('Google') || voice.name.includes('Natural') || voice.name.includes('Swara') || voice.name.includes('Madhur'))
-        ) || voices.find(voice => voice.lang.includes('hi-IN'));
-
-        if (bestVoice) {
-            utterance.voice = bestVoice;
-        }
-
-        window.speechSynthesis.speak(utterance);
+    // 1. Agar pehle se kuch bol raha hai toh usko instant stop karo
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
     }
+
+    // 2. HTML tags aur extra space saaf karo
+    let cleanText = text.replace(/<[^>]*>?/gm, '');
+    cleanText = cleanText.replace(/[*_#]/g, '').trim();
+
+    if (!cleanText) return;
+
+    // 3. Text ko Google Translate Hindi TTS API URL me encode karo (Jo Hinglish ko sabse clear bolta hai)
+    const encodedText = encodeURIComponent(cleanText);
+    const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=hi&client=tw-ob`;
+
+    // 4. Audio Element banao
+    currentAudio = new Audio(audioUrl);
+
+    // 5. SPEED CONTROL (Fast speed ke liye 1.25 ya 1.3 set kiya hai)
+    currentAudio.playbackRate = 1.25;
+
+    // 6. Audio Play karo
+    currentAudio.play().catch(err => {
+        console.log("Audio playback error, fallback to browser TTS:", err);
+        // Fallback agar browser audio policy allow na kare
+        fallbackBrowserSpeech(cleanText);
+    });
 }
 
-// Chrome / Edge me voices fast load karne ke liye
-if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-    };
+/* ================= FALLBACK SPEECH (If Google TTS blocks) ================= */
+
+function fallbackBrowserSpeech(cleanText) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'hi-IN';
+        utterance.rate = 1.25; // High speed
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+    }
 }
 
 
