@@ -931,7 +931,7 @@ liveWatches = snapshot.val() || {};
 );
 
 
-/* ================= TEXT TO SPEECH ENGINE (PERFECT HINGLISH + ENGLISH) ================= */
+/* ================= GEMINI-STYLE VOICE ENGINE (NO NOISE) ================= */
 
 function stopSpeaking() {
     if ('speechSynthesis' in window) {
@@ -940,7 +940,7 @@ function stopSpeaking() {
 }
 
 function speakText(text) {
-    stopSpeaking(); // Purana speech instant stop karo
+    stopSpeaking(); 
 
     if (!('speechSynthesis' in window)) return;
 
@@ -951,14 +951,14 @@ function speakText(text) {
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
 
-    // Dynamic Voice Settings for Ultra-Clear Hinglish/English
-    utterance.lang = 'en-IN'; // Indian Accent for natural English & Hinglish mixture
-    utterance.rate = 1.15;    // High speed but clear
+    // Natural Gemini-like conversational Indian English tone
+    utterance.lang = 'en-IN'; 
+    utterance.rate = 1.18;    // Fast & energetic
     utterance.pitch = 1.0;
 
     const voices = window.speechSynthesis.getVoices();
     
-    // Auto-select Best Indian English / Natural Speech Voice
+    // Auto-Select Best Natural Voice
     const selectedVoice = voices.find(v => 
         (v.lang === 'en-IN' || v.lang === 'hi-IN') && 
         (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('India'))
@@ -1126,7 +1126,7 @@ return similar || null;
 }
 
 
-/* ================= COMMAND ENGINE ================= */
+/* ================= GEMINI DIALOGUE ENGINE ================= */
 
 function sendCommand(){
 
@@ -1144,16 +1144,15 @@ input.value="";
 let match;
 
 
-/* 1. GREETINGS RANDOMIZER MATCH */
+/* 1. GREETINGS GEMINI STYLE */
 
 if (/^(hi|hello|hello\s+bro|hi\s+bhai|hello\s+bhai|hi\s+bro)$/i.test(command)) {
 
     const variations = [
-        "Kese ho dear sir, bataiye me aapki kese meded ker sekta hu? Aaj kiska data handle kerna he ya kuch new add kerna he?",
-        "Hello sir, kaise hain aap? ARCH-V system ready hai. Bataiye, aaj kis user ka data check karna hai ya koi naya code add karna hai?",
-        "Welcome back, dear sir! Sab badhiya? Bataiye aaj database me kya operation handle karna hai ya kuch naya deploy karna hai?",
-        "Hi sir, system fully synchronized hai. Kaise hain aap? Bataiye aaj kiska data scan ya modify karna hai?",
-        "Hello brother! Kaise ho dear sir? Main ekdum ready hoon, bataiye aaj kiska data handle karna hai ya system me kya naya add karein?"
+        "Haan bhai, bolo! ARCH-V ekdum ready hai. Kiska data dekhna hai ya manage karna hai?",
+        "Hey! Sab mast? Bataiye aaj database me kya task complete karna hai?",
+        "Bolo brother! Direct batao kis user par work karna hai, main handle kar leta hoon.",
+        "Haan sir, main fully active hoon. Bataiye kiska details fetch karna hai?"
     ];
     
     const randomIndex = Math.floor(Math.random() * variations.length);
@@ -1162,16 +1161,16 @@ if (/^(hi|hello|hello\s+bro|hi\s+bhai|hello\s+bhai|hi\s+bro)$/i.test(command)) {
 }
 
 
-/* 2. DYNAMIC CASUAL TALK ROUTERS */
+/* 2. CASUAL ROUTERS */
 
 if (/^(kesa\s+he|kese\s+ho)$/i.test(command)) {
-    addAIMessage("Me thik hu aap betao kese ho kika database handle kerna he aaj");
+    addAIMessage("Main ekdum badhiya hoon bhai! Aap batao, aaj kiska database handle karein?");
     return;
 }
 
 
 if (/^(user\s+ka\s+data\s+bta|user\s+ki\s+detail\s+bta|user\s+ka\s+voucher\s+bta|user\s+ki\s+voucher\s+detail\s+bta|user\s+ki\s+pending\s+request\s+bta|user\s+ki\s+reqest\s+bta|data\s+bta|detail\s+bta|voucher\s+bta|request\s+bta|coin\s+bta|user\s+ke\s+coin\s+bta|watch\s+detail\s+bta|user\s+ki\s+watch\s+detail\s+bta|user\s+ka\s+name\s+bta|name\s+bta)$/i.test(command)) {
-    addAIMessage("aap jis bi user ka data chate he uska id name betaye fir me aapko uska current data bta paunga jo aapne muj se abi pucha");
+    addAIMessage("Bhai, user ka ID name toh batao! Tabhi toh unka data nikal kar dikhaunga.");
     return;
 }
 
@@ -1286,7 +1285,7 @@ if(possibleUser) {
     if(pendingUser) {
         approveUserRequest(pendingUser);
     } else {
-        addAIMessage("Kis user ki request approve karni hai? User ID saath me bolo");
+        addAIMessage("Kis user ki request approve karni hai? User ID name saath me bolo.");
     }
 }
 
@@ -1324,9 +1323,9 @@ return;
 }
 
 
-/* 4. FALLBACK REFUSAL MATRIX FOR INVALID TALK */
+/* 4. FALLBACK REFUSAL MATRIX */
 
-addAIMessage("maaf kijiyega muje yha database mange kerne ke liy benaya gya he na ki faltu ki baat kerne ke liy apne mudde pe aaye");
+addAIMessage("Bhai, main database management assistant hoon. Direct command do, main kaam kar deta hoon!");
 
 }
 
@@ -1340,7 +1339,7 @@ const username=findUser(searchName);
 if(!username){
 
 addAIMessage(
-"User "+searchName+" users database me nahi mila."
+"User "+searchName+" database me nahi mila."
 );
 
 return;
@@ -1353,7 +1352,7 @@ addAIMessage(
 
 username+" ka "+
 
-(full?"full Firebase data":"Firebase data mil gaya hai."),
+(full?"full data screen par hai.":"data fetch ho gaya hai."),
 
 `
 
@@ -1389,7 +1388,7 @@ const voucher=liveUsers[username]?.activeVoucher;
 if(!voucher){
 
 addAIMessage(
-username+" ka koi active voucher nahi hai."
+username+" ka koi active voucher nahi mila."
 );
 
 return;
@@ -1448,7 +1447,7 @@ return;
 
 addAIMessage(
 
-username+" ki pending voucher request aayi hai.",
+username+" ki pending request ye rahi:",
 
 `
 
@@ -1519,7 +1518,7 @@ return;
 if(request.status!=="pending"){
 
 addAIMessage(
-username+" ki request already "+request.status+" hai."
+username+" ki request pehle se hi "+request.status+" hai."
 );
 
 return;
@@ -1534,7 +1533,7 @@ await db.ref(
 
 addAIMessage(
 
-"Request approve ho gayi hai user "+username+" ki."
+"Done! Request approve ho gayi hai "+username+" ki."
 
 );
 
@@ -1588,7 +1587,7 @@ const coins=liveUsers[username].coins || 0;
 
 addAIMessage(
 
-username+" ke current coins "+coins+" hain.",
+username+" ke paas abhi "+coins+" coins hain.",
 
 coinButtons(username)
 
@@ -1704,7 +1703,7 @@ await db.ref(
 addAIMessage(
 
 username+
-" ke coins Firebase me "+
+" ke coins "+
 value+
 " kar diye gaye hain."
 
@@ -1909,10 +1908,26 @@ return html;
 }
 
 
-/* ================= AUTOMATIC ALWAYS-ON VOICE ENGINE WITH INTERRUPT ================= */
+/* ================= NOISELESS SILENT MIC RECOGNITION ================= */
 
 let recognition;
 let isMicActive = false;
+let audioCtx = null;
+
+// Dummy Audio Context Stream to keep browser audio pipe active & prevent system beep sound
+function keepAudioPipelineActive() {
+    try {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0.000001; // Silent audio stream
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+        }
+    } catch(e) {}
+}
 
 function startMicSafely() {
     if (!recognition) return;
@@ -1921,11 +1936,13 @@ function startMicSafely() {
         recognition.start();
         isMicActive = true;
     } catch (e) {
-        // Mic is already active
+        // Already active
     }
 }
 
 function initAutoVoice() {
+
+    keepAudioPipelineActive();
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -1936,7 +1953,7 @@ function initAutoVoice() {
 
     recognition = new SpeechRecognition();
     recognition.continuous = true;
-    recognition.interimResults = true; // Enabled for instant voice interruption
+    recognition.interimResults = true; 
     recognition.lang = 'en-US'; 
 
     recognition.onstart = function() {
@@ -1946,8 +1963,7 @@ function initAutoVoice() {
     };
 
     recognition.onspeechstart = function() {
-        // SMART INTERRUPT: User ne jaise hi bolna shuru kiya, AI ki aawaz FAURAN STOP ho jayegi
-        // Data screen se DILUTE nahi hoga!
+        // User speak interrupt without clearing chat screen
         stopSpeaking();
     };
 
@@ -1967,7 +1983,6 @@ function initAutoVoice() {
     };
 
     recognition.onerror = function(event) {
-        console.error("Mic Error:", event.error);
         if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
             document.getElementById("micErrorBanner").style.display = "block";
         }
@@ -1976,7 +1991,7 @@ function initAutoVoice() {
     recognition.onend = function() {
         isMicActive = false;
         if (!document.hidden) {
-            setTimeout(() => { startMicSafely(); }, 400);
+            setTimeout(() => { startMicSafely(); }, 200);
         }
     };
 
