@@ -2616,7 +2616,7 @@ if (/^(?:arch\s+)?(?:activate|activate\s+voucher|approve|approved)$/i.test(comma
     return;
 }
 
-/* APPROVE / ACTIVATE PATTERN WITH USER NAME */
+/* APPROVE / ACTIVATE VOUCHER (5-Min Latest Request Limit) */
 
 match = command.match(/^(?:arch\s+)?(?:activate|approve|approved)\s+(.+)$/i)
      || command.match(/^(?:arch\s+)?(.+?)\s+(?:activate|approve|approved)(?:\s+(?:karo|kero|ker\s+do|kardo|do))?$/i);
@@ -2631,6 +2631,43 @@ if (match) {
     if (targetUser) {
         window.lastSearchedUser = targetUser;
         approveUserRequest(targetUser);
+        return;
+    }
+}
+
+// JAB AAP SIRF "ACTIVATE" YA "APPROVE" BOLOGE (Without User Name)
+if (/^(?:arch\s+)?(?:activate|activate\s+voucher|approve|approved)$/i.test(command)) {
+
+    // All pending requests dhoondho
+    const pendingUsers = Object.keys(liveUsers || {}).filter(u => liveUsers[u]?.pendingRequest?.status === "pending");
+
+    if (pendingUsers.length > 0) {
+        // Sabse latest request (time ke hisab se) sort/find karo
+        const latestUser = pendingUsers.reduce((latest, current) => {
+            const timeA = liveUsers[latest]?.pendingRequest?.timestamp || liveUsers[latest]?.pendingRequest?.createdAt || 0;
+            const timeB = liveUsers[current]?.pendingRequest?.timestamp || liveUsers[current]?.pendingRequest?.createdAt || 0;
+            return timeB > timeA ? current : latest;
+        });
+
+        const requestTime = liveUsers[latestUser]?.pendingRequest?.timestamp || liveUsers[latestUser]?.pendingRequest?.createdAt;
+        const currentTime = Date.now();
+        const fiveMinutes = 5 * 60 * 1000; // 5 Minutes in milliseconds
+
+        // Check ki request pichle 5 minute me aayi hai ya nahi
+        if (requestTime && (currentTime - requestTime) <= fiveMinutes) {
+            window.lastSearchedUser = latestUser;
+            approveUserRequest(latestUser);
+            return;
+        } else {
+            addAIMessage("Koi bhi recent request (pichle 5 min me) nahi mili. Kripya user ka naam bol kar activate karein.");
+            return;
+        }
+    } else if (window.lastSearchedUser) {
+        // Agar koi pending list me nahi hai par pehle search kiya gaya user hai
+        approveUserRequest(window.lastSearchedUser);
+        return;
+    } else {
+        addAIMessage("Koi recent pending request nahi hai. User ka naam saath me bolein.");
         return;
     }
 }
