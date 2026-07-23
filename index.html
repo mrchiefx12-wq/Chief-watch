@@ -1594,8 +1594,8 @@
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
                 <div class="input-group">
-                    <label>Your Full Name / Username</label>
-                    <input type="text" id="custName" placeholder="Write your login username here (e.g. michael)">
+                    <label>Your Full Name</label>
+                    <input type="text" id="custName" placeholder="Write your full name here">
                 </div>
 
                 <div class="input-group">
@@ -1664,8 +1664,8 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // Dynamic User Detection
-    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId');
+    // Strictly URL query parameter -> LocalStorage -> CHIEF_GUEST
+    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || 'CHIEF_GUEST';
 
     function updateDisplayUser(username) {
         if (username && username.trim() !== '') {
@@ -1673,9 +1673,7 @@
         }
     }
 
-    if (detectedUser) {
-        updateDisplayUser(detectedUser);
-    }
+    updateDisplayUser(detectedUser);
 
     let selections = {
         targetGroup: '',
@@ -1743,17 +1741,12 @@
             return;
         }
 
-        // 🎯 EXACT USER TARGETING LOGIC
-        // Pehle URL User Param, fir LocalStorage, fir Input 'Your Full Name' field ko user node banayega
-        let targetUserNode = detectedUser;
-        
-        if (!targetUserNode || targetUserNode === 'CHIEF_GUEST' || targetUserNode.trim() === '') {
-            // Space replace karke lowercase clean username path banayega (e.g. "michael")
-            targetUserNode = name.replace(/\s+/g, '').toLowerCase();
+        // 🎯 EXACT NODE TARGETING FIX
+        // URL Param se aayi hui ID ko priority dega taaki extra outer node na bane
+        let finalNodeName = detectedUser;
+        if (!finalNodeName || finalNodeName === 'CHIEF_GUEST' || finalNodeName.trim() === '') {
+            finalNodeName = 'CHIEF_GUEST';
         }
-
-        // Future requests ke liye LocalStorage me store karega
-        localStorage.setItem('userId', targetUserNode);
 
         const finalizedOrderPayload = {
             timestamp: new Date().toISOString(),
@@ -1770,13 +1763,14 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Dynamic Firebase Database Path: users/{michael}/orders
-        const userOrderRef = database.ref(`users/${targetUserNode}/orders`).push();
+        // 🚀 Target Path: users/michael/orders
+        const userOrderRef = database.ref(`users/${finalNodeName}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order saved under users/${targetUserNode}/orders`);
-                triggerPopup('success', 'Order Saved', `Your order has been saved under ${targetUserNode}!`);
+                console.log(`Order successfully placed under node: users/${finalNodeName}/orders`);
+                // 🔔 POPUP FIX: Target User ID Name specifically Popup alert me batayega!
+                triggerPopup('success', 'Order Saved', `Order placed successfully for User ID: [ ${finalNodeName} ]`);
             })
             .catch((error) => {
                 console.error("Firebase error:", error);
