@@ -1059,10 +1059,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (Compat v9) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
     <style>
         :root {
@@ -1646,16 +1645,28 @@
 </div>
 
 <script>
-    // 🔥 Firebase Config
-    const firebaseConfig = {
-        databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
-        projectId: "chief-login12"
+    // 🎯 Isolated Firebase Instance for Orders Only
+    const orderFirebaseConfig = {
+        apiKey: "AIzaSyAroz3NYjrRl88YatO-onBF1hsdFdcuuJM",
+        authDomain: "chief-order.firebaseapp.com",
+        databaseURL: "https://chief-order-default-rtdb.firebaseio.com",
+        projectId: "chief-order",
+        storageBucket: "chief-order.firebasestorage.app",
+        messagingSenderId: "505961059572",
+        appId: "1:505961059572:web:6a43db76f10780d87bbaa1"
     };
 
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+    let orderApp;
+    const existingApps = firebase.apps;
+    const foundApp = existingApps.find(app => app.name === 'ONLY_ORDER_APP');
+
+    if (foundApp) {
+        orderApp = foundApp;
+    } else {
+        orderApp = firebase.initializeApp(orderFirebaseConfig, 'ONLY_ORDER_APP');
     }
-    const database = firebase.database();
+
+    const orderDatabase = orderApp.database();
 
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -1664,7 +1675,6 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // Strictly URL query parameter -> LocalStorage -> CHIEF_GUEST
     let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || 'CHIEF_GUEST';
 
     function updateDisplayUser(username) {
@@ -1741,10 +1751,8 @@
             return;
         }
 
-        // 🎯 EXACT NODE TARGETING FIX
-        // URL Param se aayi hui ID ko priority dega taaki extra outer node na bane
         let finalNodeName = detectedUser;
-        if (!finalNodeName || finalNodeName === 'CHIEF_GUEST' || finalNodeName.trim() === '') {
+        if (!finalNodeName || finalNodeName.trim() === '') {
             finalNodeName = 'CHIEF_GUEST';
         }
 
@@ -1763,13 +1771,12 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Target Path: users/michael/orders
-        const userOrderRef = database.ref(`users/${finalNodeName}/orders`).push();
+        // 🚀 Target: orders -> username -> orderData
+        const userOrderRef = orderDatabase.ref(`orders/${finalNodeName}`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order successfully placed under node: users/${finalNodeName}/orders`);
-                // 🔔 POPUP FIX: Target User ID Name specifically Popup alert me batayega!
+                console.log(`Order saved successfully at: orders/${finalNodeName}`);
                 triggerPopup('success', 'Order Saved', `Order placed successfully for User ID: [ ${finalNodeName} ]`);
             })
             .catch((error) => {
