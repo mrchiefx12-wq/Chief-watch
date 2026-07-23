@@ -2078,21 +2078,20 @@
             margin: 0;
         }
 
-        /* Standard Order Box */
         .order-item-box {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
             border-radius: 14px;
             margin-bottom: 14px;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease;
         }
 
         .order-item-box.open {
             border-color: var(--border);
         }
 
-        /* 🟢 Delivered / Completed Order Box Style */
+        /* 🟢 Delivered Box Style */
         .order-item-box.delivered {
             border: 1px solid var(--success) !important;
             background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, var(--surface-card) 100%);
@@ -2218,18 +2217,34 @@
             to { transform: rotate(360deg); }
         }
 
-        .total-price-display {
-            font-family: 'Cinzel', serif;
-            font-size: 1.25rem;
-            color: var(--gold);
-            font-weight: 700;
+        .price-breakdown {
+            font-size: 0.75rem;
+            color: var(--text-muted);
             margin-bottom: 6px;
         }
 
+        .price-calculation {
+            font-size: 0.8rem;
+            color: #DDD;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .total-price-display {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            font-weight: 700;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-top: 8px;
+            margin-top: 6px;
+        }
+
         .cod-tag {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
+            margin-top: 4px;
             letter-spacing: 0.5px;
         }
 
@@ -2272,7 +2287,6 @@
             border: 1px solid var(--gold);
         }
 
-        /* Delivered Step Active Colors */
         .tracking-step.delivered-step.active i {
             background: rgba(16, 185, 129, 0.2);
             color: var(--success);
@@ -2459,6 +2473,9 @@
 
 <script>
 
+    // Set to maintain open accordion state across live updates
+    const openOrderKeys = new Set();
+
     function detectCurrentUserId() {
         try {
             if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
@@ -2527,26 +2544,42 @@
 
                 validOrdersCount++;
 
-                const totalPrice = order.totalPrice;
-                const deliveryCharge = order.deliveryCharge || '0';
+                const totalPriceStr = order.totalPrice;
+                const deliveryChargeNum = parseFloat(order.deliveryCharge) || 0;
                 
                 const isPacked = order.isPacked || ['Packed', 'Shipped', 'Delivered'].includes(currentStatus);
                 const isShipped = order.isShipped || ['Shipped', 'Delivered'].includes(currentStatus);
                 const isDelivered = order.isDelivered || (currentStatus === 'Delivered');
 
-                let pricingBlock = !totalPrice ? `
-                    <div class="waiting-box">
-                        <div class="loading-circle"></div>
-                        <span>Waiting for total price from Admin...</span>
-                    </div>
-                ` : `
-                    <div class="total-price-display">₹${totalPrice}</div>
-                    <div class="cod-tag"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery &bull; Delivery: ₹${deliveryCharge}</div>
-                `;
+                // Price Calculation Breakdown Block
+                let pricingBlock = '';
+                if (!totalPriceStr) {
+                    pricingBlock = `
+                        <div class="waiting-box">
+                            <div class="loading-circle"></div>
+                            <span>Waiting for total price from Admin...</span>
+                        </div>
+                    `;
+                } else {
+                    const priceNum = parseFloat(totalPriceStr) || 0;
+                    const grandTotal = priceNum + deliveryChargeNum;
+
+                    pricingBlock = `
+                        <div class="price-calculation">
+                            Product Price: <b>₹${priceNum}</b> + Delivery Charge: <b>₹${deliveryChargeNum}</b>
+                        </div>
+                        <div class="total-price-display">
+                            Total Payable: ₹${grandTotal}
+                        </div>
+                        <div class="cod-tag">
+                            <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery Available
+                        </div>
+                    `;
+                }
 
                 let actionButtonsBlock = (!order.isConfirmed && currentStatus !== 'Confirmed' && !isPacked) ? `
                     <div class="action-buttons-group">
-                        ${totalPrice ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
+                        ${totalPriceStr ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
                         <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel Order</button>
                     </div>
                 ` : `
@@ -2561,11 +2594,15 @@
                     </div>
                 `;
 
+                // Check if this box was previously opened
+                const isOpenedBefore = openOrderKeys.has(orderKey);
+
                 const orderBox = document.createElement('div');
-                // 🟢 Dynamically add .delivered class if order is finished
-                orderBox.className = `order-item-box ${isDelivered ? 'delivered' : ''}`;
+                orderBox.setAttribute('data-order-key', orderKey);
+                orderBox.className = `order-item-box ${isDelivered ? 'delivered' : ''} ${isOpenedBefore ? 'open' : ''}`;
+                
                 orderBox.innerHTML = `
-                    <div class="order-header-bar" onclick="toggleOrderAccordion(this)">
+                    <div class="order-header-bar" onclick="toggleOrderAccordion(this, '${orderKey}')">
                         <div class="order-title-text">
                             <i class="${isDelivered ? 'fa-solid fa-circle-check' : 'fa-solid fa-clock-rotate-left'}"></i>
                             <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
@@ -2574,7 +2611,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </div>
                     </div>
-                    <div class="order-details-content">
+                    <div class="order-details-content" style="display: ${isOpenedBefore ? 'block' : 'none'};">
                         <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
                         <ul class="specs-list">
                             <li><span>Target Edition:</span><span>${order.targetSegment || 'Custom'}</span></li>
@@ -2616,7 +2653,8 @@
         `;
     }
 
-    window.toggleOrderAccordion = function(headerElement) {
+    // Toggle with state preservation (No Auto Collapse Fix)
+    window.toggleOrderAccordion = function(headerElement, key) {
         const parentBox = headerElement.parentElement;
         const content = parentBox.querySelector('.order-details-content');
         const isOpen = parentBox.classList.contains('open');
@@ -2627,9 +2665,12 @@
             if (details) details.style.display = 'none';
         });
 
+        openOrderKeys.clear();
+
         if (!isOpen) {
             parentBox.classList.add('open');
             if (content) content.style.display = 'block';
+            if (key) openOrderKeys.add(key);
         }
     };
 
