@@ -1593,7 +1593,7 @@
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
                 <div class="input-group">
-                    <label>Your Full Name / Username</label>
+                    <label>Your Full Name</label>
                     <input type="text" id="custName" placeholder="Write your full name here">
                 </div>
 
@@ -1645,7 +1645,7 @@
 </div>
 
 <script>
-    // 🎯 Primary Firebase Configuration (chief-login12)
+    // 🎯 Target Database: chief-login12
     const firebaseConfig = {
         apiKey: "AIzaSyBPg9unSvYAs_NI2CiIvJd69PtBt1hrr5I",
         authDomain: "chief-login12.firebaseapp.com",
@@ -1669,14 +1669,14 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // URL parameter check -> LocalStorage check -> Empty Fallback
+    // STRICT USER DETECTION
     let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || '';
 
     function updateDisplayUser(username) {
         if (username && username.trim() !== '') {
             document.getElementById('editionDisplay').innerText = `Edition: ${username} Pro`;
         } else {
-            document.getElementById('editionDisplay').innerText = `Edition: Guest Pro`;
+            document.getElementById('editionDisplay').innerText = `Edition: User Pro`;
         }
     }
 
@@ -1748,11 +1748,12 @@
             return;
         }
 
-        // 🎯 DYNAMIC NODE TARGETING LOGIC
-        // Priority: 1. URL Parameter -> 2. LocalStorage -> 3. Form Name (lowercase, spaces removed)
+        // 🎯 STRICT NODE SELECTION (NO FALLBACK TO FORM NAME FIELD)
         let activeUserNode = detectedUser;
-        if (!activeUserNode || activeUserNode.trim() === '' || activeUserNode === 'CHIEF_GUEST') {
-            activeUserNode = name.replace(/\s+/g, '').toLowerCase();
+
+        // Agar URL Param ya LocalStorage se naam nahi mil paaya, tab hi default CHIEF_GUEST lega (Form Name ko node nahi banayega)
+        if (!activeUserNode || activeUserNode.trim() === '') {
+            activeUserNode = 'CHIEF_GUEST';
         }
 
         const finalizedOrderPayload = {
@@ -1770,13 +1771,13 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Target path: users/{username}/orders
+        // 🚀 Target exact path: users/{michael}/orders
         const userOrderRef = database.ref(`users/${activeUserNode}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
                 console.log(`Order saved under users/${activeUserNode}/orders`);
-                triggerPopup('success', 'Order Saved', `Order placed successfully for User ID: [ ${activeUserNode} ]`);
+                triggerPopup('success', 'Order Saved', `Order placed successfully for User: [ ${activeUserNode} ]`);
             })
             .catch((error) => {
                 console.error("Firebase error:", error);
