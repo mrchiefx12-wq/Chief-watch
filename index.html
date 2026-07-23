@@ -2078,20 +2078,21 @@
             margin: 0;
         }
 
+        /* Standard Order Box */
         .order-item-box {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
             border-radius: 14px;
             margin-bottom: 14px;
             overflow: hidden;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .order-item-box.open {
             border-color: var(--border);
         }
 
-        /* 🟢 Delivered Box Style */
+        /* 🟢 Delivered / Completed Order Box Style */
         .order-item-box.delivered {
             border: 1px solid var(--success) !important;
             background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, var(--surface-card) 100%);
@@ -2217,28 +2218,18 @@
             to { transform: rotate(360deg); }
         }
 
-        .price-calculation {
-            font-size: 0.8rem;
-            color: #DDD;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
         .total-price-display {
             font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--gold);
             font-weight: 700;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
-            padding-top: 8px;
-            margin-top: 6px;
+            margin-bottom: 6px;
         }
 
         .cod-tag {
-            font-size: 0.65rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-top: 4px;
             letter-spacing: 0.5px;
         }
 
@@ -2281,6 +2272,7 @@
             border: 1px solid var(--gold);
         }
 
+        /* Delivered Step Active Colors */
         .tracking-step.delivered-step.active i {
             background: rgba(16, 185, 129, 0.2);
             color: var(--success);
@@ -2291,8 +2283,6 @@
             display: flex;
             gap: 10px;
             margin-top: 14px;
-            position: relative;
-            z-index: 10;
         }
 
         .btn-action {
@@ -2304,7 +2294,6 @@
             text-transform: uppercase;
             cursor: pointer;
             border: none;
-            touch-action: manipulation;
         }
 
         .btn-confirm {
@@ -2315,7 +2304,7 @@
         .btn-cancel {
             background: #181111;
             color: var(--error);
-            border: 1px solid rgba(255, 77, 77, 0.4);
+            border: 1px solid rgba(255, 77, 77, 0.3);
         }
 
         .terms-box {
@@ -2469,7 +2458,6 @@
 </div>
 
 <script>
-    
 
     function detectCurrentUserId() {
         try {
@@ -2500,34 +2488,6 @@
     const detectedUser = detectCurrentUserId();
     const vaultSub = document.getElementById('vaultSubtitle');
     if (vaultSub) vaultSub.innerText = `Registry History (${detectedUser})`;
-
-    // Explicitly binding Cancel and Confirm to Global Window Object for mobile accessibility
-    window.cancelOrder = function(orderKey) {
-        if (!database) return;
-        if (confirm("Are you sure you want to cancel this order?")) {
-            database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
-                status: 'Cancelled',
-                orderStatus: 'Cancelled'
-            }).then(() => {
-                triggerPopup('Order Cancelled', 'Your order has been cancelled.');
-            }).catch((error) => {
-                alert("Error: " + error.message);
-            });
-        }
-    };
-
-    window.confirmOrder = function(orderKey) {
-        if (!database) return;
-        database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
-            isConfirmed: true,
-            orderStatus: 'Confirmed',
-            status: 'Confirmed'
-        }).then(() => {
-            triggerPopup('Order Confirmed!', 'Thank you. Your watch is locked for processing.');
-        }).catch((error) => {
-            alert("Error: " + error.message);
-        });
-    };
 
     if (database) {
         const ordersRef = database.ref(`users/${detectedUser}/orders`);
@@ -2567,42 +2527,27 @@
 
                 validOrdersCount++;
 
-                const totalPriceStr = order.totalPrice;
-                const deliveryChargeNum = parseFloat(order.deliveryCharge) || 0;
+                const totalPrice = order.totalPrice;
+                const deliveryCharge = order.deliveryCharge || '0';
                 
                 const isPacked = order.isPacked || ['Packed', 'Shipped', 'Delivered'].includes(currentStatus);
                 const isShipped = order.isShipped || ['Shipped', 'Delivered'].includes(currentStatus);
                 const isDelivered = order.isDelivered || (currentStatus === 'Delivered');
 
-                let pricingBlock = '';
-                if (!totalPriceStr) {
-                    pricingBlock = `
-                        <div class="waiting-box">
-                            <div class="loading-circle"></div>
-                            <span>Waiting for total price from Admin...</span>
-                        </div>
-                    `;
-                } else {
-                    const priceNum = parseFloat(totalPriceStr) || 0;
-                    const grandTotal = priceNum + deliveryChargeNum;
-
-                    pricingBlock = `
-                        <div class="price-calculation">
-                            Product Price: <b>₹${priceNum}</b> + Delivery Charge: <b>₹${deliveryChargeNum}</b>
-                        </div>
-                        <div class="total-price-display">
-                            Total Payable: ₹${grandTotal}
-                        </div>
-                        <div class="cod-tag">
-                            <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery Available
-                        </div>
-                    `;
-                }
+                let pricingBlock = !totalPrice ? `
+                    <div class="waiting-box">
+                        <div class="loading-circle"></div>
+                        <span>Waiting for total price from Admin...</span>
+                    </div>
+                ` : `
+                    <div class="total-price-display">₹${totalPrice}</div>
+                    <div class="cod-tag"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery &bull; Delivery: ₹${deliveryCharge}</div>
+                `;
 
                 let actionButtonsBlock = (!order.isConfirmed && currentStatus !== 'Confirmed' && !isPacked) ? `
                     <div class="action-buttons-group">
-                        ${totalPriceStr ? `<button class="btn-action btn-confirm" onclick="window.confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
-                        <button class="btn-action btn-cancel" onclick="window.cancelOrder('${orderKey}')">Cancel Order</button>
+                        ${totalPrice ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
+                        <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel Order</button>
                     </div>
                 ` : `
                     <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
@@ -2616,14 +2561,11 @@
                     </div>
                 `;
 
-                const isOpenedBefore = openOrderKeys.has(orderKey);
-
                 const orderBox = document.createElement('div');
-                orderBox.setAttribute('data-order-key', orderKey);
-                orderBox.className = `order-item-box ${isDelivered ? 'delivered' : ''} ${isOpenedBefore ? 'open' : ''}`;
-                
+                // 🟢 Dynamically add .delivered class if order is finished
+                orderBox.className = `order-item-box ${isDelivered ? 'delivered' : ''}`;
                 orderBox.innerHTML = `
-                    <div class="order-header-bar" onclick="toggleOrderAccordion(this, '${orderKey}')">
+                    <div class="order-header-bar" onclick="toggleOrderAccordion(this)">
                         <div class="order-title-text">
                             <i class="${isDelivered ? 'fa-solid fa-circle-check' : 'fa-solid fa-clock-rotate-left'}"></i>
                             <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
@@ -2632,7 +2574,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </div>
                     </div>
-                    <div class="order-details-content" style="display: ${isOpenedBefore ? 'block' : 'none'};">
+                    <div class="order-details-content">
                         <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
                         <ul class="specs-list">
                             <li><span>Target Edition:</span><span>${order.targetSegment || 'Custom'}</span></li>
@@ -2674,7 +2616,7 @@
         `;
     }
 
-    window.toggleOrderAccordion = function(headerElement, key) {
+    window.toggleOrderAccordion = function(headerElement) {
         const parentBox = headerElement.parentElement;
         const content = parentBox.querySelector('.order-details-content');
         const isOpen = parentBox.classList.contains('open');
@@ -2685,12 +2627,9 @@
             if (details) details.style.display = 'none';
         });
 
-        openOrderKeys.clear();
-
         if (!isOpen) {
             parentBox.classList.add('open');
             if (content) content.style.display = 'block';
-            if (key) openOrderKeys.add(key);
         }
     };
 
@@ -2702,6 +2641,29 @@
         overlay.classList.add('show');
         setTimeout(() => { overlay.classList.remove('show'); }, 2000);
     }
+
+    window.cancelOrder = function(orderKey) {
+        if (!database) return;
+        if(confirm("Are you sure you want to cancel this custom order?")) {
+            database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
+                status: 'Cancelled',
+                orderStatus: 'Cancelled'
+            }).then(() => {
+                triggerPopup('Order Cancelled', 'Your order has been removed from active registries.');
+            });
+        }
+    };
+
+    window.confirmOrder = function(orderKey) {
+        if (!database) return;
+        database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
+            isConfirmed: true,
+            orderStatus: 'Confirmed',
+            status: 'Confirmed'
+        }).then(() => {
+            triggerPopup('Order Confirmed!', 'Thank you. Your watch is now locked for master crafting.');
+        });
+    };
 </script>
 
 </body>
