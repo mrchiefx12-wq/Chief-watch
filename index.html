@@ -1961,9 +1961,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CHIEF Order History Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CHIEF Order Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -1971,340 +1971,321 @@
 
     <style>
         :root {
-            --gold: #F5C542;
-            --dark-gold: #C69524;
-            --gold-gradient: linear-gradient(135deg, #F5C542 0%, #D4AF37 50%, #997515 100%);
-            --black: #030303;
-            --surface: #0E0E0E;
-            --surface-card: #141414;
-            --border: rgba(245, 197, 66, 0.25);
-            --border-subtle: rgba(255, 255, 255, 0.1);
-            --text-main: #FFFFFF;
-            --text-muted: #AAAAAA;
-            --error: #FF4D4D;
+            --accent-gold: #F3C649;
+            --gold-gradient: linear-gradient(135deg, #FFE289 0%, #F3C649 50%, #B8881A 100%);
+            --bg-black: #08080A;
+            --card-bg: #121216;
+            --card-inner: #191920;
+            --border-glow: rgba(243, 198, 73, 0.22);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --text-primary: #FFFFFF;
+            --text-secondary: #9E9EA8;
+            --danger: #FF455B;
+            --danger-bg: rgba(255, 69, 91, 0.12);
             --success: #10B981;
+            --success-bg: rgba(16, 185, 129, 0.12);
         }
 
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
         }
 
-        html, body {
-            background-color: var(--black) !important;
-            color: var(--text-main);
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-primary);
             font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0 !important;
-            padding: 0 !important;
             width: 100%;
-            height: 100%;
-            overflow-y: auto !important;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        .history-wrapper-outer {
+        .app-viewport {
             width: 100%;
+            max-width: 440px;
             min-height: 100vh;
-            padding: 20px 14px 40px 14px;
+            padding: clamp(16px, 4vw, 24px) clamp(12px, 3.5vw, 18px) 40px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .history-container {
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .header {
+        /* Header Styling */
+        .app-header {
             text-align: center;
-            margin-bottom: 24px;
-            padding-top: 10px;
+            margin-bottom: 20px;
+            padding: 10px 0;
         }
 
-        .header h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.85rem;
-            letter-spacing: 6px;
+        .brand-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 5vw, 1.8rem);
+            letter-spacing: 5px;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0;
             font-weight: 700;
-        }
-
-        .header p {
-            letter-spacing: 2.5px;
-            font-size: 0.65rem;
-            color: var(--text-muted);
             text-transform: uppercase;
-            margin: 8px 0 0 0;
-            font-weight: 500;
         }
 
-        .loading-box {
-            background: var(--surface-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 24px;
-            margin-bottom: 14px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-        }
-
-        .empty-state-card {
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 30px 16px;
-            text-align: center;
-            margin-bottom: 14px;
-        }
-
-        .empty-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            color: var(--gold);
-            font-weight: 700;
+        .brand-subtitle {
+            font-size: clamp(0.6rem, 2.2vw, 0.7rem);
             letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .empty-description {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        .order-item-box {
-            background: var(--surface-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            margin-bottom: 14px;
-            overflow: hidden;
-            transition: border-color 0.3s ease;
-        }
-
-        .order-item-box.open {
-            border-color: var(--border);
-        }
-
-        /* 🟢 Delivered Box Style */
-        .order-item-box.delivered {
-            border: 1px solid var(--success) !important;
-            background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, var(--surface-card) 100%);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
-        }
-
-        .order-item-box.delivered .order-title-text i {
-            color: var(--success) !important;
-        }
-
-        .order-item-box.delivered .order-toggle-icon {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--success);
-        }
-
-        .order-header-bar {
-            padding: 15px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-            background: var(--surface);
-        }
-
-        .order-title-text {
-            color: var(--text-main);
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .order-title-text i {
-            color: var(--gold);
-        }
-
-        .order-toggle-icon {
-            color: var(--gold);
-            font-size: 0.8rem;
-            transition: transform 0.3s ease;
-            background: rgba(245, 197, 66, 0.1);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .order-item-box.open .order-toggle-icon {
-            transform: rotate(180deg);
-        }
-
-        .order-details-content {
-            display: none;
-            padding: 16px;
-            background: var(--surface-card);
-            border-top: 1px solid var(--border-subtle);
-        }
-
-        .sub-section-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.72rem;
-            color: var(--gold);
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            margin-top: 4px;
+            color: var(--text-secondary);
             text-transform: uppercase;
-        }
-
-        .specs-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 16px 0;
-        }
-
-        .specs-list li {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 6px;
-        }
-
-        .specs-list li span:last-child {
-            color: var(--text-main);
+            margin-top: 4px;
             font-weight: 600;
         }
 
-        .pricing-status-box {
-            background: #090909;
+        /* Loader & Empty State */
+        .status-card {
+            background: var(--card-bg);
             border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 16px;
+            border-radius: 16px;
+            padding: 28px 16px;
             text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
         }
 
-        .waiting-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: var(--gold);
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .loading-circle {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(245, 197, 66, 0.2);
-            border-top-color: var(--gold);
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(243, 198, 73, 0.2);
+            border-top-color: var(--accent-gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+            margin: 0 auto 10px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .price-calculation {
-            font-size: 0.8rem;
-            color: #DDD;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+        /* Order Cards */
+        .order-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .total-price-display {
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            color: var(--gold);
+        .order-card.open {
+            border-color: var(--border-glow);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .order-card.delivered {
+            border-color: rgba(16, 185, 129, 0.4) !important;
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--card-bg) 100%);
+        }
+
+        .order-header {
+            padding: clamp(12px, 3.5vw, 16px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            background: var(--card-bg);
+        }
+
+        .order-title {
+            font-size: clamp(0.8rem, 2.8vw, 0.88rem);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+
+        .order-title i {
+            color: var(--accent-gold);
+            font-size: 0.95rem;
+        }
+
+        .order-card.delivered .order-title i {
+            color: var(--success);
+        }
+
+        .chevron-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .order-card.open .chevron-icon {
+            transform: rotate(180deg);
+            color: var(--accent-gold);
+            background: rgba(243, 198, 73, 0.12);
+        }
+
+        /* Order Content */
+        .order-body {
+            display: none;
+            padding: clamp(14px, 3.5vw, 18px);
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .specs-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: clamp(0.72rem, 2.5vw, 0.78rem);
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .spec-item span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .spec-item span:last-child {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Pricing Box */
+        .price-card {
+            background: var(--card-inner);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 12px 14px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .price-breakdown {
+            font-size: clamp(0.72rem, 2.5vw, 0.78rem);
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .price-breakdown b {
+            color: var(--text-primary);
+        }
+
+        .grand-total {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+            color: var(--accent-gold);
             font-weight: 700;
             border-top: 1px dashed rgba(255, 255, 255, 0.1);
             padding-top: 8px;
             margin-top: 6px;
         }
 
-        .cod-tag {
-            font-size: 0.65rem;
-            color: var(--text-muted);
+        .cod-badge {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
             text-transform: uppercase;
             margin-top: 4px;
             letter-spacing: 0.5px;
         }
 
-        .tracking-timeline {
-            margin: 12px 0 4px 0;
-            padding: 0;
+        /* Timeline Tracker */
+        .timeline {
             list-style: none;
+            margin-top: 10px;
         }
 
-        .tracking-step {
+        .timeline-step {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 0.7rem;
+            gap: 10px;
+            font-size: 0.68rem;
             color: #555;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
             font-weight: 600;
             text-transform: uppercase;
         }
 
-        .tracking-step.active {
-            color: var(--text-main);
+        .timeline-step.active {
+            color: var(--text-primary);
         }
 
-        .tracking-step i {
-            font-size: 0.85rem;
-            width: 24px;
-            height: 24px;
-            background: #1a1a1a;
+        .timeline-step i {
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.75rem;
             color: #555;
         }
 
-        .tracking-step.active i {
-            background: rgba(245, 197, 66, 0.15);
-            color: var(--gold);
-            border: 1px solid var(--gold);
+        .timeline-step.active i {
+            background: rgba(243, 198, 73, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
         }
 
-        .tracking-step.delivered-step.active i {
-            background: rgba(16, 185, 129, 0.2);
+        .timeline-step.delivered-step.active i {
+            background: var(--success-bg);
             color: var(--success);
             border: 1px solid var(--success);
         }
 
-        .action-buttons-group {
+        /* Buttons */
+        .actions-group {
             display: flex;
             gap: 10px;
             margin-top: 14px;
-            position: relative;
-            z-index: 10;
         }
 
-        .btn-action {
+        .btn {
             flex: 1;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
-            cursor: pointer;
+            letter-spacing: 0.5px;
             border: none;
-            touch-action: manipulation;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn-confirm {
@@ -2313,242 +2294,204 @@
         }
 
         .btn-cancel {
-            background: #181111;
-            color: var(--error);
-            border: 1px solid rgba(255, 77, 77, 0.4);
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid rgba(255, 69, 91, 0.3);
         }
 
-        .terms-box {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            background: #090909;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 14px;
-        }
-
-        .chief-code-box {
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-            text-align: center;
-        }
-
-        .chief-code-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.8rem;
-            color: var(--gold);
-            letter-spacing: 2px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .chief-code-desc {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        .luxury-footer {
-            text-align: center;
-            margin-top: 24px;
-            padding-bottom: 10px;
-        }
-
-        .footer-tag {
-            font-family: 'Cinzel', serif;
-            font-size: 0.6rem;
-            letter-spacing: 2.5px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin: 0 0 4px 0;
-        }
-
-        .footer-copy {
-            font-size: 0.52rem;
-            color: #666;
-            text-transform: uppercase;
-            margin: 0;
-        }
-
-        .luxury-popup-overlay {
+        /* Custom Modal Popup */
+        .modal-backdrop {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             z-index: 9999;
-            opacity: 0; pointer-events: none;
+            opacity: 0;
+            pointer-events: none;
             transition: opacity 0.2s ease;
+            padding: 20px;
         }
 
-        .luxury-popup-overlay.show {
+        .modal-backdrop.active {
             opacity: 1;
             pointer-events: auto;
         }
 
-        .luxury-popup-card {
-            background: #141414;
-            border: 1px solid var(--border);
-            padding: 24px 20px;
-            border-radius: 16px;
-            text-align: center;
+        .modal-box {
+            background: #16161D;
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 22px 18px;
+            width: 100%;
             max-width: 320px;
-            width: 85%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        .popup-icon {
-            font-size: 2.2rem;
-            color: var(--gold);
+        .modal-icon {
+            font-size: 2rem;
+            color: var(--danger);
             margin-bottom: 10px;
         }
 
-        .popup-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.05rem;
-            color: var(--text-main);
-            margin-bottom: 8px;
+        .modal-title {
+            font-size: 1rem;
             font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
         }
 
-        .popup-msg {
+        .modal-desc {
             font-size: 0.75rem;
-            line-height: 1.5;
-            color: var(--text-muted);
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: 18px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.72rem;
+            cursor: pointer;
+        }
+
+        .btn-danger-confirm {
+            background: var(--danger);
+            color: #FFF;
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.72rem;
+            cursor: pointer;
+        }
+
+        /* Footer Info Box */
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            padding: 14px;
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .info-card-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .info-card-text {
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .app-footer {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 16px;
+        }
+
+        .footer-tag {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
 
-<div class="history-wrapper-outer">
-    <div class="history-container">
-        
-        <div class="header">
-            <h1>CHIEF</h1>
-            <p id="vaultSubtitle">Private Registry History</p>
-        </div>
+<div class="app-viewport">
+    
+    <header class="app-header">
+        <div class="brand-logo">CHIEF</div>
+        <div class="brand-subtitle" id="userVaultTag">Order History</div>
+    </header>
 
-        <div id="ordersContainer">
-            <div class="loading-box" id="loaderBox">
-                <div class="loading-circle" style="margin: 0 auto 8px auto;"></div>
-                Loading vault history...
-            </div>
+    <main id="ordersListContainer">
+        <div class="status-card" id="loadingState">
+            <div class="spinner"></div>
+            Loading history...
         </div>
+    </main>
 
-        <div class="chief-code-box">
-            <div class="chief-code-title"><i class="fa-solid fa-fingerprint"></i> CHIEF CODE</div>
-            <p class="chief-code-desc">
-                Your watch features a secret CHIEF CODE that will be revealed upon receiving your order. We hope your timepiece receives a unique and rare serial number.
-            </p>
-        </div>
-
-        <div class="luxury-footer">
-            <p class="footer-tag">MR CHIEF INDIA</p>
-            <p class="footer-copy">© 2026 Secure Firebase Vault</p>
-        </div>
-
+    <div class="info-card">
+        <div class="info-card-title"><i class="fa-solid fa-fingerprint"></i> CHIEF CODE</div>
+        <p class="info-card-text">
+            Your watch features a secret CHIEF CODE that will be revealed upon receiving your order.
+        </p>
     </div>
+
+    <footer class="app-footer">
+        <div class="footer-tag">MR CHIEF INDIA &bull; 2026</div>
+    </footer>
+
 </div>
 
-<div class="luxury-popup-overlay" id="luxuryPopup">
-    <div class="luxury-popup-card">
-        <div class="popup-icon"><i class="fa-solid fa-circle-check"></i></div>
-        <div class="popup-title" id="popupTitle">Success</div>
-        <div class="popup-msg" id="popupMsg">Action completed successfully.</div>
+<div class="modal-backdrop" id="cancelModal">
+    <div class="modal-box">
+        <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="modal-title">Cancel Order?</div>
+        <div class="modal-desc">This action will remove your custom order from Firebase registry permanently.</div>
+        <div class="modal-buttons">
+            <button class="btn-secondary" onclick="closeCancelModal()">Keep Order</button>
+            <button class="btn-danger-confirm" id="confirmDeleteBtn">Yes, Cancel</button>
+        </div>
     </div>
 </div>
 
 <script>
+    const openKeys = new Set();
+    let targetOrderKeyToDelete = null;
 
-    const openOrderKeys = new Set();
-
-    function detectCurrentUserId() {
+    function detectUserId() {
         try {
             if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
-                var bridgeUid = window.AndroidBridge.getUserId();
-                if (bridgeUid && bridgeUid.trim() !== "" && bridgeUid !== "null") return bridgeUid;
+                let uid = window.AndroidBridge.getUserId();
+                if (uid && uid.trim() !== "" && uid !== "null") return uid;
             }
-            var storedUid = localStorage.getItem('chief_user_id');
-            if (storedUid && storedUid.trim() !== "" && storedUid !== "null") return storedUid;
+            let stored = localStorage.getItem('chief_user_id');
+            if (stored && stored.trim() !== "" && stored !== "null") return stored;
 
-            let name = 'user';
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            let results = regex.exec(location.search);
-            if (results !== null) {
-                let urlUid = decodeURIComponent(results[1].replace(/\+/g, ' '));
-                if (urlUid && urlUid.trim() !== "") return urlUid;
-            }
-        } catch (e) {
-            console.log("Detection error:", e);
-        }
+            let urlParams = new URLSearchParams(window.location.search);
+            let urlUid = urlParams.get('user');
+            if (urlUid && urlUid.trim() !== "") return urlUid;
+        } catch(e) {}
 
-        let newUid = 'USER_' + Math.floor(100000 + Math.random() * 900000);
-        localStorage.setItem('chief_user_id', newUid);
-        return newUid;
+        let createdUid = 'USER_' + Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('chief_user_id', createdUid);
+        return createdUid;
     }
 
-    const detectedUser = detectCurrentUserId();
-    const vaultSub = document.getElementById('vaultSubtitle');
-    if (vaultSub) vaultSub.innerText = `Registry History (${detectedUser})`;
-
-    // Explicitly binding Cancel and Confirm to Global Window Object for mobile accessibility
-    window.cancelOrder = function(orderKey) {
-        if (!database) return;
-        if (confirm("Are you sure you want to cancel this order?")) {
-            database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
-                status: 'Cancelled',
-                orderStatus: 'Cancelled'
-            }).then(() => {
-                triggerPopup('Order Cancelled', 'Your order has been cancelled.');
-            }).catch((error) => {
-                alert("Error: " + error.message);
-            });
-        }
-    };
-
-    window.confirmOrder = function(orderKey) {
-        if (!database) return;
-        database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
-            isConfirmed: true,
-            orderStatus: 'Confirmed',
-            status: 'Confirmed'
-        }).then(() => {
-            triggerPopup('Order Confirmed!', 'Thank you. Your watch is locked for processing.');
-        }).catch((error) => {
-            alert("Error: " + error.message);
-        });
-    };
+    const currentUserId = detectUserId();
+    document.getElementById('userVaultTag').innerText = `VAULT HISTORY (${currentUserId})`;
 
     if (database) {
-        const ordersRef = database.ref(`users/${detectedUser}/orders`);
-        let isDataLoaded = false;
-
-        setTimeout(() => {
-            if (!isDataLoaded) {
-                const container = document.getElementById('ordersContainer');
-                if (container && container.querySelector('#loaderBox')) {
-                    showEmptyState(container);
-                }
-            }
-        }, 2500);
-
-        ordersRef.off();
-        ordersRef.on('value', (snapshot) => {
-            isDataLoaded = true;
-            const container = document.getElementById('ordersContainer');
+        const ref = database.ref(`users/${currentUserId}/orders`);
+        
+        ref.on('value', (snapshot) => {
+            const container = document.getElementById('ordersListContainer');
             if (!container) return;
-
             container.innerHTML = '';
 
             if (!snapshot.exists()) {
@@ -2556,153 +2499,149 @@
                 return;
             }
 
-            const ordersData = snapshot.val();
-            let validOrdersCount = 0;
-            const keys = Object.keys(ordersData).reverse();
+            const orders = snapshot.val();
+            const keys = Object.keys(orders).reverse();
+            let activeCount = 0;
 
-            keys.forEach((orderKey) => {
-                const order = ordersData[orderKey];
-                
-                const currentStatus = order.orderStatus || order.status || 'Pending';
-                if (currentStatus === 'Cancelled') return;
+            keys.forEach(key => {
+                const item = orders[key];
+                const status = item.orderStatus || item.status || 'Pending';
+                if (status === 'Cancelled') return;
 
-                validOrdersCount++;
+                activeCount++;
+                const isDelivered = item.isDelivered || (status === 'Delivered');
+                const isPacked = item.isPacked || ['Packed', 'Shipped', 'Delivered'].includes(status);
+                const isShipped = item.isShipped || ['Shipped', 'Delivered'].includes(status);
 
-                const totalPriceStr = order.totalPrice;
-                const deliveryChargeNum = parseFloat(order.deliveryCharge) || 0;
-                
-                const isPacked = order.isPacked || ['Packed', 'Shipped', 'Delivered'].includes(currentStatus);
-                const isShipped = order.isShipped || ['Shipped', 'Delivered'].includes(currentStatus);
-                const isDelivered = order.isDelivered || (currentStatus === 'Delivered');
+                const price = parseFloat(item.totalPrice) || 0;
+                const delivery = parseFloat(item.deliveryCharge) || 0;
+                const grandTotal = price + delivery;
 
-                let pricingBlock = '';
-                if (!totalPriceStr) {
-                    pricingBlock = `
-                        <div class="waiting-box">
-                            <div class="loading-circle"></div>
-                            <span>Waiting for total price from Admin...</span>
+                let pricingHTML = '';
+                if (!item.totalPrice) {
+                    pricingHTML = `
+                        <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:var(--accent-gold); font-size:0.72rem;">
+                            <div class="spinner" style="margin:0;"></div> Waiting for Admin Pricing...
                         </div>
                     `;
                 } else {
-                    const priceNum = parseFloat(totalPriceStr) || 0;
-                    const grandTotal = priceNum + deliveryChargeNum;
-
-                    pricingBlock = `
-                        <div class="price-calculation">
-                            Product Price: <b>₹${priceNum}</b> + Delivery Charge: <b>₹${deliveryChargeNum}</b>
-                        </div>
-                        <div class="total-price-display">
-                            Total Payable: ₹${grandTotal}
-                        </div>
-                        <div class="cod-tag">
-                            <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery Available
-                        </div>
+                    pricingHTML = `
+                        <div class="price-breakdown">Product: <b>₹${price}</b> + Delivery: <b>₹${delivery}</b></div>
+                        <div class="grand-total">Total Payable: ₹${grandTotal}</div>
+                        <div class="cod-badge"><i class="fa-solid fa-truck-ramp-box"></i> Cash On Delivery</div>
                     `;
                 }
 
-                let actionButtonsBlock = (!order.isConfirmed && currentStatus !== 'Confirmed' && !isPacked) ? `
-                    <div class="action-buttons-group">
-                        ${totalPriceStr ? `<button class="btn-action btn-confirm" onclick="window.confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
-                        <button class="btn-action btn-cancel" onclick="window.cancelOrder('${orderKey}')">Cancel Order</button>
+                let actionsHTML = (!item.isConfirmed && status !== 'Confirmed' && !isPacked) ? `
+                    <div class="actions-group">
+                        ${item.totalPrice ? `<button class="btn btn-confirm" onclick="confirmOrder('${key}')"><i class="fa-solid fa-check"></i> Confirm Order</button>` : ''}
+                        <button class="btn btn-cancel" onclick="openCancelModal('${key}')"><i class="fa-solid fa-xmark"></i> Cancel Order</button>
                     </div>
                 ` : `
-                    <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
-                        <div class="sub-section-title"><i class="fa-solid fa-truck-fast"></i> Order Tracking Pipeline</div>
-                        <ul class="tracking-timeline">
-                            <li class="tracking-step active"><i class="fa-solid fa-circle-check"></i> Confirmed by User</li>
-                            <li class="tracking-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box-archive"></i> Item Packed in Vault</li>
-                            <li class="tracking-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched / Shipped</li>
-                            <li class="tracking-step delivered-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-circle-check"></i> Successfully Delivered</li>
+                    <div style="margin-top: 12px; border-top: 1px dashed var(--border-subtle); padding-top: 10px;">
+                        <div class="section-label"><i class="fa-solid fa-truck-fast"></i> Order Tracking</div>
+                        <ul class="timeline">
+                            <li class="timeline-step active"><i class="fa-solid fa-check"></i> Confirmed</li>
+                            <li class="timeline-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box"></i> Packed in Vault</li>
+                            <li class="timeline-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched</li>
+                            <li class="timeline-step delivered-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-circle-check"></i> Delivered</li>
                         </ul>
                     </div>
                 `;
 
-                const isOpenedBefore = openOrderKeys.has(orderKey);
+                const isOpen = openKeys.has(key);
+                const card = document.createElement('div');
+                card.className = `order-card ${isDelivered ? 'delivered' : ''} ${isOpen ? 'open' : ''}`;
 
-                const orderBox = document.createElement('div');
-                orderBox.setAttribute('data-order-key', orderKey);
-                orderBox.className = `order-item-box ${isDelivered ? 'delivered' : ''} ${isOpenedBefore ? 'open' : ''}`;
-                
-                orderBox.innerHTML = `
-                    <div class="order-header-bar" onclick="toggleOrderAccordion(this, '${orderKey}')">
-                        <div class="order-title-text">
+                card.innerHTML = `
+                    <div class="order-header" onclick="toggleCard(this, '${key}')">
+                        <div class="order-title">
                             <i class="${isDelivered ? 'fa-solid fa-circle-check' : 'fa-solid fa-clock-rotate-left'}"></i>
-                            <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
+                            <span>${item.ownerName || 'Custom Edition'} &bull; ${item.caseShape || 'Timepiece'}</span>
                         </div>
-                        <div class="order-toggle-icon">
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
+                        <div class="chevron-icon"><i class="fa-solid fa-chevron-down"></i></div>
                     </div>
-                    <div class="order-details-content" style="display: ${isOpenedBefore ? 'block' : 'none'};">
-                        <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
-                        <ul class="specs-list">
-                            <li><span>Target Edition:</span><span>${order.targetSegment || 'Custom'}</span></li>
-                            <li><span>Case Shape:</span><span>${order.caseShape || 'Standard'}</span></li>
-                            <li><span>Dial Color:</span><span>${order.dialColor || 'Default'}</span></li>
-                            <li><span>Top Border:</span><span>${order.topBorderStyle || 'N/A'}</span></li>
-                            <li><span>Strap Material:</span><span>${order.strapMaterial || 'Standard'}</span></li>
-                            <li><span>Mechanism:</span><span>${order.mechanismInsideLook || 'Analog'}</span></li>
-                            <li><span>Location:</span><span>${order.ownerLocation || 'India'}</span></li>
-                        </ul>
-
-                        <div class="sub-section-title"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
-                        <div class="pricing-status-box">${pricingBlock}</div>
-                        ${actionButtonsBlock}
-                        <div class="terms-box">
-                            <b>Terms & Conditions:</b> All Chief luxury timepieces are precision-crafted custom editions. Production initiates immediately upon confirmation.
+                    <div class="order-body" style="display: ${isOpen ? 'block' : 'none'};">
+                        <div class="section-label"><i class="fa-solid fa-sliders"></i> Specifications</div>
+                        <div class="specs-grid">
+                            <div class="spec-item"><span>Target Edition:</span><span>${item.targetSegment || 'Custom'}</span></div>
+                            <div class="spec-item"><span>Case Shape:</span><span>${item.caseShape || 'Standard'}</span></div>
+                            <div class="spec-item"><span>Dial Color:</span><span>${item.dialColor || 'Default'}</span></div>
+                            <div class="spec-item"><span>Strap Material:</span><span>${item.strapMaterial || 'Standard'}</span></div>
+                            <div class="spec-item"><span>Mechanism:</span><span>${item.mechanismInsideLook || 'Analog'}</span></div>
                         </div>
+                        <div class="section-label"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
+                        <div class="price-card">${pricingHTML}</div>
+                        ${actionsHTML}
                     </div>
                 `;
-                container.appendChild(orderBox);
+                container.appendChild(card);
             });
 
-            if (validOrdersCount === 0) {
-                showEmptyState(container);
-            }
+            if (activeCount === 0) showEmptyState(container);
         });
     }
 
-    function showEmptyState(container) {
-        if (!container) return;
-        container.innerHTML = `
-            <div class="empty-state-card">
-                <div class="empty-title">NO HISTORY YET</div>
-                <div class="empty-description">
-                    Your journey with Chief has just begun.<br>
-                    Your custom orders will appear here once placed.
-                </div>
+    function showEmptyState(c) {
+        c.innerHTML = `
+            <div class="status-card">
+                <div style="font-weight:700; color:var(--accent-gold); font-size:0.9rem; margin-bottom:4px;">NO ORDERS FOUND</div>
+                <div>Your customized watch orders will appear here.</div>
             </div>
         `;
     }
 
-    window.toggleOrderAccordion = function(headerElement, key) {
-        const parentBox = headerElement.parentElement;
-        const content = parentBox.querySelector('.order-details-content');
-        const isOpen = parentBox.classList.contains('open');
-        
-        document.querySelectorAll('.order-item-box').forEach(box => {
-            box.classList.remove('open');
-            const details = box.querySelector('.order-details-content');
-            if (details) details.style.display = 'none';
+    function toggleCard(header, key) {
+        const card = header.parentElement;
+        const body = card.querySelector('.order-body');
+        const isOpen = card.classList.contains('open');
+
+        document.querySelectorAll('.order-card').forEach(c => {
+            c.classList.remove('open');
+            c.querySelector('.order-body').style.display = 'none';
         });
 
-        openOrderKeys.clear();
-
+        openKeys.clear();
         if (!isOpen) {
-            parentBox.classList.add('open');
-            if (content) content.style.display = 'block';
-            if (key) openOrderKeys.add(key);
+            card.classList.add('open');
+            body.style.display = 'block';
+            openKeys.add(key);
         }
-    };
-
-    function triggerPopup(title, message) {
-        const overlay = document.getElementById('luxuryPopup');
-        if (!overlay) return;
-        document.getElementById('popupTitle').innerText = title;
-        document.getElementById('popupMsg').innerText = message;
-        overlay.classList.add('show');
-        setTimeout(() => { overlay.classList.remove('show'); }, 2000);
     }
+
+    function confirmOrder(key) {
+        database.ref(`users/${currentUserId}/orders/${key}`).update({
+            isConfirmed: true,
+            orderStatus: 'Confirmed',
+            status: 'Confirmed'
+        });
+    }
+
+    /* Modal for cancelling and removing from Firebase */
+    function openCancelModal(key) {
+        targetOrderKeyToDelete = key;
+        document.getElementById('cancelModal').classList.add('active');
+    }
+
+    function closeCancelModal() {
+        targetOrderKeyToDelete = null;
+        document.getElementById('cancelModal').classList.remove('active');
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        if (targetOrderKeyToDelete && database) {
+            // Delete record directly from Firebase Database
+            database.ref(`users/${currentUserId}/orders/${targetOrderKeyToDelete}`).remove()
+            .then(() => {
+                openKeys.delete(targetOrderKeyToDelete);
+                closeCancelModal();
+            })
+            .catch((err) => {
+                alert("Error removing order: " + err.message);
+                closeCancelModal();
+            });
+        }
+    });
 </script>
 
 </body>
