@@ -1059,7 +1059,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Firebase SDKs (Compat v9) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
@@ -1082,18 +1082,62 @@
             padding: 0 !important;
             width: 100%;
             height: 100%;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
+            overflow: hidden !important;
             -webkit-font-smoothing: antialiased;
             -webkit-overflow-scrolling: touch;
-            touch-action: manipulation;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .studio-wrapper-outer::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background: #000000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 6px 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: marquee 25s linear infinite;
+        }
+
+        .ticker span {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0 40px;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
         }
 
         .studio-wrapper-outer {
             width: 100%;
-            min-height: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
             box-sizing: border-box;
             padding: 55px 15px 30px 15px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         .studio-container {
@@ -1186,7 +1230,35 @@
             text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(212,175,55,0.2);
             transition: 0.3s;
-            pointer-events: auto !important;
+        }
+
+        .start-btn:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.45);
+            transform: translateY(-1px);
+        }
+
+        .luxury-footer {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px 0;
+            border-top: 1px solid #1a1a1a;
+        }
+        
+        .footer-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: #555;
+            text-transform: uppercase;
+            margin: 0 0 5px 0;
+        }
+
+        .footer-copy {
+            font-size: 0.55rem;
+            color: #333;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 0;
         }
 
         .configurator-content {
@@ -1257,8 +1329,7 @@
             border-radius: 6px;
             transition: all 0.2s ease;
             box-sizing: border-box;
-            pointer-events: auto !important;
-            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .option-card i {
@@ -1266,7 +1337,6 @@
             margin-bottom: 6px;
             color: #555555;
             transition: 0.2s;
-            pointer-events: none;
         }
 
         .option-card span {
@@ -1276,21 +1346,21 @@
             letter-spacing: 0.5px;
             color: #b3b3b3;
             text-transform: uppercase;
-            pointer-events: none;
         }
 
-        .option-card.active {
-            border-color: var(--gold) !important;
-            background: #000000 !important;
-            box-shadow: 0 4px 12px rgba(212,175,55,0.2) !important;
+        .option-card:hover, .option-card.active {
+            border-color: var(--gold);
+            background: #000000;
+            box-shadow: 0 4px 12px rgba(212,175,55,0.15);
         }
 
         .option-card.active i {
-            color: var(--gold) !important;
+            color: var(--gold);
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
         }
         
         .option-card.active span {
-            color: var(--white) !important;
+            color: var(--white);
         }
 
         .input-group {
@@ -1329,7 +1399,9 @@
             box-sizing: border-box;
             font-size: 0.8rem;
             transition: 0.2s;
-            pointer-events: auto !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
         input:focus {
@@ -1353,31 +1425,11 @@
             margin-top: 5px;
             text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(212,175,55,0.2);
-            pointer-events: auto !important;
+            transition: 0.3s;
         }
 
-        .luxury-footer {
-            text-align: center;
-            margin-top: 15px;
-            padding: 15px 0;
-            border-top: 1px solid #1a1a1a;
-        }
-        
-        .footer-tag {
-            font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
-            letter-spacing: 3px;
-            color: #555;
-            text-transform: uppercase;
-            margin: 0 0 5px 0;
-        }
-
-        .footer-copy {
-            font-size: 0.55rem;
-            color: #333;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin: 0;
+        .order-btn:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
         }
 
         .luxury-popup-overlay {
@@ -1424,10 +1476,12 @@
             font-size: 2.8rem;
             color: var(--gold);
             margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
         .alert-card .popup-icon {
             color: var(--error);
+            text-shadow: 0 0 15px rgba(211, 47, 47, 0.4);
         }
 
         .popup-title {
@@ -1448,6 +1502,113 @@
             color: #cccccc;
             font-weight: 300;
         }
+
+        @media (max-width: 768px) {
+            .studio-wrapper-outer {
+                padding: 45px 12px 15px 12px;
+            }
+
+            .intro-section {
+                padding: 30px 15px;
+                margin-bottom: 20px;
+            }
+
+            .intro-logo {
+                font-size: 2.3rem;
+                letter-spacing: 6px;
+            }
+
+            .intro-tagline {
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+
+            .intro-features {
+                max-width: 100%;
+                margin-bottom: 25px;
+            }
+
+            .intro-features li {
+                font-size: 0.72rem;
+                margin-bottom: 10px;
+            }
+
+            .start-btn {
+                width: 100%;
+                padding: 14px 20px;
+                font-size: 0.8rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+                letter-spacing: 5px;
+            }
+
+            .header p {
+                font-size: 0.65rem;
+                letter-spacing: 2px;
+            }
+
+            .section-box {
+                padding: 12px 10px;
+                margin-bottom: 12px;
+            }
+
+            .section-title {
+                font-size: 0.78rem;
+            }
+
+            .options-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 6px;
+            }
+
+            .options-grid:has(.option-card:nth-child(5)) {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .option-card {
+                padding: 12px 5px;
+            }
+
+            .option-card i {
+                font-size: 1.2rem;
+                margin-bottom: 4px;
+            }
+
+            .option-card span {
+                font-size: 0.58rem;
+            }
+
+            input {
+                font-size: 0.75rem;
+                padding: 8px 10px;
+            }
+
+            label {
+                font-size: 0.58rem;
+            }
+
+            .order-btn {
+                padding: 12px;
+                font-size: 0.85rem;
+                letter-spacing: 2px;
+            }
+
+            .luxury-footer {
+                padding: 10px 0;
+            }
+
+            .footer-tag {
+                font-size: 0.55rem;
+                letter-spacing: 2px;
+            }
+
+            .footer-copy {
+                font-size: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1457,7 +1618,7 @@
         
         <div class="top-meta-bar" id="topMeta">
             <span>Studio: Active</span>
-            <span id="editionDisplay">Edition: Pro</span>
+            <span id="editionDisplay">Edition: 1-of-1 Pro</span>
         </div>
 
         <div class="intro-section" id="landingView">
@@ -1594,7 +1755,7 @@
                 
                 <div class="input-group">
                     <label>Your Full Name</label>
-                    <input type="text" id="custName" placeholder="Write your full name here">
+                    <input type="text" id="custName" placeholder="Write your name here">
                 </div>
 
                 <div class="input-group">
@@ -1645,49 +1806,36 @@
 </div>
 
 <script>
-    // 🎯 Target Database: chief-login12
+    // 🔥 Firebase Configuration
     const firebaseConfig = {
-        apiKey: "AIzaSyBPg9unSvYAs_NI2CiIvJd69PtBt1hrr5I",
-        authDomain: "chief-login12.firebaseapp.com",
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
         databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
         projectId: "chief-login12",
-        storageBucket: "chief-login12.appspot.com",
-        messagingSenderId: "334157325641",
-        appId: "1:334157325641:web:c9b2d4048105e71011e698",
-        measurementId: "G-CB9F743N3M"
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
     };
 
+    // Initialize Firebase
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     const database = firebase.database();
 
-    // 🔍 LIVE REAL-TIME URL PARSER
-    function getLiveUserParam() {
-        let name = 'user';
+    // 🔍 URL se Dynamic User ID detect karna (Jaise: ?user=varsha)
+    function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        let results = regex.exec(window.location.search || location.search);
-        let paramVal = results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        
-        if (paramVal && paramVal.trim() !== '') {
-            localStorage.setItem('userId', paramVal.trim());
-            return paramVal.trim();
-        }
-        return localStorage.getItem('userId') || '';
+        let results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    let detectedUser = getLiveUserParam();
+    // Dynamic User ID get karega, agar URL mein na ho toh default 'CHIEF_GUEST' lega
+    const detectedUser = getUrlParameter('user') || 'CHIEF_GUEST';
 
-    function updateDisplayUser(username) {
-        if (username && username.trim() !== '') {
-            document.getElementById('editionDisplay').innerText = `Edition: ${username} Pro`;
-        } else {
-            document.getElementById('editionDisplay').innerText = `Edition: User Pro`;
-        }
-    }
-
-    updateDisplayUser(detectedUser);
+    // UI par display update karna
+    document.getElementById('editionDisplay').innerText = `Edition: ${detectedUser} Pro`;
 
     let selections = {
         targetGroup: '',
@@ -1699,8 +1847,7 @@
 
     function selectOption(category, value, element) {
         selections[category] = value;
-        let parent = element.parentElement;
-        parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
+        element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
         element.classList.add('active');
     }
 
@@ -1726,13 +1873,10 @@
         }
 
         overlay.classList.add('show');
-        setTimeout(() => { overlay.classList.remove('show'); }, 3500);
+        setTimeout(() => { overlay.classList.remove('show'); }, 2500);
     }
 
     function submitOrder() {
-        // Re-check live user param upon button click
-        let activeUserNode = getLiveUserParam();
-
         const name = document.getElementById('custName').value.trim();
         const contact = document.getElementById('custContact').value.trim();
         const age = document.getElementById('custAge').value.trim();
@@ -1758,11 +1902,6 @@
             return;
         }
 
-        // 🚨 CRITICAL GUARANTEE: CHIEF_GUEST tabhi hoga jab URL me id zero milegi
-        if (!activeUserNode || activeUserNode.trim() === '') {
-            activeUserNode = 'CHIEF_GUEST';
-        }
-
         const finalizedOrderPayload = {
             timestamp: new Date().toISOString(),
             ownerName: name,
@@ -1778,18 +1917,17 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Target exact path: users/{activeUserNode}/orders
-        const userOrderRef = database.ref(`users/${activeUserNode}/orders`).push();
+        // 🚀 Data ab exact user ke andar 'activeVoucher' wale section me save hoga (Jaise image me hai)
+        const userOrderRef = database.ref(`users/${detectedUser}/activeVoucher`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order saved under users/${activeUserNode}/orders`);
-                // 🔔 POPUP AUDIT: Direct ID name popup alert me dikhega!
-                triggerPopup('success', 'Order Saved', `Target Node: [ users / ${activeUserNode} / orders ]`);
+                console.log(`Order saved successfully under ${detectedUser}!`);
+                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under (${detectedUser}) active voucher!`);
             })
             .catch((error) => {
-                console.error("Firebase error:", error);
-                triggerPopup('error', 'Save Failed', 'Could not save order to database.');
+                console.error("Firebase save error:", error);
+                triggerPopup('error', 'Save Failed', 'Could not save order to database. Please check connection.');
             });
     }
 </script>
