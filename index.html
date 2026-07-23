@@ -1808,13 +1808,13 @@
 <script>
     // 🔥 Firebase Configuration
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
+        apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
+        authDomain: "chief-login12.firebaseapp.com",
+        databaseURL: "https://chief-login12-default-rtdb.firebaseio.com",
         projectId: "chief-login12",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        storageBucket: "chief-login12.appspot.com",
+        messagingSenderId: "334157325641",
+        appId: "1:334157325641:web:c9b2d4048105e71011e698"
     };
 
     // Initialize Firebase
@@ -1823,19 +1823,33 @@
     }
     const database = firebase.database();
 
-    // 🔍 URL se Dynamic User ID detect karna (Jaise: ?user=varsha)
-    function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        let results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    // 🔍 Voucher Jaisa Exact User Detection Logic
+    function fetchAndroidUserId() {
+        try {
+            var storedUid = localStorage.getItem('chief_user_id');
+            if (storedUid && storedUid.trim() !== "" && storedUid !== "null" && storedUid !== "CHIEF_GUEST") {
+                return storedUid;
+            }
+            if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
+                var bridgeUid = window.AndroidBridge.getUserId();
+                if (bridgeUid && bridgeUid.trim() !== "") {
+                    return bridgeUid;
+                }
+            }
+            // URL parameter fallback check
+            let urlParams = new URLSearchParams(window.location.search);
+            let urlUser = urlParams.get('user');
+            if (urlUser && urlUser.trim() !== "") {
+                return urlUser;
+            }
+        } catch (e) {
+            console.log("Error reading bridge/storage/url: ", e);
+        }
+        return "CHIEF_GUEST"; 
     }
 
-    // Dynamic User ID get karega, agar URL mein na ho toh default 'CHIEF_GUEST' lega
-    const detectedUser = getUrlParameter('user') || 'CHIEF_GUEST';
-
-    // UI par display update karna
-    document.getElementById('editionDisplay').innerText = `Edition: ${detectedUser} Pro`;
+    let userId = fetchAndroidUserId();
+    document.getElementById('editionDisplay').innerText = `Edition: ${userId} Pro`;
 
     let selections = {
         targetGroup: '',
@@ -1852,6 +1866,10 @@
     }
 
     function startCustomizer() {
+        // Refresh active user id on start
+        userId = fetchAndroidUserId();
+        document.getElementById('editionDisplay').innerText = `Edition: ${userId} Pro`;
+
         document.getElementById('landingView').style.display = 'none';
         document.getElementById('topMeta').style.display = 'none';
         document.getElementById('mainConfigurator').style.display = 'block';
@@ -1877,6 +1895,9 @@
     }
 
     function submitOrder() {
+        // Dobara user id recheck karlo submission ke waqt
+        userId = fetchAndroidUserId();
+
         const name = document.getElementById('custName').value.trim();
         const contact = document.getElementById('custContact').value.trim();
         const age = document.getElementById('custAge').value.trim();
@@ -1917,13 +1938,13 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Data ab seedhe user ke andar 'orders' node me save hoga
-        const userOrderRef = database.ref(`users/${detectedUser}/orders`).push();
+        // 🚀 Ab data hamesha correct detected user ke andar 'orders' node me save hoga
+        const userOrderRef = database.ref(`users/${userId}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order saved successfully under ${detectedUser}/orders!`);
-                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under (${detectedUser}) orders!`);
+                console.log(`Order saved successfully under ${userId}/orders!`);
+                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under (${userId}) orders!`);
             })
             .catch((error) => {
                 console.error("Firebase save error:", error);
