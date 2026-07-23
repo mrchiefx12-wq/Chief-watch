@@ -1962,8 +1962,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CHIEF Order Vault</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <title>CHIEF Order History Pro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -1971,17 +1972,17 @@
 
     <style>
         :root {
-            --accent-gold: #F3C649;
+            --gold: #F3C649;
             --gold-gradient: linear-gradient(135deg, #FFE289 0%, #F3C649 50%, #B8881A 100%);
-            --bg-black: #08080A;
-            --card-bg: #121216;
-            --card-inner: #191920;
+            --black: #08080A;
+            --surface: #121216;
+            --surface-card: #191920;
             --border-glow: rgba(243, 198, 73, 0.22);
             --border-subtle: rgba(255, 255, 255, 0.08);
-            --text-primary: #FFFFFF;
-            --text-secondary: #9E9EA8;
-            --danger: #FF455B;
-            --danger-bg: rgba(255, 69, 91, 0.12);
+            --text-main: #FFFFFF;
+            --text-muted: #9E9EA8;
+            --error: #FF455B;
+            --error-bg: rgba(255, 69, 91, 0.12);
             --success: #10B981;
             --success-bg: rgba(16, 185, 129, 0.12);
         }
@@ -1993,9 +1994,9 @@
             padding: 0;
         }
 
-        body {
-            background-color: var(--bg-black);
-            color: var(--text-primary);
+        html, body {
+            background-color: var(--black) !important;
+            color: var(--text-main);
             font-family: 'Plus Jakarta Sans', sans-serif;
             width: 100%;
             min-height: 100vh;
@@ -2005,7 +2006,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        .app-viewport {
+        .history-wrapper-outer {
             width: 100%;
             max-width: 440px;
             min-height: 100vh;
@@ -2014,49 +2015,66 @@
             flex-direction: column;
         }
 
+        .history-container {
+            width: 100%;
+        }
+
         /* Header Styling */
-        .app-header {
+        .header {
             text-align: center;
             margin-bottom: 20px;
             padding: 10px 0;
         }
 
-        .brand-logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(1.5rem, 5vw, 1.8rem);
+        .header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.6rem, 5vw, 1.9rem);
             letter-spacing: 5px;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
-            text-transform: uppercase;
         }
 
-        .brand-subtitle {
-            font-size: clamp(0.6rem, 2.2vw, 0.7rem);
+        .header p {
             letter-spacing: 2px;
-            color: var(--text-secondary);
+            font-size: clamp(0.6rem, 2.2vw, 0.7rem);
+            color: var(--text-muted);
             text-transform: uppercase;
             margin-top: 4px;
             font-weight: 600;
         }
 
-        /* Loader & Empty State */
-        .status-card {
-            background: var(--card-bg);
+        /* Loading & Empty Cards */
+        .loading-box, .empty-state-card {
+            background: var(--surface);
             border: 1px solid var(--border-subtle);
             border-radius: 16px;
             padding: 28px 16px;
             text-align: center;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             font-size: 0.8rem;
         }
 
-        .spinner {
+        .empty-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .empty-description {
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .loading-circle {
             width: 20px;
             height: 20px;
             border: 2px solid rgba(243, 198, 73, 0.2);
-            border-top-color: var(--accent-gold);
+            border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             margin: 0 auto 10px;
@@ -2066,9 +2084,9 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Order Cards */
-        .order-card {
-            background: var(--card-bg);
+        /* Order Cards Layout */
+        .order-item-box {
+            background: var(--surface);
             border: 1px solid var(--border-subtle);
             border-radius: 16px;
             margin-bottom: 12px;
@@ -2076,50 +2094,50 @@
             transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .order-card.open {
+        .order-item-box.open {
             border-color: var(--border-glow);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .order-card.delivered {
+        .order-item-box.delivered {
             border-color: rgba(16, 185, 129, 0.4) !important;
-            background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--card-bg) 100%);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--surface) 100%);
         }
 
-        .order-header {
+        .order-header-bar {
             padding: clamp(12px, 3.5vw, 16px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
             user-select: none;
-            background: var(--card-bg);
+            background: var(--surface);
         }
 
-        .order-title {
+        .order-title-text {
             font-size: clamp(0.8rem, 2.8vw, 0.88rem);
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--text-primary);
+            color: var(--text-main);
         }
 
-        .order-title i {
-            color: var(--accent-gold);
+        .order-title-text i {
+            color: var(--gold);
             font-size: 0.95rem;
         }
 
-        .order-card.delivered .order-title i {
+        .order-item-box.delivered .order-title-text i {
             color: var(--success);
         }
 
-        .chevron-icon {
+        .order-toggle-icon {
             width: 26px;
             height: 26px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2127,24 +2145,24 @@
             transition: transform 0.3s ease;
         }
 
-        .order-card.open .chevron-icon {
+        .order-item-box.open .order-toggle-icon {
             transform: rotate(180deg);
-            color: var(--accent-gold);
+            color: var(--gold);
             background: rgba(243, 198, 73, 0.12);
         }
 
-        /* Order Content */
-        .order-body {
+        /* Accordion Body */
+        .order-details-content {
             display: none;
             padding: clamp(14px, 3.5vw, 18px);
-            background: var(--card-bg);
+            background: var(--surface);
             border-top: 1px solid var(--border-subtle);
         }
 
-        .section-label {
+        .sub-section-title {
             font-size: 0.65rem;
             font-weight: 700;
-            color: var(--accent-gold);
+            color: var(--gold);
             letter-spacing: 1px;
             text-transform: uppercase;
             margin-bottom: 10px;
@@ -2153,14 +2171,16 @@
             gap: 6px;
         }
 
-        .specs-grid {
+        .specs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-bottom: 16px;
         }
 
-        .spec-item {
+        .specs-list li {
             display: flex;
             justify-content: space-between;
             font-size: clamp(0.72rem, 2.5vw, 0.78rem);
@@ -2168,18 +2188,18 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .spec-item span:first-child {
-            color: var(--text-secondary);
+        .specs-list li span:first-child {
+            color: var(--text-muted);
         }
 
-        .spec-item span:last-child {
-            color: var(--text-primary);
+        .specs-list li span:last-child {
+            color: var(--text-main);
             font-weight: 600;
         }
 
-        /* Pricing Box */
-        .price-card {
-            background: var(--card-inner);
+        /* Price Calculation Card */
+        .pricing-status-box {
+            background: var(--surface-card);
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
             padding: 12px 14px;
@@ -2187,41 +2207,41 @@
             margin-bottom: 14px;
         }
 
-        .price-breakdown {
+        .price-calculation {
             font-size: clamp(0.72rem, 2.5vw, 0.78rem);
-            color: var(--text-secondary);
+            color: var(--text-muted);
             margin-bottom: 6px;
         }
 
-        .price-breakdown b {
-            color: var(--text-primary);
+        .price-calculation b {
+            color: var(--text-main);
         }
 
-        .grand-total {
-            font-family: 'Space Grotesk', sans-serif;
+        .total-price-display {
+            font-family: 'Cinzel', serif;
             font-size: clamp(1.1rem, 4vw, 1.3rem);
-            color: var(--accent-gold);
+            color: var(--gold);
             font-weight: 700;
             border-top: 1px dashed rgba(255, 255, 255, 0.1);
             padding-top: 8px;
             margin-top: 6px;
         }
 
-        .cod-badge {
+        .cod-tag {
             font-size: 0.62rem;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             text-transform: uppercase;
             margin-top: 4px;
             letter-spacing: 0.5px;
         }
 
-        /* Timeline Tracker */
-        .timeline {
+        /* Timeline Tracking */
+        .tracking-timeline {
             list-style: none;
             margin-top: 10px;
         }
 
-        .timeline-step {
+        .tracking-step {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -2232,11 +2252,11 @@
             text-transform: uppercase;
         }
 
-        .timeline-step.active {
-            color: var(--text-primary);
+        .tracking-step.active {
+            color: var(--text-main);
         }
 
-        .timeline-step i {
+        .tracking-step i {
             width: 22px;
             height: 22px;
             border-radius: 50%;
@@ -2248,26 +2268,26 @@
             color: #555;
         }
 
-        .timeline-step.active i {
+        .tracking-step.active i {
             background: rgba(243, 198, 73, 0.15);
-            color: var(--accent-gold);
-            border: 1px solid var(--accent-gold);
+            color: var(--gold);
+            border: 1px solid var(--gold);
         }
 
-        .timeline-step.delivered-step.active i {
+        .tracking-step.delivered-step.active i {
             background: var(--success-bg);
             color: var(--success);
             border: 1px solid var(--success);
         }
 
-        /* Buttons */
-        .actions-group {
+        /* Action Buttons */
+        .action-buttons-group {
             display: flex;
             gap: 10px;
             margin-top: 14px;
         }
 
-        .btn {
+        .btn-action {
             flex: 1;
             padding: 12px;
             border-radius: 10px;
@@ -2281,10 +2301,10 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            transition: opacity 0.2s ease, transform 0.1s ease;
+            transition: transform 0.1s ease;
         }
 
-        .btn:active {
+        .btn-action:active {
             transform: scale(0.98);
         }
 
@@ -2294,17 +2314,72 @@
         }
 
         .btn-cancel {
-            background: var(--danger-bg);
-            color: var(--danger);
+            background: var(--error-bg);
+            color: var(--error);
             border: 1px solid rgba(255, 69, 91, 0.3);
         }
 
-        /* Custom Modal Popup */
+        /* Terms & Secret Code Card */
+        .terms-box {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 12px;
+        }
+
+        .chief-code-box {
+            background: var(--surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            padding: 14px;
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .chief-code-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .chief-code-desc {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .luxury-footer {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 16px;
+        }
+
+        .footer-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        .footer-copy {
+            font-size: 0.55rem;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        /* Interactive Deletion Modal Popup */
         .modal-backdrop {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2333,7 +2408,7 @@
 
         .modal-icon {
             font-size: 2rem;
-            color: var(--danger);
+            color: var(--error);
             margin-bottom: 10px;
         }
 
@@ -2341,12 +2416,12 @@
             font-size: 1rem;
             font-weight: 700;
             margin-bottom: 6px;
-            color: var(--text-primary);
+            color: var(--text-main);
         }
 
         .modal-desc {
             font-size: 0.75rem;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             line-height: 1.4;
             margin-bottom: 18px;
         }
@@ -2356,9 +2431,9 @@
             gap: 8px;
         }
 
-        .btn-secondary {
+        .btn-modal-cancel {
             background: rgba(255, 255, 255, 0.08);
-            color: var(--text-primary);
+            color: var(--text-main);
             flex: 1;
             padding: 10px;
             border-radius: 8px;
@@ -2368,8 +2443,8 @@
             cursor: pointer;
         }
 
-        .btn-danger-confirm {
-            background: var(--danger);
+        .btn-modal-delete {
+            background: var(--error);
             color: #FFF;
             flex: 1;
             padding: 10px;
@@ -2379,118 +2454,117 @@
             font-size: 0.72rem;
             cursor: pointer;
         }
-
-        /* Footer Info Box */
-        .info-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            border-radius: 14px;
-            padding: 14px;
-            margin: 16px 0;
-            text-align: center;
-        }
-
-        .info-card-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            margin-bottom: 4px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .info-card-text {
-            font-size: 0.68rem;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-
-        .app-footer {
-            text-align: center;
-            margin-top: auto;
-            padding-top: 16px;
-        }
-
-        .footer-tag {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            color: var(--text-secondary);
-        }
     </style>
 </head>
 <body>
 
-<div class="app-viewport">
-    
-    <header class="app-header">
-        <div class="brand-logo">CHIEF</div>
-        <div class="brand-subtitle" id="userVaultTag">Order History</div>
-    </header>
+<div class="history-wrapper-outer">
+    <div class="history-container">
+        
+        <header class="header">
+            <h1>CHIEF</h1>
+            <p id="vaultSubtitle">Private Registry History</p>
+        </header>
 
-    <main id="ordersListContainer">
-        <div class="status-card" id="loadingState">
-            <div class="spinner"></div>
-            Loading history...
+        <main id="ordersContainer">
+            <div class="loading-box" id="loaderBox">
+                <div class="loading-circle"></div>
+                Loading vault history...
+            </div>
+        </main>
+
+        <div class="chief-code-box">
+            <div class="chief-code-title"><i class="fa-solid fa-fingerprint"></i> CHIEF CODE</div>
+            <p class="chief-code-desc">
+                Your watch features a secret CHIEF CODE that will be revealed upon receiving your order. We hope your timepiece receives a unique serial number.
+            </p>
         </div>
-    </main>
 
-    <div class="info-card">
-        <div class="info-card-title"><i class="fa-solid fa-fingerprint"></i> CHIEF CODE</div>
-        <p class="info-card-text">
-            Your watch features a secret CHIEF CODE that will be revealed upon receiving your order.
-        </p>
+        <footer class="luxury-footer">
+            <p class="footer-tag">MR CHIEF INDIA</p>
+            <p class="footer-copy">&copy; 2026 Secure Firebase Vault</p>
+        </footer>
+
     </div>
-
-    <footer class="app-footer">
-        <div class="footer-tag">MR CHIEF INDIA &bull; 2026</div>
-    </footer>
-
 </div>
 
 <div class="modal-backdrop" id="cancelModal">
     <div class="modal-box">
         <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
         <div class="modal-title">Cancel Order?</div>
-        <div class="modal-desc">This action will remove your custom order from Firebase registry permanently.</div>
+        <div class="modal-desc">This action will remove your watch order directly from the Firebase database.</div>
         <div class="modal-buttons">
-            <button class="btn-secondary" onclick="closeCancelModal()">Keep Order</button>
-            <button class="btn-danger-confirm" id="confirmDeleteBtn">Yes, Cancel</button>
+            <button class="btn-modal-cancel" onclick="closeCancelModal()">Keep Order</button>
+            <button class="btn-modal-delete" id="confirmDeleteBtn">Yes, Cancel</button>
         </div>
     </div>
 </div>
 
 <script>
-    const openKeys = new Set();
-    let targetOrderKeyToDelete = null;
 
-    function detectUserId() {
+    function detectCurrentUserId() {
         try {
             if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
-                let uid = window.AndroidBridge.getUserId();
-                if (uid && uid.trim() !== "" && uid !== "null") return uid;
+                let bridgeUid = window.AndroidBridge.getUserId();
+                if (bridgeUid && bridgeUid.trim() !== "" && bridgeUid !== "null") return bridgeUid;
             }
-            let stored = localStorage.getItem('chief_user_id');
-            if (stored && stored.trim() !== "" && stored !== "null") return stored;
+            let storedUid = localStorage.getItem('chief_user_id');
+            if (storedUid && storedUid.trim() !== "" && storedUid !== "null") return storedUid;
 
             let urlParams = new URLSearchParams(window.location.search);
             let urlUid = urlParams.get('user');
             if (urlUid && urlUid.trim() !== "") return urlUid;
-        } catch(e) {}
+        } catch (e) {}
 
-        let createdUid = 'USER_' + Math.floor(100000 + Math.random() * 900000);
-        localStorage.setItem('chief_user_id', createdUid);
-        return createdUid;
+        let newUid = 'USER_' + Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('chief_user_id', newUid);
+        return newUid;
     }
 
-    const currentUserId = detectUserId();
-    document.getElementById('userVaultTag').innerText = `VAULT HISTORY (${currentUserId})`;
+    const detectedUser = detectCurrentUserId();
+    const vaultSub = document.getElementById('vaultSubtitle');
+    if (vaultSub) vaultSub.innerText = `Registry History (${detectedUser})`;
+
+    // Cancel Modal Triggers
+    window.openCancelModal = function(orderKey) {
+        pendingKeyToDelete = orderKey;
+        document.getElementById('cancelModal').classList.add('active');
+    };
+
+    function closeCancelModal() {
+        pendingKeyToDelete = null;
+        document.getElementById('cancelModal').classList.remove('active');
+    }
+
+    // Direct Deletion from Firebase
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        if (pendingKeyToDelete && database) {
+            database.ref(`users/${detectedUser}/orders/${pendingKeyToDelete}`).remove()
+            .then(() => {
+                openOrderKeys.delete(pendingKeyToDelete);
+                closeCancelModal();
+            })
+            .catch((error) => {
+                alert("Error deleting order: " + error.message);
+                closeCancelModal();
+            });
+        }
+    });
+
+    window.confirmOrder = function(orderKey) {
+        if (!database) return;
+        database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
+            isConfirmed: true,
+            orderStatus: 'Confirmed',
+            status: 'Confirmed'
+        });
+    };
 
     if (database) {
-        const ref = database.ref(`users/${currentUserId}/orders`);
+        const ordersRef = database.ref(`users/${detectedUser}/orders`);
         
-        ref.on('value', (snapshot) => {
-            const container = document.getElementById('ordersListContainer');
+        ordersRef.on('value', (snapshot) => {
+            const container = document.getElementById('ordersContainer');
             if (!container) return;
             container.innerHTML = '';
 
@@ -2499,149 +2573,141 @@
                 return;
             }
 
-            const orders = snapshot.val();
-            const keys = Object.keys(orders).reverse();
-            let activeCount = 0;
+            const ordersData = snapshot.val();
+            let validOrdersCount = 0;
+            const keys = Object.keys(ordersData).reverse();
 
-            keys.forEach(key => {
-                const item = orders[key];
-                const status = item.orderStatus || item.status || 'Pending';
-                if (status === 'Cancelled') return;
+            keys.forEach((orderKey) => {
+                const order = ordersData[orderKey];
+                const currentStatus = order.orderStatus || order.status || 'Pending';
+                
+                if (currentStatus === 'Cancelled') return;
 
-                activeCount++;
-                const isDelivered = item.isDelivered || (status === 'Delivered');
-                const isPacked = item.isPacked || ['Packed', 'Shipped', 'Delivered'].includes(status);
-                const isShipped = item.isShipped || ['Shipped', 'Delivered'].includes(status);
+                validOrdersCount++;
 
-                const price = parseFloat(item.totalPrice) || 0;
-                const delivery = parseFloat(item.deliveryCharge) || 0;
-                const grandTotal = price + delivery;
+                const totalPriceStr = order.totalPrice;
+                const deliveryChargeNum = parseFloat(order.deliveryCharge) || 0;
+                
+                const isPacked = order.isPacked || ['Packed', 'Shipped', 'Delivered'].includes(currentStatus);
+                const isShipped = order.isShipped || ['Shipped', 'Delivered'].includes(currentStatus);
+                const isDelivered = order.isDelivered || (currentStatus === 'Delivered');
 
-                let pricingHTML = '';
-                if (!item.totalPrice) {
-                    pricingHTML = `
-                        <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:var(--accent-gold); font-size:0.72rem;">
-                            <div class="spinner" style="margin:0;"></div> Waiting for Admin Pricing...
+                let pricingBlock = '';
+                if (!totalPriceStr) {
+                    pricingBlock = `
+                        <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:var(--gold); font-size:0.75rem;">
+                            <div class="loading-circle" style="margin:0;"></div>
+                            <span>Waiting for total price from Admin...</span>
                         </div>
                     `;
                 } else {
-                    pricingHTML = `
-                        <div class="price-breakdown">Product: <b>₹${price}</b> + Delivery: <b>₹${delivery}</b></div>
-                        <div class="grand-total">Total Payable: ₹${grandTotal}</div>
-                        <div class="cod-badge"><i class="fa-solid fa-truck-ramp-box"></i> Cash On Delivery</div>
+                    const priceNum = parseFloat(totalPriceStr) || 0;
+                    const grandTotal = priceNum + deliveryChargeNum;
+
+                    pricingBlock = `
+                        <div class="price-calculation">
+                            Product Price: <b>₹${priceNum}</b> + Delivery: <b>₹${deliveryChargeNum}</b>
+                        </div>
+                        <div class="total-price-display">
+                            Total Payable: ₹${grandTotal}
+                        </div>
+                        <div class="cod-tag">
+                            <i class="fa-solid fa-truck-ramp-box"></i> Cash on Delivery
+                        </div>
                     `;
                 }
 
-                let actionsHTML = (!item.isConfirmed && status !== 'Confirmed' && !isPacked) ? `
-                    <div class="actions-group">
-                        ${item.totalPrice ? `<button class="btn btn-confirm" onclick="confirmOrder('${key}')"><i class="fa-solid fa-check"></i> Confirm Order</button>` : ''}
-                        <button class="btn btn-cancel" onclick="openCancelModal('${key}')"><i class="fa-solid fa-xmark"></i> Cancel Order</button>
+                let actionButtonsBlock = (!order.isConfirmed && currentStatus !== 'Confirmed' && !isPacked) ? `
+                    <div class="action-buttons-group">
+                        ${totalPriceStr ? `<button class="btn-action btn-confirm" onclick="window.confirmOrder('${orderKey}')"><i class="fa-solid fa-check"></i> Confirm</button>` : ''}
+                        <button class="btn-action btn-cancel" onclick="window.openCancelModal('${orderKey}')"><i class="fa-solid fa-xmark"></i> Cancel</button>
                     </div>
                 ` : `
-                    <div style="margin-top: 12px; border-top: 1px dashed var(--border-subtle); padding-top: 10px;">
-                        <div class="section-label"><i class="fa-solid fa-truck-fast"></i> Order Tracking</div>
-                        <ul class="timeline">
-                            <li class="timeline-step active"><i class="fa-solid fa-check"></i> Confirmed</li>
-                            <li class="timeline-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box"></i> Packed in Vault</li>
-                            <li class="timeline-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched</li>
-                            <li class="timeline-step delivered-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-circle-check"></i> Delivered</li>
+                    <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
+                        <div class="sub-section-title"><i class="fa-solid fa-truck-fast"></i> Order Tracking Pipeline</div>
+                        <ul class="tracking-timeline">
+                            <li class="tracking-step active"><i class="fa-solid fa-circle-check"></i> Confirmed</li>
+                            <li class="tracking-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box"></i> Packed in Vault</li>
+                            <li class="tracking-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched</li>
+                            <li class="tracking-step delivered-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-circle-check"></i> Delivered</li>
                         </ul>
                     </div>
                 `;
 
-                const isOpen = openKeys.has(key);
-                const card = document.createElement('div');
-                card.className = `order-card ${isDelivered ? 'delivered' : ''} ${isOpen ? 'open' : ''}`;
+                const isOpenedBefore = openOrderKeys.has(orderKey);
 
-                card.innerHTML = `
-                    <div class="order-header" onclick="toggleCard(this, '${key}')">
-                        <div class="order-title">
+                const orderBox = document.createElement('div');
+                orderBox.className = `order-item-box ${isDelivered ? 'delivered' : ''} ${isOpenedBefore ? 'open' : ''}`;
+                
+                orderBox.innerHTML = `
+                    <div class="order-header-bar" onclick="toggleOrderAccordion(this, '${orderKey}')">
+                        <div class="order-title-text">
                             <i class="${isDelivered ? 'fa-solid fa-circle-check' : 'fa-solid fa-clock-rotate-left'}"></i>
-                            <span>${item.ownerName || 'Custom Edition'} &bull; ${item.caseShape || 'Timepiece'}</span>
+                            <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
                         </div>
-                        <div class="chevron-icon"><i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="order-toggle-icon">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
                     </div>
-                    <div class="order-body" style="display: ${isOpen ? 'block' : 'none'};">
-                        <div class="section-label"><i class="fa-solid fa-sliders"></i> Specifications</div>
-                        <div class="specs-grid">
-                            <div class="spec-item"><span>Target Edition:</span><span>${item.targetSegment || 'Custom'}</span></div>
-                            <div class="spec-item"><span>Case Shape:</span><span>${item.caseShape || 'Standard'}</span></div>
-                            <div class="spec-item"><span>Dial Color:</span><span>${item.dialColor || 'Default'}</span></div>
-                            <div class="spec-item"><span>Strap Material:</span><span>${item.strapMaterial || 'Standard'}</span></div>
-                            <div class="spec-item"><span>Mechanism:</span><span>${item.mechanismInsideLook || 'Analog'}</span></div>
+                    <div class="order-details-content" style="display: ${isOpenedBefore ? 'block' : 'none'};">
+                        <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Specifications</div>
+                        <ul class="specs-list">
+                            <li><span>Target Edition:</span><span>${order.targetSegment || 'Custom'}</span></li>
+                            <li><span>Case Shape:</span><span>${order.caseShape || 'Standard'}</span></li>
+                            <li><span>Dial Color:</span><span>${order.dialColor || 'Default'}</span></li>
+                            <li><span>Top Border:</span><span>${order.topBorderStyle || 'N/A'}</span></li>
+                            <li><span>Strap Material:</span><span>${order.strapMaterial || 'Standard'}</span></li>
+                            <li><span>Mechanism:</span><span>${order.mechanismInsideLook || 'Analog'}</span></li>
+                        </ul>
+
+                        <div class="sub-section-title"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
+                        <div class="pricing-status-box">${pricingBlock}</div>
+                        ${actionButtonsBlock}
+                        <div class="terms-box">
+                            <b>Terms:</b> Precision-crafted custom timepieces start production immediately upon confirmation.
                         </div>
-                        <div class="section-label"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
-                        <div class="price-card">${pricingHTML}</div>
-                        ${actionsHTML}
                     </div>
                 `;
-                container.appendChild(card);
+                container.appendChild(orderBox);
             });
 
-            if (activeCount === 0) showEmptyState(container);
+            if (validOrdersCount === 0) {
+                showEmptyState(container);
+            }
         });
     }
 
-    function showEmptyState(c) {
-        c.innerHTML = `
-            <div class="status-card">
-                <div style="font-weight:700; color:var(--accent-gold); font-size:0.9rem; margin-bottom:4px;">NO ORDERS FOUND</div>
-                <div>Your customized watch orders will appear here.</div>
+    function showEmptyState(container) {
+        if (!container) return;
+        container.innerHTML = `
+            <div class="empty-state-card">
+                <div class="empty-title">NO HISTORY YET</div>
+                <div class="empty-description">
+                    Your customized watch orders will appear here once placed.
+                </div>
             </div>
         `;
     }
 
-    function toggleCard(header, key) {
-        const card = header.parentElement;
-        const body = card.querySelector('.order-body');
-        const isOpen = card.classList.contains('open');
-
-        document.querySelectorAll('.order-card').forEach(c => {
-            c.classList.remove('open');
-            c.querySelector('.order-body').style.display = 'none';
+    window.toggleOrderAccordion = function(headerElement, key) {
+        const parentBox = headerElement.parentElement;
+        const content = parentBox.querySelector('.order-details-content');
+        const isOpen = parentBox.classList.contains('open');
+        
+        document.querySelectorAll('.order-item-box').forEach(box => {
+            box.classList.remove('open');
+            const details = box.querySelector('.order-details-content');
+            if (details) details.style.display = 'none';
         });
 
-        openKeys.clear();
+        openOrderKeys.clear();
+
         if (!isOpen) {
-            card.classList.add('open');
-            body.style.display = 'block';
-            openKeys.add(key);
+            parentBox.classList.add('open');
+            if (content) content.style.display = 'block';
+            if (key) openOrderKeys.add(key);
         }
-    }
-
-    function confirmOrder(key) {
-        database.ref(`users/${currentUserId}/orders/${key}`).update({
-            isConfirmed: true,
-            orderStatus: 'Confirmed',
-            status: 'Confirmed'
-        });
-    }
-
-    /* Modal for cancelling and removing from Firebase */
-    function openCancelModal(key) {
-        targetOrderKeyToDelete = key;
-        document.getElementById('cancelModal').classList.add('active');
-    }
-
-    function closeCancelModal() {
-        targetOrderKeyToDelete = null;
-        document.getElementById('cancelModal').classList.remove('active');
-    }
-
-    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-        if (targetOrderKeyToDelete && database) {
-            // Delete record directly from Firebase Database
-            database.ref(`users/${currentUserId}/orders/${targetOrderKeyToDelete}`).remove()
-            .then(() => {
-                openKeys.delete(targetOrderKeyToDelete);
-                closeCancelModal();
-            })
-            .catch((err) => {
-                alert("Error removing order: " + err.message);
-                closeCancelModal();
-            });
-        }
-    });
+    };
 </script>
 
 </body>
