@@ -1917,13 +1917,13 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Data ab exact user ke andar 'activeVoucher' wale section me save hoga (Jaise image me hai)
-        const userOrderRef = database.ref(`users/${detectedUser}/activeVoucher`).push();
+        // 🚀 Data ab seedhe user ke andar 'orders' node me save hoga
+        const userOrderRef = database.ref(`users/${detectedUser}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order saved successfully under ${detectedUser}!`);
-                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under (${detectedUser}) active voucher!`);
+                console.log(`Order saved successfully under ${detectedUser}/orders!`);
+                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under (${detectedUser}) orders!`);
             })
             .catch((error) => {
                 console.error("Firebase save error:", error);
