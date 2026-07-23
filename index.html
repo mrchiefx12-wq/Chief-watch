@@ -1593,7 +1593,7 @@
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
                 <div class="input-group">
-                    <label>Your Full Name</label>
+                    <label>Your Full Name / Username</label>
                     <input type="text" id="custName" placeholder="Write your full name here">
                 </div>
 
@@ -1645,28 +1645,22 @@
 </div>
 
 <script>
-    // 🎯 Isolated Firebase Instance for Orders Only
-    const orderFirebaseConfig = {
-        apiKey: "AIzaSyAroz3NYjrRl88YatO-onBF1hsdFdcuuJM",
-        authDomain: "chief-order.firebaseapp.com",
-        databaseURL: "https://chief-order-default-rtdb.firebaseio.com",
-        projectId: "chief-order",
-        storageBucket: "chief-order.firebasestorage.app",
-        messagingSenderId: "505961059572",
-        appId: "1:505961059572:web:6a43db76f10780d87bbaa1"
+    // 🎯 Primary Firebase Configuration (chief-login12)
+    const firebaseConfig = {
+        apiKey: "AIzaSyBPg9unSvYAs_NI2CiIvJd69PtBt1hrr5I",
+        authDomain: "chief-login12.firebaseapp.com",
+        databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
+        projectId: "chief-login12",
+        storageBucket: "chief-login12.appspot.com",
+        messagingSenderId: "334157325641",
+        appId: "1:334157325641:web:c9b2d4048105e71011e698",
+        measurementId: "G-CB9F743N3M"
     };
 
-    let orderApp;
-    const existingApps = firebase.apps;
-    const foundApp = existingApps.find(app => app.name === 'ONLY_ORDER_APP');
-
-    if (foundApp) {
-        orderApp = foundApp;
-    } else {
-        orderApp = firebase.initializeApp(orderFirebaseConfig, 'ONLY_ORDER_APP');
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
     }
-
-    const orderDatabase = orderApp.database();
+    const database = firebase.database();
 
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -1675,11 +1669,14 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || 'CHIEF_GUEST';
+    // URL parameter check -> LocalStorage check -> Empty Fallback
+    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || '';
 
     function updateDisplayUser(username) {
         if (username && username.trim() !== '') {
             document.getElementById('editionDisplay').innerText = `Edition: ${username} Pro`;
+        } else {
+            document.getElementById('editionDisplay').innerText = `Edition: Guest Pro`;
         }
     }
 
@@ -1751,9 +1748,11 @@
             return;
         }
 
-        let finalNodeName = detectedUser;
-        if (!finalNodeName || finalNodeName.trim() === '') {
-            finalNodeName = 'CHIEF_GUEST';
+        // 🎯 DYNAMIC NODE TARGETING LOGIC
+        // Priority: 1. URL Parameter -> 2. LocalStorage -> 3. Form Name (lowercase, spaces removed)
+        let activeUserNode = detectedUser;
+        if (!activeUserNode || activeUserNode.trim() === '' || activeUserNode === 'CHIEF_GUEST') {
+            activeUserNode = name.replace(/\s+/g, '').toLowerCase();
         }
 
         const finalizedOrderPayload = {
@@ -1771,13 +1770,13 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Target: orders -> username -> orderData
-        const userOrderRef = orderDatabase.ref(`orders/${finalNodeName}`).push();
+        // 🚀 Target path: users/{username}/orders
+        const userOrderRef = database.ref(`users/${activeUserNode}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order saved successfully at: orders/${finalNodeName}`);
-                triggerPopup('success', 'Order Saved', `Order placed successfully for User ID: [ ${finalNodeName} ]`);
+                console.log(`Order saved under users/${activeUserNode}/orders`);
+                triggerPopup('success', 'Order Saved', `Order placed successfully for User ID: [ ${activeUserNode} ]`);
             })
             .catch((error) => {
                 console.error("Firebase error:", error);
