@@ -1188,7 +1188,6 @@
             box-shadow: 0 4px 15px rgba(212,175,55,0.2);
             transition: 0.3s;
             pointer-events: auto !important;
-            -webkit-tap-highlight-color: transparent;
         }
 
         .configurator-content {
@@ -1250,7 +1249,6 @@
             gap: 8px;
         }
 
-        /* Fixed Selection & Touch for WebView */
         .option-card {
             background: var(--card-bg);
             border: 1px solid #2d2d2d;
@@ -1262,8 +1260,6 @@
             box-sizing: border-box;
             pointer-events: auto !important;
             -webkit-tap-highlight-color: transparent;
-            position: relative;
-            z-index: 10;
         }
 
         .option-card i {
@@ -1284,10 +1280,10 @@
             pointer-events: none;
         }
 
-        .option-card:active, .option-card.active {
+        .option-card.active {
             border-color: var(--gold) !important;
             background: #000000 !important;
-            box-shadow: 0 4px 12px rgba(212,175,55,0.25) !important;
+            box-shadow: 0 4px 12px rgba(212,175,55,0.2) !important;
         }
 
         .option-card.active i {
@@ -1598,8 +1594,8 @@
                 <div class="section-title"><i class="fa-solid fa-user-shield"></i> 7. Enter Your Details</div>
                 
                 <div class="input-group">
-                    <label>Your Full Name</label>
-                    <input type="text" id="custName" placeholder="Write your name here">
+                    <label>Your Full Name / Username</label>
+                    <input type="text" id="custName" placeholder="Write your login username here (e.g. michael)">
                 </div>
 
                 <div class="input-group">
@@ -1650,7 +1646,7 @@
 </div>
 
 <script>
-    // 🔥 Firebase Initialization
+    // 🔥 Firebase Config
     const firebaseConfig = {
         databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
         projectId: "chief-login12"
@@ -1661,7 +1657,6 @@
     }
     const database = firebase.database();
 
-    // 🔍 URL se ?user= param check karega
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -1669,17 +1664,19 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    let detectedUser = getUrlParameter('user');
+    // Dynamic User Detection
+    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId');
 
-    // Display update
-    function updateUserDisplay() {
-        let activeUser = detectedUser || 'CHIEF_GUEST';
-        document.getElementById('editionDisplay').innerText = `Edition: ${activeUser} Pro`;
+    function updateDisplayUser(username) {
+        if (username && username.trim() !== '') {
+            document.getElementById('editionDisplay').innerText = `Edition: ${username} Pro`;
+        }
     }
-    
-    updateUserDisplay();
 
-    // Active selection store karne ke liye
+    if (detectedUser) {
+        updateDisplayUser(detectedUser);
+    }
+
     let selections = {
         targetGroup: '',
         shape: '',
@@ -1691,8 +1688,7 @@
     function selectOption(category, value, element) {
         selections[category] = value;
         let parent = element.parentElement;
-        let cards = parent.querySelectorAll('.option-card');
-        cards.forEach(c => c.classList.remove('active'));
+        parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
         element.classList.add('active');
     }
 
@@ -1747,6 +1743,18 @@
             return;
         }
 
+        // 🎯 EXACT USER TARGETING LOGIC
+        // Pehle URL User Param, fir LocalStorage, fir Input 'Your Full Name' field ko user node banayega
+        let targetUserNode = detectedUser;
+        
+        if (!targetUserNode || targetUserNode === 'CHIEF_GUEST' || targetUserNode.trim() === '') {
+            // Space replace karke lowercase clean username path banayega (e.g. "michael")
+            targetUserNode = name.replace(/\s+/g, '').toLowerCase();
+        }
+
+        // Future requests ke liye LocalStorage me store karega
+        localStorage.setItem('userId', targetUserNode);
+
         const finalizedOrderPayload = {
             timestamp: new Date().toISOString(),
             ownerName: name,
@@ -1762,15 +1770,13 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        const targetUser = detectedUser && detectedUser !== '' ? detectedUser : 'CHIEF_GUEST';
-
-        // 🚀 Dynamic path: users/{userId}/orders
-        const userOrderRef = database.ref(`users/${targetUser}/orders`).push();
+        // 🚀 Dynamic Firebase Database Path: users/{michael}/orders
+        const userOrderRef = database.ref(`users/${targetUserNode}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order saved under ${targetUser}`);
-                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under ${targetUser} orders!`);
+                console.log(`Order saved under users/${targetUserNode}/orders`);
+                triggerPopup('success', 'Order Saved', `Your order has been saved under ${targetUserNode}!`);
             })
             .catch((error) => {
                 console.error("Firebase error:", error);
@@ -1795,7 +1801,7 @@
     <!-- Firebase Compat SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
 
     <style>
         :root {
@@ -1826,17 +1832,27 @@
             padding: 0 !important;
             width: 100%;
             height: 100%;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
+            overflow: hidden !important;
             -webkit-font-smoothing: antialiased;
-            touch-action: manipulation;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .history-wrapper-outer::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
         }
 
         .history-wrapper-outer {
             width: 100%;
-            min-height: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
             padding: 20px 14px 40px 14px;
-            box-sizing: border-box;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         .history-container {
@@ -1929,7 +1945,6 @@
             cursor: pointer;
             user-select: none;
             background: var(--surface);
-            pointer-events: auto !important;
         }
 
         .order-title-text {
@@ -1939,7 +1954,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            pointer-events: none;
         }
 
         .order-title-text i {
@@ -1957,7 +1971,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            pointer-events: none;
         }
 
         .order-item-box.open .order-toggle-icon {
@@ -2102,7 +2115,6 @@
             text-transform: uppercase;
             cursor: pointer;
             border: none;
-            pointer-events: auto !important;
         }
 
         .btn-confirm {
@@ -2293,153 +2305,171 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || 'CHIEF_GUEST';
-    
+    const detectedUser = getUrlParameter('user') || 'CHIEF_GUEST';
     document.getElementById('vaultSubtitle').innerText = `Registry History (${detectedUser})`;
 
-    function renderEmptyState(msg) {
-        const container = document.getElementById('ordersContainer');
-        container.innerHTML = `
-            <div class="empty-state-card">
-                <div class="empty-title">NO HISTORY YET</div>
-                <div class="empty-description">
-                    ${msg || 'Your journey with Chief has just begun.<br>Your custom orders will appear here once placed.'}
-                </div>
-            </div>
-        `;
-    }
+    const ordersRef = database.ref(`users/${detectedUser}/orders`);
 
-    function fetchHistory(userId) {
-        const ordersRef = database.ref(`users/${userId}/orders`);
-
-        ordersRef.on('value', (snapshot) => {
+    // Safety Timeout taaki agar Firebase rules ya connection ki wajah se data na aaye toh infinite loader fass na rahe
+    let dataLoaded = false;
+    setTimeout(() => {
+        if (!dataLoaded) {
             const container = document.getElementById('ordersContainer');
-            container.innerHTML = '';
-
-            if (!snapshot.exists()) {
-                renderEmptyState();
-                return;
-            }
-
-            const ordersData = snapshot.val();
-            let validOrdersCount = 0;
-
-            Object.keys(ordersData).forEach((orderKey) => {
-                const order = ordersData[orderKey];
-
-                if (order.status === 'Cancelled') {
-                    return; 
-                }
-
-                validOrdersCount++;
-
-                const totalPrice = order.totalPrice;
-                const deliveryCharge = order.deliveryCharge || '0';
-                const orderStatus = order.orderStatus || 'Pending';
-
-                let pricingBlock = '';
-                if (!totalPrice) {
-                    pricingBlock = `
-                        <div class="waiting-box">
-                            <div class="loading-circle"></div>
-                            <span>Waiting for total price from Admin...</span>
-                        </div>
-                    `;
-                } else {
-                    pricingBlock = `
-                        <div class="total-price-display">₹${totalPrice}</div>
-                        <div class="cod-tag"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery &bull; Delivery: ₹${deliveryCharge}</div>
-                    `;
-                }
-
-                let actionButtonsBlock = '';
-                if (!order.isConfirmed) {
-                    actionButtonsBlock = `
-                        <div class="action-buttons-group">
-                            ${totalPrice ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
-                            <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel</button>
-                        </div>
-                    `;
-                } else {
-                    const isPacked = orderStatus === 'Packed' || orderStatus === 'Shipped' || orderStatus === 'Delivered';
-                    const isShipped = orderStatus === 'Shipped' || orderStatus === 'Delivered';
-                    const isDelivered = orderStatus === 'Delivered';
-
-                    actionButtonsBlock = `
-                        <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
-                            <div class="sub-section-title"><i class="fa-solid fa-truck-fast"></i> Order Tracking Pipeline</div>
-                            <ul class="tracking-timeline">
-                                <li class="tracking-step active"><i class="fa-solid fa-circle-check"></i> Confirmed by User</li>
-                                <li class="tracking-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box-archive"></i> Item Packed in Vault</li>
-                                <li class="tracking-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched / Shipped</li>
-                                <li class="tracking-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-award"></i> Successfully Delivered</li>
-                            </ul>
-                        </div>
-                    `;
-                }
-
-                const orderBox = document.createElement('div');
-                orderBox.className = 'order-item-box';
-                orderBox.innerHTML = `
-                    <div class="order-header-bar" onclick="toggleOrderAccordion(this)">
-                        <div class="order-title-text">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                            <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
-                        </div>
-                        <div class="order-toggle-icon">
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                    </div>
-                    <div class="order-details-content">
-                        <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
-                        <ul class="specs-list">
-                            <li><span>Target Edition:</span><span>${order.targetSegment || 'N/A'}</span></li>
-                            <li><span>Case Shape:</span><span>${order.caseShape || 'N/A'}</span></li>
-                            <li><span>Dial Color:</span><span>${order.dialColor || 'N/A'}</span></li>
-                            <li><span>Top Border:</span><span>${order.topBorderStyle || 'N/A'} (${order.topBorderColor || 'N/A'})</span></li>
-                            <li><span>Strap Material:</span><span>${order.strapMaterial || 'N/A'}</span></li>
-                            <li><span>Mechanism:</span><span>${order.mechanismInsideLook || 'N/A'}</span></li>
-                            <li><span>Location:</span><span>${order.ownerLocation || 'N/A'}</span></li>
-                        </ul>
-
-                        <div class="sub-section-title"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
-                        <div class="pricing-status-box">
-                            ${pricingBlock}
-                        </div>
-
-                        ${actionButtonsBlock}
-
-                        <div class="terms-box">
-                            <b>Terms & Conditions:</b> All Chief luxury timepieces are precision-crafted custom editions created strictly to individual specifications. Production initiates immediately under absolute vault privacy upon confirmation.
+            if (container && container.contains(document.getElementById('loaderBox'))) {
+                container.innerHTML = `
+                    <div class="empty-state-card">
+                        <div class="empty-title">NO HISTORY YET</div>
+                        <div class="empty-description">
+                            Your journey with Chief has just begun.<br>
+                            Your custom orders will appear here once placed.
                         </div>
                     </div>
                 `;
-                container.appendChild(orderBox);
-            });
-
-            if (validOrdersCount === 0) {
-                renderEmptyState();
             }
-        }, (error) => {
-            console.error("Firebase read error: ", error);
-            renderEmptyState("Unable to sync with the secure vault. Check connection.");
-        });
-    }
-
-    // Auto check active auth state or URL parameter
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user && (!detectedUser || detectedUser === 'CHIEF_GUEST')) {
-            detectedUser = user.uid;
-            document.getElementById('vaultSubtitle').innerText = `Registry History (${detectedUser})`;
         }
-        fetchHistory(detectedUser);
+    }, 4000);
+
+    ordersRef.on('value', (snapshot) => {
+        dataLoaded = true;
+        const container = document.getElementById('ordersContainer');
+        container.innerHTML = '';
+
+        if (!snapshot.exists()) {
+            container.innerHTML = `
+                <div class="empty-state-card">
+                    <div class="empty-title">NO HISTORY YET</div>
+                    <div class="empty-description">
+                        Your journey with Chief has just begun.<br>
+                        Your custom orders will appear here once placed.
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        const ordersData = snapshot.val();
+        let validOrdersCount = 0;
+        
+        Object.keys(ordersData).forEach((orderKey) => {
+            const order = ordersData[orderKey];
+            
+            if (order.status === 'Cancelled') {
+                return; 
+            }
+
+            validOrdersCount++;
+
+            const totalPrice = order.totalPrice;
+            const deliveryCharge = order.deliveryCharge || '0';
+            const orderStatus = order.orderStatus || 'Pending';
+
+            let pricingBlock = '';
+            if (!totalPrice) {
+                pricingBlock = `
+                    <div class="waiting-box">
+                        <div class="loading-circle"></div>
+                        <span>Waiting for total price from Admin...</span>
+                    </div>
+                `;
+            } else {
+                pricingBlock = `
+                    <div class="total-price-display">₹${totalPrice}</div>
+                    <div class="cod-tag"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery &bull; Delivery: ₹${deliveryCharge}</div>
+                `;
+            }
+
+            let actionButtonsBlock = '';
+            if (!order.isConfirmed) {
+                actionButtonsBlock = `
+                    <div class="action-buttons-group">
+                        ${totalPrice ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
+                        <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel</button>
+                    </div>
+                `;
+            } else {
+                const isPacked = orderStatus === 'Packed' || orderStatus === 'Shipped' || orderStatus === 'Delivered';
+                const isShipped = orderStatus === 'Shipped' || orderStatus === 'Delivered';
+                const isDelivered = orderStatus === 'Delivered';
+
+                actionButtonsBlock = `
+                    <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
+                        <div class="sub-section-title"><i class="fa-solid fa-truck-fast"></i> Order Tracking Pipeline</div>
+                        <ul class="tracking-timeline">
+                            <li class="tracking-step active"><i class="fa-solid fa-circle-check"></i> Confirmed by User</li>
+                            <li class="tracking-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box-archive"></i> Item Packed in Vault</li>
+                            <li class="tracking-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched / Shipped</li>
+                            <li class="tracking-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-award"></i> Successfully Delivered</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            const orderBox = document.createElement('div');
+            orderBox.className = 'order-item-box';
+            orderBox.innerHTML = `
+                <div class="order-header-bar" onclick="toggleOrderAccordion(this)">
+                    <div class="order-title-text">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
+                    </div>
+                    <div class="order-toggle-icon">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="order-details-content">
+                    <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
+                    <ul class="specs-list">
+                        <li><span>Target Edition:</span><span>${order.targetSegment || 'N/A'}</span></li>
+                        <li><span>Case Shape:</span><span>${order.caseShape || 'N/A'}</span></li>
+                        <li><span>Dial Color:</span><span>${order.dialColor || 'N/A'}</span></li>
+                        <li><span>Top Border:</span><span>${order.topBorderStyle || 'N/A'} (${order.topBorderColor || 'N/A'})</span></li>
+                        <li><span>Strap Material:</span><span>${order.strapMaterial || 'N/A'}</span></li>
+                        <li><span>Mechanism:</span><span>${order.mechanismInsideLook || 'N/A'}</span></li>
+                        <li><span>Location:</span><span>${order.ownerLocation || 'N/A'}</span></li>
+                    </ul>
+
+                    <div class="sub-section-title"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
+                    <div class="pricing-status-box">
+                        ${pricingBlock}
+                    </div>
+
+                    ${actionButtonsBlock}
+
+                    <div class="terms-box">
+                        <b>Terms & Conditions:</b> All Chief luxury timepieces are precision-crafted custom editions created strictly to individual specifications. Production initiates immediately under absolute vault privacy upon confirmation.
+                    </div>
+                </div>
+            `;
+            container.appendChild(orderBox);
+        });
+
+        if (validOrdersCount === 0) {
+            container.innerHTML = `
+                <div class="empty-state-card">
+                    <div class="empty-title">NO HISTORY YET</div>
+                    <div class="empty-description">
+                        Your journey with Chief has just begun.<br>
+                        Your custom orders will appear here once placed.
+                    </div>
+                </div>
+            `;
+        }
+    }, (error) => {
+        dataLoaded = true;
+        console.error("Firebase read error: ", error);
+        document.getElementById('ordersContainer').innerHTML = `
+            <div class="empty-state-card">
+                <div class="empty-title">CONNECTION ERROR</div>
+                <div class="empty-description">Unable to sync with the secure vault. Check Firebase Rules.</div>
+            </div>
+        `;
     });
 
     function toggleOrderAccordion(headerElement) {
         const parentBox = headerElement.parentElement;
         const content = parentBox.querySelector('.order-details-content');
         const isOpen = parentBox.classList.contains('open');
-
+        
         document.querySelectorAll('.order-item-box').forEach(box => {
             box.classList.remove('open');
             box.querySelector('.order-details-content').style.display = 'none';
