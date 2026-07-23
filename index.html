@@ -2091,7 +2091,7 @@
             border-color: var(--border);
         }
 
-        /* Delivered Box Style */
+        /* 🟢 Delivered Box Style */
         .order-item-box.delivered {
             border: 1px solid var(--success) !important;
             background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, var(--surface-card) 100%);
@@ -2462,7 +2462,7 @@
 
 <div class="luxury-popup-overlay" id="luxuryPopup">
     <div class="luxury-popup-card">
-        <div class="popup-icon" id="popupIcon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="popup-icon"><i class="fa-solid fa-circle-check"></i></div>
         <div class="popup-title" id="popupTitle">Success</div>
         <div class="popup-msg" id="popupMsg">Action completed successfully.</div>
     </div>
@@ -2470,7 +2470,6 @@
 
 <script>
     
-    const openOrderKeys = new Set();
 
     function detectCurrentUserId() {
         try {
@@ -2502,23 +2501,23 @@
     const vaultSub = document.getElementById('vaultSubtitle');
     if (vaultSub) vaultSub.innerText = `Registry History (${detectedUser})`;
 
-    // FIX: Cancel Order removes data permanently from Firebase Realtime Database
+    // Explicitly binding Cancel and Confirm to Global Window Object for mobile accessibility
     window.cancelOrder = function(orderKey) {
-        if (!database || !orderKey) return;
-        
-        if (confirm("Are you sure you want to cancel and delete this order?")) {
-            database.ref(`users/${detectedUser}/orders/${orderKey}`).remove()
-            .then(() => {
-                triggerPopup('Order Deleted', 'Your order has been removed permanently.', true);
-            })
-            .catch((error) => {
-                alert("Error removing order: " + error.message);
+        if (!database) return;
+        if (confirm("Are you sure you want to cancel this order?")) {
+            database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
+                status: 'Cancelled',
+                orderStatus: 'Cancelled'
+            }).then(() => {
+                triggerPopup('Order Cancelled', 'Your order has been cancelled.');
+            }).catch((error) => {
+                alert("Error: " + error.message);
             });
         }
     };
 
     window.confirmOrder = function(orderKey) {
-        if (!database || !orderKey) return;
+        if (!database) return;
         database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
             isConfirmed: true,
             orderStatus: 'Confirmed',
@@ -2602,8 +2601,8 @@
 
                 let actionButtonsBlock = (!order.isConfirmed && currentStatus !== 'Confirmed' && !isPacked) ? `
                     <div class="action-buttons-group">
-                        ${totalPriceStr ? `<button type="button" class="btn-action btn-confirm" onclick="window.confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
-                        <button type="button" class="btn-action btn-cancel" onclick="window.cancelOrder('${orderKey}')">Cancel Order</button>
+                        ${totalPriceStr ? `<button class="btn-action btn-confirm" onclick="window.confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
+                        <button class="btn-action btn-cancel" onclick="window.cancelOrder('${orderKey}')">Cancel Order</button>
                     </div>
                 ` : `
                     <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
@@ -2695,17 +2694,9 @@
         }
     };
 
-    function triggerPopup(title, message, isError = false) {
+    function triggerPopup(title, message) {
         const overlay = document.getElementById('luxuryPopup');
-        const iconContainer = document.getElementById('popupIcon');
         if (!overlay) return;
-        
-        if (isError) {
-            iconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color: var(--error);"></i>';
-        } else {
-            iconContainer.innerHTML = '<i class="fa-solid fa-circle-check" style="color: var(--gold);"></i>';
-        }
-
         document.getElementById('popupTitle').innerText = title;
         document.getElementById('popupMsg').innerText = message;
         overlay.classList.add('show');
