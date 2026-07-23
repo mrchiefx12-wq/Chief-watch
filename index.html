@@ -2471,6 +2471,8 @@
 <script>
     
 
+    const openOrderKeys = new Set();
+
     function detectCurrentUserId() {
         try {
             if (window.AndroidBridge && typeof window.AndroidBridge.getUserId === 'function') {
