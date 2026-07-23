@@ -1662,15 +1662,22 @@
     }
     const database = firebase.database();
 
-    function getUrlParameter(name) {
+    // 🔍 LIVE REAL-TIME URL PARSER
+    function getLiveUserParam() {
+        let name = 'user';
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        let results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        let results = regex.exec(window.location.search || location.search);
+        let paramVal = results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        
+        if (paramVal && paramVal.trim() !== '') {
+            localStorage.setItem('userId', paramVal.trim());
+            return paramVal.trim();
+        }
+        return localStorage.getItem('userId') || '';
     }
 
-    // STRICT USER DETECTION
-    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || '';
+    let detectedUser = getLiveUserParam();
 
     function updateDisplayUser(username) {
         if (username && username.trim() !== '') {
@@ -1719,10 +1726,13 @@
         }
 
         overlay.classList.add('show');
-        setTimeout(() => { overlay.classList.remove('show'); }, 2500);
+        setTimeout(() => { overlay.classList.remove('show'); }, 3500);
     }
 
     function submitOrder() {
+        // Re-check live user param upon button click
+        let activeUserNode = getLiveUserParam();
+
         const name = document.getElementById('custName').value.trim();
         const contact = document.getElementById('custContact').value.trim();
         const age = document.getElementById('custAge').value.trim();
@@ -1748,10 +1758,7 @@
             return;
         }
 
-        // 🎯 STRICT NODE SELECTION (NO FALLBACK TO FORM NAME FIELD)
-        let activeUserNode = detectedUser;
-
-        // Agar URL Param ya LocalStorage se naam nahi mil paaya, tab hi default CHIEF_GUEST lega (Form Name ko node nahi banayega)
+        // 🚨 CRITICAL GUARANTEE: CHIEF_GUEST tabhi hoga jab URL me id zero milegi
         if (!activeUserNode || activeUserNode.trim() === '') {
             activeUserNode = 'CHIEF_GUEST';
         }
@@ -1771,13 +1778,14 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Target exact path: users/{michael}/orders
+        // 🚀 Target exact path: users/{activeUserNode}/orders
         const userOrderRef = database.ref(`users/${activeUserNode}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
                 console.log(`Order saved under users/${activeUserNode}/orders`);
-                triggerPopup('success', 'Order Saved', `Order placed successfully for User: [ ${activeUserNode} ]`);
+                // 🔔 POPUP AUDIT: Direct ID name popup alert me dikhega!
+                triggerPopup('success', 'Order Saved', `Target Node: [ users / ${activeUserNode} / orders ]`);
             })
             .catch((error) => {
                 console.error("Firebase error:", error);
