@@ -1062,6 +1062,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
     <style>
         :root {
@@ -1082,62 +1083,18 @@
             padding: 0 !important;
             width: 100%;
             height: 100%;
-            overflow: hidden !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
             -webkit-font-smoothing: antialiased;
             -webkit-overflow-scrolling: touch;
-        }
-
-        html::-webkit-scrollbar,
-        body::-webkit-scrollbar,
-        .studio-wrapper-outer::-webkit-scrollbar {
-            display: none !important;
-            width: 0 !important;
-            height: 0 !important;
-        }
-
-        .ticker-wrap {
-            width: 100%;
-            background: #000000;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 6px 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 100;
-            overflow: hidden;
-        }
-
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            padding-left: 100%;
-            animation: marquee 25s linear infinite;
-        }
-
-        .ticker span {
-            font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: var(--gold);
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 0 40px;
-        }
-
-        @keyframes marquee {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
+            touch-action: manipulation;
         }
 
         .studio-wrapper-outer {
             width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
+            min-height: 100%;
             box-sizing: border-box;
             padding: 55px 15px 30px 15px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
 
         .studio-container {
@@ -1230,35 +1187,8 @@
             text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(212,175,55,0.2);
             transition: 0.3s;
-        }
-
-        .start-btn:hover {
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.45);
-            transform: translateY(-1px);
-        }
-
-        .luxury-footer {
-            text-align: center;
-            margin-top: 15px;
-            padding: 15px 0;
-            border-top: 1px solid #1a1a1a;
-        }
-        
-        .footer-tag {
-            font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
-            letter-spacing: 3px;
-            color: #555;
-            text-transform: uppercase;
-            margin: 0 0 5px 0;
-        }
-
-        .footer-copy {
-            font-size: 0.55rem;
-            color: #333;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin: 0;
+            pointer-events: auto !important;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .configurator-content {
@@ -1320,6 +1250,7 @@
             gap: 8px;
         }
 
+        /* Fixed Selection & Touch for WebView */
         .option-card {
             background: var(--card-bg);
             border: 1px solid #2d2d2d;
@@ -1329,7 +1260,10 @@
             border-radius: 6px;
             transition: all 0.2s ease;
             box-sizing: border-box;
-            user-select: none;
+            pointer-events: auto !important;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 10;
         }
 
         .option-card i {
@@ -1337,6 +1271,7 @@
             margin-bottom: 6px;
             color: #555555;
             transition: 0.2s;
+            pointer-events: none;
         }
 
         .option-card span {
@@ -1346,21 +1281,21 @@
             letter-spacing: 0.5px;
             color: #b3b3b3;
             text-transform: uppercase;
+            pointer-events: none;
         }
 
-        .option-card:hover, .option-card.active {
-            border-color: var(--gold);
-            background: #000000;
-            box-shadow: 0 4px 12px rgba(212,175,55,0.15);
+        .option-card:active, .option-card.active {
+            border-color: var(--gold) !important;
+            background: #000000 !important;
+            box-shadow: 0 4px 12px rgba(212,175,55,0.25) !important;
         }
 
         .option-card.active i {
-            color: var(--gold);
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+            color: var(--gold) !important;
         }
         
         .option-card.active span {
-            color: var(--white);
+            color: var(--white) !important;
         }
 
         .input-group {
@@ -1399,9 +1334,7 @@
             box-sizing: border-box;
             font-size: 0.8rem;
             transition: 0.2s;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
+            pointer-events: auto !important;
         }
 
         input:focus {
@@ -1425,11 +1358,31 @@
             margin-top: 5px;
             text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(212,175,55,0.2);
-            transition: 0.3s;
+            pointer-events: auto !important;
         }
 
-        .order-btn:hover {
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+        .luxury-footer {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px 0;
+            border-top: 1px solid #1a1a1a;
+        }
+        
+        .footer-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: #555;
+            text-transform: uppercase;
+            margin: 0 0 5px 0;
+        }
+
+        .footer-copy {
+            font-size: 0.55rem;
+            color: #333;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 0;
         }
 
         .luxury-popup-overlay {
@@ -1476,12 +1429,10 @@
             font-size: 2.8rem;
             color: var(--gold);
             margin-bottom: 15px;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
         .alert-card .popup-icon {
             color: var(--error);
-            text-shadow: 0 0 15px rgba(211, 47, 47, 0.4);
         }
 
         .popup-title {
@@ -1502,113 +1453,6 @@
             color: #cccccc;
             font-weight: 300;
         }
-
-        @media (max-width: 768px) {
-            .studio-wrapper-outer {
-                padding: 45px 12px 15px 12px;
-            }
-
-            .intro-section {
-                padding: 30px 15px;
-                margin-bottom: 20px;
-            }
-
-            .intro-logo {
-                font-size: 2.3rem;
-                letter-spacing: 6px;
-            }
-
-            .intro-tagline {
-                font-size: 0.75rem;
-                letter-spacing: 2px;
-                margin-bottom: 20px;
-            }
-
-            .intro-features {
-                max-width: 100%;
-                margin-bottom: 25px;
-            }
-
-            .intro-features li {
-                font-size: 0.72rem;
-                margin-bottom: 10px;
-            }
-
-            .start-btn {
-                width: 100%;
-                padding: 14px 20px;
-                font-size: 0.8rem;
-            }
-
-            .header h1 {
-                font-size: 1.8rem;
-                letter-spacing: 5px;
-            }
-
-            .header p {
-                font-size: 0.65rem;
-                letter-spacing: 2px;
-            }
-
-            .section-box {
-                padding: 12px 10px;
-                margin-bottom: 12px;
-            }
-
-            .section-title {
-                font-size: 0.78rem;
-            }
-
-            .options-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 6px;
-            }
-
-            .options-grid:has(.option-card:nth-child(5)) {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-
-            .option-card {
-                padding: 12px 5px;
-            }
-
-            .option-card i {
-                font-size: 1.2rem;
-                margin-bottom: 4px;
-            }
-
-            .option-card span {
-                font-size: 0.58rem;
-            }
-
-            input {
-                font-size: 0.75rem;
-                padding: 8px 10px;
-            }
-
-            label {
-                font-size: 0.58rem;
-            }
-
-            .order-btn {
-                padding: 12px;
-                font-size: 0.85rem;
-                letter-spacing: 2px;
-            }
-
-            .luxury-footer {
-                padding: 10px 0;
-            }
-
-            .footer-tag {
-                font-size: 0.55rem;
-                letter-spacing: 2px;
-            }
-
-            .footer-copy {
-                font-size: 0.5rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -1618,7 +1462,7 @@
         
         <div class="top-meta-bar" id="topMeta">
             <span>Studio: Active</span>
-            <span id="editionDisplay">Edition: 1-of-1 Pro</span>
+            <span id="editionDisplay">Edition: Pro</span>
         </div>
 
         <div class="intro-section" id="landingView">
@@ -1806,24 +1650,18 @@
 </div>
 
 <script>
-    // 🔥 Firebase Configuration
+    // 🔥 Firebase Initialization
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
         databaseURL: "https://chief-login12-default-rtdb.firebaseio.com/",
-        projectId: "chief-login12",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        projectId: "chief-login12"
     };
 
-    // Initialize Firebase
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     const database = firebase.database();
 
-    // 🔍 URL se Dynamic User ID detect karna (Jaise: ?user=JATISH2752 ya ?user=mrchiefx12)
+    // 🔍 URL se ?user= param check karega
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -1831,12 +1669,17 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // Dynamic User ID get karega, agar URL mein na ho toh default 'CHIEF_GUEST' lega
-    const detectedUser = getUrlParameter('user') || 'CHIEF_GUEST';
+    let detectedUser = getUrlParameter('user');
 
-    // UI par display update karna
-    document.getElementById('editionDisplay').innerText = `Edition: ${detectedUser} Pro`;
+    // Display update
+    function updateUserDisplay() {
+        let activeUser = detectedUser || 'CHIEF_GUEST';
+        document.getElementById('editionDisplay').innerText = `Edition: ${activeUser} Pro`;
+    }
+    
+    updateUserDisplay();
 
+    // Active selection store karne ke liye
     let selections = {
         targetGroup: '',
         shape: '',
@@ -1847,7 +1690,9 @@
 
     function selectOption(category, value, element) {
         selections[category] = value;
-        element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
+        let parent = element.parentElement;
+        let cards = parent.querySelectorAll('.option-card');
+        cards.forEach(c => c.classList.remove('active'));
         element.classList.add('active');
     }
 
@@ -1917,17 +1762,19 @@
             mechanismInsideLook: selections.insideLook
         };
 
-        // 🚀 Ab data dynamically detected user path par save hoga (e.g., users/JATISH2752/orders)
-        const userOrderRef = database.ref(`users/${detectedUser}/orders`).push();
+        const targetUser = detectedUser && detectedUser !== '' ? detectedUser : 'CHIEF_GUEST';
+
+        // 🚀 Dynamic path: users/{userId}/orders
+        const userOrderRef = database.ref(`users/${targetUser}/orders`).push();
         
         userOrderRef.set(finalizedOrderPayload)
             .then(() => {
-                console.log(`Order saved successfully under ${detectedUser}!`);
-                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under ${detectedUser} orders!`);
+                console.log(`Order saved under ${targetUser}`);
+                triggerPopup('success', 'Order Saved', `Your custom watch configuration has been saved under ${targetUser} orders!`);
             })
             .catch((error) => {
-                console.error("Firebase save error:", error);
-                triggerPopup('error', 'Save Failed', 'Could not save order to database. Please check connection.');
+                console.error("Firebase error:", error);
+                triggerPopup('error', 'Save Failed', 'Could not save order to database.');
             });
     }
 </script>
@@ -1948,7 +1795,7 @@
     <!-- Firebase Compat SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
     <style>
         :root {
@@ -1979,27 +1826,17 @@
             padding: 0 !important;
             width: 100%;
             height: 100%;
-            overflow: hidden !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        html::-webkit-scrollbar,
-        body::-webkit-scrollbar,
-        .history-wrapper-outer::-webkit-scrollbar {
-            display: none !important;
-            width: 0 !important;
-            height: 0 !important;
+            touch-action: manipulation;
         }
 
         .history-wrapper-outer {
             width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
+            min-height: 100%;
             padding: 20px 14px 40px 14px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            box-sizing: border-box;
         }
 
         .history-container {
@@ -2035,7 +1872,6 @@
             font-weight: 500;
         }
 
-        /* Clean Sharp Loading Box (No blur) */
         .loading-box {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
@@ -2093,6 +1929,7 @@
             cursor: pointer;
             user-select: none;
             background: var(--surface);
+            pointer-events: auto !important;
         }
 
         .order-title-text {
@@ -2102,6 +1939,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            pointer-events: none;
         }
 
         .order-title-text i {
@@ -2119,6 +1957,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: none;
         }
 
         .order-item-box.open .order-toggle-icon {
@@ -2263,6 +2102,7 @@
             text-transform: uppercase;
             cursor: pointer;
             border: none;
+            pointer-events: auto !important;
         }
 
         .btn-confirm {
@@ -2338,7 +2178,6 @@
             margin: 0;
         }
 
-        /* Clean Crisp Popup (No backdrop blur) */
         .luxury-popup-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -2394,12 +2233,12 @@
         
         <div class="header">
             <h1>CHIEF</h1>
-            <p>Private Registry History</p>
+            <p id="vaultSubtitle">Private Registry History</p>
         </div>
 
         <!-- Orders Container -->
         <div id="ordersContainer">
-            <div class="loading-box">
+            <div class="loading-box" id="loaderBox">
                 <div class="loading-circle" style="margin: 0 auto 8px auto;"></div>
                 Loading vault history...
             </div>
@@ -2446,147 +2285,161 @@
         firebase.initializeApp(firebaseConfig);
     }
     const database = firebase.database();
-    const ordersRef = database.ref('users/CHIEF_GUEST/orders');
 
-    ordersRef.on('value', (snapshot) => {
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        let results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    let detectedUser = getUrlParameter('user') || localStorage.getItem('userId') || 'CHIEF_GUEST';
+    
+    document.getElementById('vaultSubtitle').innerText = `Registry History (${detectedUser})`;
+
+    function renderEmptyState(msg) {
         const container = document.getElementById('ordersContainer');
-        container.innerHTML = '';
-
-        if (!snapshot.exists()) {
-            container.innerHTML = `
-                <div class="empty-state-card">
-                    <div class="empty-title">NO HISTORY YET</div>
-                    <div class="empty-description">
-                        Your journey with Chief has just begun.<br>
-                        Your custom orders will appear here once placed.
-                    </div>
-                </div>
-            `;
-            return;
-        }
-
-        const ordersData = snapshot.val();
-        let validOrdersCount = 0;
-        
-        Object.keys(ordersData).forEach((orderKey) => {
-            const order = ordersData[orderKey];
-            
-            if (order.status === 'Cancelled') {
-                return; 
-            }
-
-            validOrdersCount++;
-
-            const totalPrice = order.totalPrice;
-            const deliveryCharge = order.deliveryCharge || '0';
-            const orderStatus = order.orderStatus || 'Pending';
-
-            let pricingBlock = '';
-            if (!totalPrice) {
-                pricingBlock = `
-                    <div class="waiting-box">
-                        <div class="loading-circle"></div>
-                        <span>Waiting for total price from Admin...</span>
-                    </div>
-                `;
-            } else {
-                pricingBlock = `
-                    <div class="total-price-display">₹${totalPrice}</div>
-                    <div class="cod-tag"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery &bull; Delivery: ₹${deliveryCharge}</div>
-                `;
-            }
-
-            let actionButtonsBlock = '';
-            if (!order.isConfirmed) {
-                actionButtonsBlock = `
-                    <div class="action-buttons-group">
-                        ${totalPrice ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
-                        <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel</button>
-                    </div>
-                `;
-            } else {
-                const isPacked = orderStatus === 'Packed' || orderStatus === 'Shipped' || orderStatus === 'Delivered';
-                const isShipped = orderStatus === 'Shipped' || orderStatus === 'Delivered';
-                const isDelivered = orderStatus === 'Delivered';
-
-                actionButtonsBlock = `
-                    <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
-                        <div class="sub-section-title"><i class="fa-solid fa-truck-fast"></i> Order Tracking Pipeline</div>
-                        <ul class="tracking-timeline">
-                            <li class="tracking-step active"><i class="fa-solid fa-circle-check"></i> Confirmed by User</li>
-                            <li class="tracking-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box-archive"></i> Item Packed in Vault</li>
-                            <li class="tracking-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched / Shipped</li>
-                            <li class="tracking-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-award"></i> Successfully Delivered</li>
-                        </ul>
-                    </div>
-                `;
-            }
-
-            const orderBox = document.createElement('div');
-            orderBox.className = 'order-item-box';
-            orderBox.innerHTML = `
-                <div class="order-header-bar" onclick="toggleOrderAccordion(this)">
-                    <div class="order-title-text">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                        <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
-                    </div>
-                    <div class="order-toggle-icon">
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                </div>
-                <div class="order-details-content">
-                    <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
-                    <ul class="specs-list">
-                        <li><span>Target Edition:</span><span>${order.targetSegment || 'N/A'}</span></li>
-                        <li><span>Case Shape:</span><span>${order.caseShape || 'N/A'}</span></li>
-                        <li><span>Dial Color:</span><span>${order.dialColor || 'N/A'}</span></li>
-                        <li><span>Top Border:</span><span>${order.topBorderStyle || 'N/A'} (${order.topBorderColor || 'N/A'})</span></li>
-                        <li><span>Strap Material:</span><span>${order.strapMaterial || 'N/A'}</span></li>
-                        <li><span>Mechanism:</span><span>${order.mechanismInsideLook || 'N/A'}</span></li>
-                        <li><span>Location:</span><span>${order.ownerLocation || 'N/A'}</span></li>
-                    </ul>
-
-                    <div class="sub-section-title"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
-                    <div class="pricing-status-box">
-                        ${pricingBlock}
-                    </div>
-
-                    ${actionButtonsBlock}
-
-                    <div class="terms-box">
-                        <b>Terms & Conditions:</b> All Chief luxury timepieces are precision-crafted custom editions created strictly to individual specifications. Production initiates immediately under absolute vault privacy upon confirmation.
-                    </div>
-                </div>
-            `;
-            container.appendChild(orderBox);
-        });
-
-        if (validOrdersCount === 0) {
-            container.innerHTML = `
-                <div class="empty-state-card">
-                    <div class="empty-title">NO HISTORY YET</div>
-                    <div class="empty-description">
-                        Your journey with Chief has just begun.<br>
-                        Your custom orders will appear here once placed.
-                    </div>
-                </div>
-            `;
-        }
-    }, (error) => {
-        console.error("Firebase read error: ", error);
-        document.getElementById('ordersContainer').innerHTML = `
+        container.innerHTML = `
             <div class="empty-state-card">
-                <div class="empty-title">CONNECTION ERROR</div>
-                <div class="empty-description">Unable to sync with the secure vault.</div>
+                <div class="empty-title">NO HISTORY YET</div>
+                <div class="empty-description">
+                    ${msg || 'Your journey with Chief has just begun.<br>Your custom orders will appear here once placed.'}
+                </div>
             </div>
         `;
+    }
+
+    function fetchHistory(userId) {
+        const ordersRef = database.ref(`users/${userId}/orders`);
+
+        ordersRef.on('value', (snapshot) => {
+            const container = document.getElementById('ordersContainer');
+            container.innerHTML = '';
+
+            if (!snapshot.exists()) {
+                renderEmptyState();
+                return;
+            }
+
+            const ordersData = snapshot.val();
+            let validOrdersCount = 0;
+
+            Object.keys(ordersData).forEach((orderKey) => {
+                const order = ordersData[orderKey];
+
+                if (order.status === 'Cancelled') {
+                    return; 
+                }
+
+                validOrdersCount++;
+
+                const totalPrice = order.totalPrice;
+                const deliveryCharge = order.deliveryCharge || '0';
+                const orderStatus = order.orderStatus || 'Pending';
+
+                let pricingBlock = '';
+                if (!totalPrice) {
+                    pricingBlock = `
+                        <div class="waiting-box">
+                            <div class="loading-circle"></div>
+                            <span>Waiting for total price from Admin...</span>
+                        </div>
+                    `;
+                } else {
+                    pricingBlock = `
+                        <div class="total-price-display">₹${totalPrice}</div>
+                        <div class="cod-tag"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery &bull; Delivery: ₹${deliveryCharge}</div>
+                    `;
+                }
+
+                let actionButtonsBlock = '';
+                if (!order.isConfirmed) {
+                    actionButtonsBlock = `
+                        <div class="action-buttons-group">
+                            ${totalPrice ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
+                            <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel</button>
+                        </div>
+                    `;
+                } else {
+                    const isPacked = orderStatus === 'Packed' || orderStatus === 'Shipped' || orderStatus === 'Delivered';
+                    const isShipped = orderStatus === 'Shipped' || orderStatus === 'Delivered';
+                    const isDelivered = orderStatus === 'Delivered';
+
+                    actionButtonsBlock = `
+                        <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
+                            <div class="sub-section-title"><i class="fa-solid fa-truck-fast"></i> Order Tracking Pipeline</div>
+                            <ul class="tracking-timeline">
+                                <li class="tracking-step active"><i class="fa-solid fa-circle-check"></i> Confirmed by User</li>
+                                <li class="tracking-step ${isPacked ? 'active' : ''}"><i class="fa-solid fa-box-archive"></i> Item Packed in Vault</li>
+                                <li class="tracking-step ${isShipped ? 'active' : ''}"><i class="fa-solid fa-truck"></i> Dispatched / Shipped</li>
+                                <li class="tracking-step ${isDelivered ? 'active' : ''}"><i class="fa-solid fa-award"></i> Successfully Delivered</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                const orderBox = document.createElement('div');
+                orderBox.className = 'order-item-box';
+                orderBox.innerHTML = `
+                    <div class="order-header-bar" onclick="toggleOrderAccordion(this)">
+                        <div class="order-title-text">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>${order.ownerName || 'Custom Order'} &bull; ${order.caseShape || 'Watch'}</span>
+                        </div>
+                        <div class="order-toggle-icon">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="order-details-content">
+                        <div class="sub-section-title"><i class="fa-solid fa-sliders"></i> Customization Specs</div>
+                        <ul class="specs-list">
+                            <li><span>Target Edition:</span><span>${order.targetSegment || 'N/A'}</span></li>
+                            <li><span>Case Shape:</span><span>${order.caseShape || 'N/A'}</span></li>
+                            <li><span>Dial Color:</span><span>${order.dialColor || 'N/A'}</span></li>
+                            <li><span>Top Border:</span><span>${order.topBorderStyle || 'N/A'} (${order.topBorderColor || 'N/A'})</span></li>
+                            <li><span>Strap Material:</span><span>${order.strapMaterial || 'N/A'}</span></li>
+                            <li><span>Mechanism:</span><span>${order.mechanismInsideLook || 'N/A'}</span></li>
+                            <li><span>Location:</span><span>${order.ownerLocation || 'N/A'}</span></li>
+                        </ul>
+
+                        <div class="sub-section-title"><i class="fa-solid fa-receipt"></i> Pricing Details</div>
+                        <div class="pricing-status-box">
+                            ${pricingBlock}
+                        </div>
+
+                        ${actionButtonsBlock}
+
+                        <div class="terms-box">
+                            <b>Terms & Conditions:</b> All Chief luxury timepieces are precision-crafted custom editions created strictly to individual specifications. Production initiates immediately under absolute vault privacy upon confirmation.
+                        </div>
+                    </div>
+                `;
+                container.appendChild(orderBox);
+            });
+
+            if (validOrdersCount === 0) {
+                renderEmptyState();
+            }
+        }, (error) => {
+            console.error("Firebase read error: ", error);
+            renderEmptyState("Unable to sync with the secure vault. Check connection.");
+        });
+    }
+
+    // Auto check active auth state or URL parameter
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user && (!detectedUser || detectedUser === 'CHIEF_GUEST')) {
+            detectedUser = user.uid;
+            document.getElementById('vaultSubtitle').innerText = `Registry History (${detectedUser})`;
+        }
+        fetchHistory(detectedUser);
     });
 
     function toggleOrderAccordion(headerElement) {
         const parentBox = headerElement.parentElement;
         const content = parentBox.querySelector('.order-details-content');
         const isOpen = parentBox.classList.contains('open');
-        
+
         document.querySelectorAll('.order-item-box').forEach(box => {
             box.classList.remove('open');
             box.querySelector('.order-details-content').style.display = 'none';
@@ -2608,7 +2461,7 @@
 
     function cancelOrder(orderKey) {
         if(confirm("Are you sure you want to cancel this custom order?")) {
-            database.ref(`users/CHIEF_GUEST/orders/${orderKey}`).update({
+            database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
                 status: 'Cancelled'
             }).then(() => {
                 triggerPopup('Order Cancelled', 'Your order has been removed from active registries.');
@@ -2617,7 +2470,7 @@
     }
 
     function confirmOrder(orderKey) {
-        database.ref(`users/CHIEF_GUEST/orders/${orderKey}`).update({
+        database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
             isConfirmed: true,
             orderStatus: 'Confirmed'
         }).then(() => {
