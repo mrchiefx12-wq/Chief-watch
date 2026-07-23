@@ -2217,6 +2217,12 @@
             to { transform: rotate(360deg); }
         }
 
+        .price-breakdown {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
         .price-calculation {
             font-size: 0.8rem;
             color: #DDD;
@@ -2291,8 +2297,6 @@
             display: flex;
             gap: 10px;
             margin-top: 14px;
-            position: relative;
-            z-index: 10;
         }
 
         .btn-action {
@@ -2304,7 +2308,6 @@
             text-transform: uppercase;
             cursor: pointer;
             border: none;
-            touch-action: manipulation;
         }
 
         .btn-confirm {
@@ -2315,7 +2318,7 @@
         .btn-cancel {
             background: #181111;
             color: var(--error);
-            border: 1px solid rgba(255, 77, 77, 0.4);
+            border: 1px solid rgba(255, 77, 77, 0.3);
         }
 
         .terms-box {
@@ -2470,6 +2473,7 @@
 
 <script>
 
+    // Set to maintain open accordion state across live updates
     const openOrderKeys = new Set();
 
     function detectCurrentUserId() {
@@ -2501,34 +2505,6 @@
     const detectedUser = detectCurrentUserId();
     const vaultSub = document.getElementById('vaultSubtitle');
     if (vaultSub) vaultSub.innerText = `Registry History (${detectedUser})`;
-
-    // Explicitly binding Cancel and Confirm to Global Window Object for mobile accessibility
-    window.cancelOrder = function(orderKey) {
-        if (!database) return;
-        if (confirm("Are you sure you want to cancel this order?")) {
-            database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
-                status: 'Cancelled',
-                orderStatus: 'Cancelled'
-            }).then(() => {
-                triggerPopup('Order Cancelled', 'Your order has been cancelled.');
-            }).catch((error) => {
-                alert("Error: " + error.message);
-            });
-        }
-    };
-
-    window.confirmOrder = function(orderKey) {
-        if (!database) return;
-        database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
-            isConfirmed: true,
-            orderStatus: 'Confirmed',
-            status: 'Confirmed'
-        }).then(() => {
-            triggerPopup('Order Confirmed!', 'Thank you. Your watch is locked for processing.');
-        }).catch((error) => {
-            alert("Error: " + error.message);
-        });
-    };
 
     if (database) {
         const ordersRef = database.ref(`users/${detectedUser}/orders`);
@@ -2575,6 +2551,7 @@
                 const isShipped = order.isShipped || ['Shipped', 'Delivered'].includes(currentStatus);
                 const isDelivered = order.isDelivered || (currentStatus === 'Delivered');
 
+                // Price Calculation Breakdown Block
                 let pricingBlock = '';
                 if (!totalPriceStr) {
                     pricingBlock = `
@@ -2602,8 +2579,8 @@
 
                 let actionButtonsBlock = (!order.isConfirmed && currentStatus !== 'Confirmed' && !isPacked) ? `
                     <div class="action-buttons-group">
-                        ${totalPriceStr ? `<button class="btn-action btn-confirm" onclick="window.confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
-                        <button class="btn-action btn-cancel" onclick="window.cancelOrder('${orderKey}')">Cancel Order</button>
+                        ${totalPriceStr ? `<button class="btn-action btn-confirm" onclick="confirmOrder('${orderKey}')">Confirm Order</button>` : ''}
+                        <button class="btn-action btn-cancel" onclick="cancelOrder('${orderKey}')">Cancel Order</button>
                     </div>
                 ` : `
                     <div style="margin-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
@@ -2617,6 +2594,7 @@
                     </div>
                 `;
 
+                // Check if this box was previously opened
                 const isOpenedBefore = openOrderKeys.has(orderKey);
 
                 const orderBox = document.createElement('div');
@@ -2675,6 +2653,7 @@
         `;
     }
 
+    // Toggle with state preservation (No Auto Collapse Fix)
     window.toggleOrderAccordion = function(headerElement, key) {
         const parentBox = headerElement.parentElement;
         const content = parentBox.querySelector('.order-details-content');
@@ -2703,6 +2682,29 @@
         overlay.classList.add('show');
         setTimeout(() => { overlay.classList.remove('show'); }, 2000);
     }
+
+    window.cancelOrder = function(orderKey) {
+        if (!database) return;
+        if(confirm("Are you sure you want to cancel this custom order?")) {
+            database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
+                status: 'Cancelled',
+                orderStatus: 'Cancelled'
+            }).then(() => {
+                triggerPopup('Order Cancelled', 'Your order has been removed from active registries.');
+            });
+        }
+    };
+
+    window.confirmOrder = function(orderKey) {
+        if (!database) return;
+        database.ref(`users/${detectedUser}/orders/${orderKey}`).update({
+            isConfirmed: true,
+            orderStatus: 'Confirmed',
+            status: 'Confirmed'
+        }).then(() => {
+            triggerPopup('Order Confirmed!', 'Thank you. Your watch is now locked for master crafting.');
+        });
+    };
 </script>
 
 </body>
