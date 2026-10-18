@@ -2966,6 +2966,11 @@
             border: 1px dashed var(--cv-accent-color);
             border-radius: 8px;
             text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .cv-voucher-code-container:hover {
+            background: rgba(255, 255, 255, 0.08);
         }
         .cv-voucher-code-label {
             font-size: 10px;
@@ -2981,6 +2986,13 @@
             letter-spacing: 1px;
             color: #fff;
             word-break: break-all;
+        }
+        .copy-hint {
+            font-size: 9px;
+            color: var(--cv-accent-color);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* DETAILS TABLE & WATCH REGISTRATION */
@@ -3017,7 +3029,7 @@
         .cv-detail-label { color: #888; font-weight: 500; }
         .cv-detail-val { color: #fff; font-weight: bold; }
 
-        /* Watch Register Input Section inside Details */
+        /* Watch Registry Section */
         .cv-watch-reg-box {
             margin-top: 15px;
             padding-top: 12px;
@@ -3045,8 +3057,14 @@
             font-size: 12px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 12px;
             text-transform: uppercase;
+        }
+        .change-limit-info {
+            font-size: 10px;
+            color: #aaa;
+            margin-top: 6px;
+            text-align: center;
         }
 
         /* TERMS & CONDITIONS */
@@ -3122,6 +3140,9 @@
             color: #fff; border: none; border-radius: 8px; padding: 10px;
             font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 12px;
         }
+        .cv-error-msg {
+            color: #ff5252; font-size: 11px; text-align: center; margin-top: 8px; display: none; font-weight: bold;
+        }
     </style>
 </head>
 <body class="cv-wrapper">
@@ -3132,7 +3153,7 @@
         </header>
 
         <div class="cv-cards-container" id="cardsContainer">
-            <!-- SILVER CARD (No Special Frame) -->
+            <!-- SILVER CARD -->
             <div class="cv-voucher-card cv-silver-card" id="card-silver">
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
@@ -3145,14 +3166,15 @@
                     </ul>
                     <button class="cv-buy-btn" data-tier="silver" data-amount="200">BUY ₹200</button>
                     
-                    <div class="cv-voucher-code-container" style="display: none;" id="code-silver">
+                    <div class="cv-voucher-code-container" style="display: none;" id="code-silver" onclick="copyToClipboard('code-val-silver')">
                         <div class="cv-voucher-code-label">Your Unique Voucher Code</div>
                         <div class="cv-voucher-code-value" id="code-val-silver">CHIEF-SLV-XXXX</div>
+                        <div class="copy-hint">Click to Copy Code</div>
                     </div>
                 </div>
             </div>
 
-            <!-- GOLD CARD (Special Frame) -->
+            <!-- GOLD CARD -->
             <div class="cv-voucher-card cv-gold-card" id="card-gold">
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
@@ -3161,19 +3183,20 @@
                     <ul class="cv-card-list">
                         <li>10% Flat Discount</li>
                         <li>3 Free Watch Repairings</li>
-                        <li>Exclusive App Access</li>
+                        <li>Exclusive Gold Frame Redemption</li>
                         <li>Extended Warranty</li>
                     </ul>
                     <button class="cv-buy-btn" data-tier="gold" data-amount="400">BUY ₹400</button>
 
-                    <div class="cv-voucher-code-container" style="display: none;" id="code-gold">
+                    <div class="cv-voucher-code-container" style="display: none;" id="code-gold" onclick="copyToClipboard('code-val-gold')">
                         <div class="cv-voucher-code-label">Your Unique Voucher Code</div>
                         <div class="cv-voucher-code-value" id="code-val-gold">CHIEF-GLD-XXXX</div>
+                        <div class="copy-hint">Click to Copy Code</div>
                     </div>
                 </div>
             </div>
 
-            <!-- DIAMOND CARD (Special Frame) -->
+            <!-- DIAMOND CARD -->
             <div class="cv-voucher-card cv-diamond-card" id="card-diamond">
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
@@ -3182,21 +3205,21 @@
                     <ul class="cv-card-list">
                         <li>10% Flat Discount</li>
                         <li>10 Free Watch Repairings</li>
-                        <li>Exclusive App Access</li>
-                        <li>Customizable Watch Strap</li>
-                        <li>Free Delivery On All Orders</li>
+                        <li>Exclusive Diamond Frame Redemption</li>
+                        <li>Customizable Watch Strap & Delivery</li>
                     </ul>
                     <button class="cv-buy-btn" data-tier="diamond" data-amount="800">BUY ₹800</button>
 
-                    <div class="cv-voucher-code-container" style="display: none;" id="code-diamond">
+                    <div class="cv-voucher-code-container" style="display: none;" id="code-diamond" onclick="copyToClipboard('code-val-diamond')">
                         <div class="cv-voucher-code-label">Your Unique Voucher Code</div>
                         <div class="cv-voucher-code-value" id="code-val-diamond">CHIEF-DMD-XXXX</div>
+                        <div class="copy-hint">Click to Copy Code</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- DETAILS TABLE WITH WATCH REGISTRATION INPUT -->
+        <!-- DETAILS TABLE WITH WATCH REGISTRATION -->
         <div class="cv-details-table-card" id="voucherDetailsCard">
             <div class="cv-details-title-row">
                 <span>💳</span> Chief Membership / Voucher
@@ -3214,15 +3237,17 @@
                 <div class="cv-detail-val" id="det-repair-count" style="color: #81D4FA;">0 Left</div>
             </div>
             <div class="cv-detail-row">
-                <div class="cv-detail-label">Perks & Access</div>
-                <div class="cv-detail-val" id="det-perks" style="color: #ffd700; text-align: right; max-width: 180px;">-</div>
+                <div class="cv-detail-label">Active Frame</div>
+                <div class="cv-detail-val" id="det-active-frame" style="color: #ffd700;">Default (None)</div>
             </div>
 
             <!-- Watch Registry Section -->
-            <div class="cv-watch-reg-box">
-                <div class="cv-detail-label" style="color: #ffd700; font-weight: bold;">Watch Registration Name / Code:</div>
-                <input type="text" class="cv-watch-input" id="registeredWatchInput" placeholder="Enter Watch Model / Code (e.g. CHF-001)">
-                <button class="cv-watch-save-btn" id="saveWatchBtn">Save & Register Watch</button>
+            <div class="cv-watch-reg-box" id="watchRegSection" style="display: none;">
+                <div class="cv-detail-label" style="color: #ffd700; font-weight: bold;" id="frameRegLabel">Register Watch Code:</div>
+                <input type="text" class="cv-watch-input" id="registeredWatchInput" placeholder="Enter Watch Code (e.g. CHF-001)">
+                
+                <button class="cv-watch-save-btn" id="openPopupBtn">Apply Frame & Save Watch</button>
+                <div class="change-limit-info" id="changeLimitInfo">Changes remaining: -</div>
             </div>
         </div>
 
@@ -3230,14 +3255,14 @@
         <div class="cv-notice-section">
             <h3>Terms & Conditions:</h3>
             <ol>
-                <li>Repairings: Free repairings are valid for registered Chief watches only.</li>
-                <li>Discount: 10% Flat OFF is applied on eligible Chief watches & accessories.</li>
-                <li>Policy: By purchasing a Chief Voucher, you agree to the Chief Terms & Conditions.</li>
+                <li>Frames: Gold vouchers apply Gold frames only; Diamond vouchers apply Diamond frames only. Silver vouchers have standard default frames[cite: 3].</li>
+                <li>Changes Limit: Gold voucher code changes are limited to 2 times. Diamond voucher code changes are limited to 4 times[cite: 3].</li>
+                <li>Security: Changing watch codes requires entering your valid voucher code inside the verification popup[cite: 3].</li>
             </ol>
         </div>
     </div>
 
-    <!-- MODALS -->
+    <!-- PAYMENT MODAL -->
     <div class="cv-modal-overlay" id="paymentModal">
         <div class="cv-modal-card">
             <button class="cv-modal-close" id="closePaymentModalBtn">&times;</button>
@@ -3257,6 +3282,22 @@
         </div>
     </div>
 
+    <!-- VOUCHER VERIFICATION POPUP MODAL -->
+    <div class="cv-modal-overlay" id="voucherVerifyModal">
+        <div class="cv-modal-card">
+            <button class="cv-modal-close" id="closeVoucherModalBtn">&times;</button>
+            <div class="cv-modal-title-custom">Verification Your Voucher</div>
+            <hr class="cv-modal-divider">
+            <div class="cv-modal-desc" style="margin-bottom: 10px;">
+                Enter your voucher code to authenticate and apply changes:
+            </div>
+            <input type="text" class="cv-utr-input" id="popupVoucherCodeInput" placeholder="Enter your voucher code">
+            <div class="cv-error-msg" id="popupErrorMsg">Wrong code! Please check and try again.</div>
+            <button class="cv-verify-btn" id="confirmVoucherPopupBtn" style="margin-top: 14px;">Confirm & Apply</button>
+        </div>
+    </div>
+
+    <!-- WAITING MODAL -->
     <div class="cv-modal-overlay" id="waitingModal">
         <div class="cv-modal-card" style="text-align: center; border-color: #ff9800;">
             <div class="cv-modal-title-custom" style="color: #ff9800;">Waiting for Verification</div>
@@ -3268,6 +3309,7 @@
         </div>
     </div>
 
+    <!-- SUCCESS MODAL -->
     <div class="cv-modal-overlay" id="successModal">
         <div class="cv-modal-card" style="text-align: center; border-color: #2ecc71;">
             <div class="cv-modal-title-custom" style="color: #2ecc71; font-size: 16px;">Verification Completed! 🎉</div>
@@ -3280,6 +3322,35 @@
     </div>
 
     <script>
+        function copyToClipboard(elementId) {
+            var textToCopy = document.getElementById(elementId).innerText;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    alert("Voucher code copied to clipboard: " + textToCopy);
+                }).catch(function(err) {
+                    fallbackCopyText(textToCopy);
+                });
+            } else {
+                fallbackCopyText(textToCopy);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert("Voucher code copied to clipboard: " + text);
+            } catch (err) {
+                alert("Unable to copy voucher code.");
+            }
+            document.body.removeChild(textArea);
+        }
+
         (function() {
             var currentSelectedTier = "";
             var currentSelectedAmount = 0;
@@ -3287,9 +3358,11 @@
             var isApprovedWaitingForUserAction = false;
             var approvedVoucherBackupData = null;
             var db = null;
+            var cmSmmDb = null;
             var firebaseInitialized = false;
             var firebaseListenerRef = null;
 
+            // Primary App Firebase Config (User Auth & Voucher)
             var firebaseConfig = {
                 "apiKey": "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
                 "authDomain": "chief-login12.firebaseapp.com",
@@ -3300,11 +3373,27 @@
                 "appId": "1:334157325641:web:c9b2d4048105e71011e698"
             };
 
+            // CM-SMM-PANEL Database Config (For direct watch updates like CHF-001)
+            var cmSmmConfig = {
+                "apiKey": "AIzaSyAIG79RWnrUTaRNhFU8YWBjGlNWiZ1Eeaw",
+                "authDomain": "cm-smm-panel.firebaseapp.com",
+                "databaseURL": "https://cm-smm-panel-default-rtdb.firebaseio.com",
+                "projectId": "cm-smm-panel",
+                "storageBucket": "cm-smm-panel.firebasestorage.app",
+                "messagingSenderId": "805393568681",
+                "appId": "1:805393568681:web:e1c454a61e17b394082ab8"
+            };
+
             try {
                 if (typeof firebase !== 'undefined') {
+                    // Initialize default app
                     firebase.initializeApp(firebaseConfig);
                     db = firebase.database();
                     firebaseInitialized = true;
+
+                    // Initialize secondary CM-SMM-PANEL app
+                    var cmApp = firebase.initializeApp(cmSmmConfig, "cmSmmApp");
+                    cmSmmDb = firebase.database(cmApp);
                 }
             } catch (e) {
                 console.warn("Firebase Error:", e);
@@ -3346,22 +3435,118 @@
                 var autoPayBtn = document.getElementById('autoPayBtn');
                 if (autoPayBtn) autoPayBtn.addEventListener('click', triggerAutoPay);
 
-                var saveWatchBtn = document.getElementById('saveWatchBtn');
-                if (saveWatchBtn) {
-                    saveWatchBtn.addEventListener('click', function() {
-                        var watchName = document.getElementById('registeredWatchInput').value.trim();
-                        if (!watchName) {
-                            alert("Please enter your watch name or code.");
+                // Open Popup Modal
+                var openPopupBtn = document.getElementById('openPopupBtn');
+                if (openPopupBtn) {
+                    openPopupBtn.addEventListener('click', function() {
+                        var watchCode = document.getElementById('registeredWatchInput').value.trim();
+                        if (!watchCode) {
+                            alert("Please enter your watch code first.");
                             return;
                         }
+                        document.getElementById('popupVoucherCodeInput').value = "";
+                        document.getElementById('popupErrorMsg').style.display = "none";
+                        document.getElementById('voucherVerifyModal').style.display = "flex";
+                    });
+                }
+
+                // Close popup modal handler
+                var closeVoucherModalBtn = document.getElementById('closeVoucherModalBtn');
+                if (closeVoucherModalBtn) {
+                    closeVoucherModalBtn.addEventListener('click', function() {
+                        document.getElementById('voucherVerifyModal').style.display = "none";
+                    });
+                }
+
+                // Confirm Voucher & Update direct Watch node (e.g. CHF-001)
+                var confirmVoucherPopupBtn = document.getElementById('confirmVoucherPopupBtn');
+                if (confirmVoucherPopupBtn) {
+                    confirmVoucherPopupBtn.addEventListener('click', function() {
+                        var watchCode = document.getElementById('registeredWatchInput').value.trim();
+                        var enteredVoucherCode = document.getElementById('popupVoucherCodeInput').value.trim();
+                        var errorMsgEl = document.getElementById('popupErrorMsg');
+                        
+                        errorMsgEl.style.display = "none";
+
+                        if (!enteredVoucherCode) {
+                            errorMsgEl.innerText = "Please enter your voucher code.";
+                            errorMsgEl.style.display = "block";
+                            return;
+                        }
+
                         if (db && userId !== "CHIEF_GUEST") {
-                            db.ref("users/" + userId + "/activeVoucher/registeredWatch").set(watchName).then(function() {
-                                alert("Watch successfully registered!");
-                            }).catch(function(err) {
-                                alert("Error saving watch: " + err.message);
+                            db.ref("users/" + userId + "/activeVoucher").once('value', function(snapshot) {
+                                if (!snapshot.exists()) {
+                                    errorMsgEl.innerText = "No active voucher found.";
+                                    errorMsgEl.style.display = "block";
+                                    return;
+                                }
+                                var vData = snapshot.val();
+                                
+                                // Verify voucher code
+                                if (vData.voucherCode !== enteredVoucherCode) {
+                                    errorMsgEl.innerText = "Wrong code! Please check and try again.";
+                                    errorMsgEl.style.display = "block";
+                                    return;
+                                }
+
+                                var tier = vData.tier; // 'gold' ya 'diamond'
+                                var maxChanges = (tier === 'gold') ? 2 : ((tier === 'diamond') ? 4 : 0);
+                                var currentChangesCount = vData.changeCount || 0;
+
+                                if (tier === 'silver') {
+                                    errorMsgEl.innerText = "Silver tier users do not have special frames.";
+                                    errorMsgEl.style.display = "block";
+                                    return;
+                                }
+
+                                if (currentChangesCount >= maxChanges) {
+                                    errorMsgEl.innerText = "Maximum limit of " + maxChanges + " changes reached for this voucher.";
+                                    errorMsgEl.style.display = "block";
+                                    return;
+                                }
+
+                                var assignedFrame = (tier === 'gold') ? 'Gold Frame' : 'Diamond Frame';
+                                var targetTheme = (tier === 'gold') ? 'gold' : 'diamond';
+                                var updatedCount = currentChangesCount + 1;
+
+                                // 1. Update active voucher details inside User profile
+                                db.ref("users/" + userId + "/activeVoucher").update({
+                                    registeredWatch: watchCode,
+                                    frame: assignedFrame,
+                                    changeCount: updatedCount
+                                }).then(function() {
+                                    
+                                    // 2. Direct ROOT Update in CM-SMM-PANEL Database (CHF-001 node par "theme" aur "voucher" ko "gold"/"diamond" set karega)
+                                    if (cmSmmDb) {
+                                        cmSmmDb.ref(watchCode).update({
+                                            theme: targetTheme,
+                                            voucher: targetTheme
+                                        }, function(error) {
+                                            if (error) {
+                                                console.error("Error updating CM-SMM-PANEL DB:", error);
+                                            } else {
+                                                console.log("Successfully updated " + watchCode + " in CM-SMM-PANEL Database with theme: " + targetTheme);
+                                            }
+                                        });
+                                    }
+
+                                    // Primary DB backup node update
+                                    db.ref("watches/" + watchCode).update({
+                                        theme: targetTheme,
+                                        voucher: targetTheme
+                                    });
+
+                                    document.getElementById('voucherVerifyModal').style.display = "none";
+                                    alert("Success! Watch " + watchCode + " theme updated to: " + targetTheme.toUpperCase());
+                                }).catch(function(err) {
+                                    errorMsgEl.innerText = "Error saving: " + err.message;
+                                    errorMsgEl.style.display = "block";
+                                });
                             });
                         } else {
-                            alert("Watch saved locally: " + watchName);
+                            alert("Local Mode: Watch saved successfully!");
+                            document.getElementById('voucherVerifyModal').style.display = "none";
                         }
                     });
                 }
@@ -3407,9 +3592,7 @@
                             
                             if (req.status === "approved") {
                                 var defaultRepairs = req.tier === 'silver' ? 2 : (req.tier === 'gold' ? 3 : 10);
-                                var defaultPerks = req.tier === 'silver' ? "Community Access" : 
-                                                  (req.tier === 'gold' ? "App Access, Warranty" : 
-                                                  "App Access, Strap, Free Delivery");
+                                var initialFrame = (req.tier === 'silver') ? 'Default (None)' : (req.tier === 'gold' ? 'Gold Frame' : 'Diamond Frame');
 
                                 var finalVoucherData = {
                                     tier: req.tier,
@@ -3417,9 +3600,10 @@
                                     voucherCode: req.voucherCode,
                                     purchaseDate: Date.now(),
                                     repairsLeft: defaultRepairs,
-                                    perks: defaultPerks,
                                     discountPercent: 10,
-                                    registeredWatch: ""
+                                    registeredWatch: "",
+                                    frame: initialFrame,
+                                    changeCount: 0
                                 };
 
                                 approvedVoucherBackupData = finalVoucherData;
@@ -3554,6 +3738,8 @@
                 var voucherCode = voucherData.voucherCode;
                 var price = voucherData.price;
                 var repairsLeft = voucherData.repairsLeft !== undefined ? voucherData.repairsLeft : (tier === 'silver' ? 2 : (tier === 'gold' ? 3 : 10));
+                var activeFrame = voucherData.frame || (tier === 'silver' ? 'Default (None)' : (tier === 'gold' ? 'Gold Frame' : 'Diamond Frame'));
+                var changeCount = voucherData.changeCount || 0;
                 
                 document.getElementById('tier-subtitle').innerText = "YOUR ACTIVE VOUCHER";
 
@@ -3574,12 +3760,18 @@
                 document.getElementById('voucherDetailsCard').style.display = "block";
                 document.getElementById('det-price').innerText = "₹" + price;
                 document.getElementById('det-repair-count').innerText = repairsLeft + " Free Repairs";
+                document.getElementById('det-active-frame').innerText = activeFrame;
 
-                var perksText = "Community Access";
-                if (tier === 'gold') { perksText = "App Access, Warranty"; }
-                if (tier === 'diamond') { perksText = "App Access, Strap, Free Delivery"; }
-
-                document.getElementById('det-perks').innerText = perksText;
+                var watchRegSection = document.getElementById('watchRegSection');
+                if (tier === 'silver') {
+                    watchRegSection.style.display = "none";
+                } else {
+                    watchRegSection.style.display = "block";
+                    var maxAllowed = (tier === 'gold') ? 2 : 4;
+                    var remaining = maxAllowed - changeCount;
+                    document.getElementById('changeLimitInfo').innerText = "Changes remaining: " + remaining + " of " + maxAllowed;
+                    document.getElementById('frameRegLabel').innerText = "Register Watch Code for " + (tier === 'gold' ? "Gold" : "Diamond") + " Frame:";
+                }
 
                 if (voucherData.registeredWatch) {
                     document.getElementById('registeredWatchInput').value = voucherData.registeredWatch;
