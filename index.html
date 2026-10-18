@@ -386,40 +386,102 @@
         
         .modal-content {
             background: linear-gradient(135deg, #121212 0%, #0a0a0a 100%);
-            border: 1px solid var(--gold-primary); 
             border-radius: 16px;
             width: 100%; max-width: 450px; padding: 35px 25px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(223, 186, 107, 0.05); 
             position: relative;
             transform: scale(0.9); transition: transform 0.3s ease; text-align: center;
             pointer-events: auto !important; box-sizing: border-box;
-            overflow: hidden;
+            overflow: visible !important;
         }
         body.modal-active .modal-content { transform: scale(1); }
 
-        .modal-content::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.08) 50%, transparent 100%);
-            transform: skewX(-20deg); animation: loopCardShimmer 4s infinite ease-in-out;
-            pointer-events: none; z-index: 1;
+        /* --- CORNER ELEMENTS (OVERLAID ON FRAME & BORDER) --- */
+        .corner-gem {
+            position: absolute;
+            z-index: 1000 !important;
+            pointer-events: none;
+        }
+        .gem-top-left { top: -12px; left: -12px; }
+        .gem-bottom-right { bottom: -12px; right: -12px; }
+
+        /* --- GOLD THEME --- */
+        .modal-content.theme-gold {
+            border: 2px solid #dfba6b;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(223, 186, 107, 0.15);
+        }
+        .theme-gold .corner-gem {
+            width: 20px; height: 20px;
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, #fff2b2 0%, #dfba6b 50%, #9a7b36 100%);
+            box-shadow: 0 0 12px #dfba6b, 0 0 4px #ffffff;
+            border: 2px solid #ffffff;
+        }
+        .theme-gold .status-badge { color: #dfba6b; }
+        .theme-gold .info-row { border-bottom: 1px solid rgba(223, 186, 107, 0.15); }
+        .theme-gold .btn-close {
+            background: transparent; color: #dfba6b; border: 1px solid #dfba6b;
+        }
+        .theme-gold .btn-close:hover { background: #dfba6b; color: #000000; box-shadow: 0 0 15px rgba(223, 186, 107, 0.4); }
+
+        /* --- DIAMOND THEME --- */
+        .modal-content.theme-diamond {
+            border: 2px solid #b9f2ff;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(185, 242, 255, 0.35);
+            animation: diamondEntryPulse 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
         }
 
-        @keyframes loopCardShimmer {
-            0% { left: -150%; }
-            30% { left: 150%; }
-            100% { left: 150%; }
+        @keyframes diamondEntryPulse {
+            0% { transform: scale(0.6); opacity: 0; filter: brightness(1.3); }
+            60% { transform: scale(1.04); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; filter: brightness(1); }
         }
+
+        /* Diamond Corner Gems (Overlaid) */
+        .theme-diamond .corner-gem {
+            width: 28px; height: 24px;
+            background: linear-gradient(135deg, #ffffff 0%, #b9f2ff 40%, #00b4d2 100%);
+            border: 1.5px solid #ffffff;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 35%, 50% 100%, 0% 35%);
+            box-shadow: 0 0 14px rgba(185, 242, 255, 0.95), 0 0 6px #00b4d2;
+        }
+
+        /* Diamond Text Shimmer Effect (Wapas Laya Gaya Hai) */
+        .theme-diamond .status-badge,
+        .theme-diamond .info-label,
+        .theme-diamond .info-value {
+            background: linear-gradient(90deg, #ffffff 0%, #b9f2ff 30%, #00b4d2 50%, #b9f2ff 70%, #ffffff 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none !important;
+            animation: textBlueShimmer 2.2s linear infinite;
+        }
+
+        @keyframes textBlueShimmer {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        .theme-diamond .info-row { border-bottom: 1px solid rgba(185, 242, 255, 0.25); }
         
-        .status-badge { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold-primary); letter-spacing: 1px; margin-bottom: 30px; font-weight: 700; line-height: 1.4; position: relative; z-index: 2; }
+        .theme-diamond .btn-close {
+            background: linear-gradient(135deg, #00b4d2 0%, #0077b6 100%); 
+            color: #ffffff; border: 1.5px solid #b9f2ff;
+            box-shadow: 0 0 15px rgba(0, 180, 210, 0.4);
+        }
+        .theme-diamond .btn-close:hover { background: #b9f2ff; color: #000000; box-shadow: 0 0 20px rgba(185, 242, 255, 0.7); }
+
+        .status-badge { font-family: 'Cinzel', serif; font-size: 1.05rem; letter-spacing: 1px; margin-bottom: 30px; font-weight: 700; line-height: 1.4; position: relative; z-index: 10; }
         
-        .info-container { width: 100%; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 2; }
+        .info-container { width: 100%; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 10; }
         .info-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 14px 5px; border-bottom: 1px solid rgba(223, 186, 107, 0.1); 
-            gap: 15px; text-align: left;
+            padding: 14px 5px; gap: 15px; text-align: left;
         }
         .info-label { color: var(--text-muted); font-size: 0.88rem; font-weight: 400; white-space: nowrap; }
-        .info-value { color: var(--text-light); font-size: 0.95rem; font-weight: 600; text-align: right; word-break: break-word; }
+        .info-value { font-size: 0.95rem; font-weight: 600; text-align: right; word-break: break-word; }
 
         .shimmer-wrapper { display: none; width: 100%; flex-direction: column; gap: 16px; margin: 10px 0 20px 0; }
         .shimmer-header {
@@ -449,7 +511,7 @@
             100% { background-position: -200% 0; }
         }
 
-        .actual-data { display: block; animation: fadeIn 0.4s ease forwards; width: 100%; }
+        .actual-data { display: block; animation: fadeIn 0.4s ease forwards; width: 100%; position: relative; z-index: 10; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -457,30 +519,37 @@
         }
 
         .btn-close {
-            background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary);
             padding: 12px 40px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
             letter-spacing: 2px; cursor: pointer; text-transform: uppercase; border-radius: 6px;
             position: relative; z-index: 100000; margin-top: 10px; transition: all 0.2s ease;
         }
-        .btn-close:hover { background: var(--gold-primary); color: #000000; box-shadow: 0 0 15px rgba(223, 186, 107, 0.4); }
 
         .footer-section { background: radial-gradient(circle at top, #141414 0%, #050505 100%); padding: 50px 20px 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; width: 100%; box-sizing: border-box; }
         .brand-title { font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 6px; background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 12px 0; text-transform: uppercase; font-weight: 700; }
         .philosophy-box { max-width: 700px; margin: 0 auto 30px; font-size: 13px; color: #666; line-height: 1.7; }
         
         .credits-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 0 auto 40px auto; max-width: 320px; width: 100%; }
+        
         .credit-card { 
-            background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(212, 175, 55, 0.4); 
+            background: rgba(10, 10, 10, 0.8); 
+            border: 1px solid rgba(212, 175, 55, 0.4); 
             padding: 15px 25px; width: 100%; border-radius: 8px; text-align: center; 
-            box-shadow: 0 0 15px rgba(223, 186, 107, 0.15); transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px rgba(223, 186, 107, 0.15); 
             position: relative; overflow: hidden; box-sizing: border-box;
         }
-        .credit-card:hover { box-shadow: 0 0 25px rgba(223, 186, 107, 0.35); transform: translateY(-2px); }
         .credit-card::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.12) 50%, transparent 100%);
-            transform: skewX(-20deg); animation: loopCardShimmer 4s infinite ease-in-out; pointer-events: none;
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(223, 186, 107, 0.15), transparent);
+            animation: creditShimmer 3s linear infinite;
+            pointer-events: none;
         }
+        @keyframes creditShimmer {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+        .credit-card:hover { box-shadow: 0 0 25px rgba(223, 186, 107, 0.35); transform: translateY(-2px); }
         
         .credit-card .role { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: #888; display: block; margin-bottom: 5px; position: relative; z-index: 2; }
         .credit-card .identity { font-family: 'Cinzel', serif; font-size: 15px; color: #fff; font-weight: 700; position: relative; z-index: 2; }
@@ -489,7 +558,31 @@
         .deals-text { color: #666; } .deals-text a { color: #d4af37; text-decoration: none; font-weight: 600; }
         .social-wrapper { display: flex; gap: 15px; align-items: center; }
         .contact-us-label { font-size: 10px; letter-spacing: 1px; color: #d4af37; font-weight: 700; }
-        .social-icon img { width: 18px; height: 18px; filter: grayscale(1) brightness(1.3); }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .social-icon img { width: 16px; height: 16px; filter: grayscale(1) brightness(1.3); transition: filter 0.3s ease; }
+        
+        .social-icon.instagram:hover, .social-icon.instagram:active { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+        .social-icon.instagram:hover img, .social-icon.instagram:active img { filter: brightness(2) invert(0); }
+
+        .social-icon.email:hover, .social-icon.email:active { background: #ea4335; }
+        .social-icon.email:hover img, .social-icon.email:active img { filter: brightness(2) invert(0); }
+
+        .social-icon.youtube:hover, .social-icon.youtube:active { background: #ff0000; }
+        .social-icon.youtube:hover img, .social-icon.youtube:active img { filter: brightness(2) invert(0); }
+
+        .social-icon.discord:hover, .social-icon.discord:active { background: #5865F2; }
+        .social-icon.discord:hover img, .social-icon.discord:active img { filter: brightness(2) invert(0); }
+
         .disclaimer-text { margin-top: 30px; font-size: 9px; color: #333; letter-spacing: 1px; }
 
         @media (max-width: 480px) {
@@ -545,9 +638,10 @@
             <div class="deals-text">BEST DEALS TODAY — <a target="_blank">EXPLORE COLLECTION</a></div>
             <div class="social-wrapper">
                 <span class="contact-us-label">CONTACT US</span>
-                <a href="https://www.instagram.com/mr_chief_india?igsh=dWNqMjIzcWVlbXht=" target="_blank" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"></a>
-                <a href="mailto:mrchiefx12@gmail.com" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Email"></a>
-                <a href="https://youtube.com/@mrchief-c?si=0qDQUJmI7umYpPGo" target="_blank" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube"></a>
+                <a href="https://www.instagram.com/mr_chief_india?igsh=dWNqMjIzcWVlbXht=" target="_blank" class="social-icon instagram"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"></a>
+                <a href="javascript:void(0)" id="discordBtn" class="social-icon discord"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord"></a>
+                <a href="mailto:mrchiefx12@gmail.com" class="social-icon email"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Email"></a>
+                <a href="https://youtube.com/@mrchief-c?si=0qDQUJmI7umYpPGo" target="_blank" class="social-icon youtube"><img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube"></a>
             </div>
         </div>
         <div class="disclaimer-text">Notice: This App is linked with Web. Not published officially.</div>
@@ -556,7 +650,11 @@
 
 <!-- POPUP MODAL -->
 <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
+    <div class="modal-content" id="modalContainerBox">
+        <!-- Corner Gems Overlaid on Frame Border -->
+        <div class="corner-gem gem-top-left"></div>
+        <div class="corner-gem gem-bottom-right"></div>
+
         <!-- Premium Initial Skeleton Loader -->
         <div class="shimmer-wrapper" id="shimmerLoader">
             <div class="shimmer-header"></div>
@@ -569,7 +667,7 @@
 
         <!-- Dynamic Registry Data Wrapper -->
         <div class="actual-data" id="actualDataView" style="display: none;">
-            <div class="status-badge">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
+            <div class="status-badge" id="resBadgeText">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
             
             <div class="info-container">
                 <div class="info-row">
@@ -578,7 +676,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Global Status</span>
-                    <span class="info-value" id="resStatus" style="color: #dfba6b;">-</span>
+                    <span class="info-value" id="resStatus">-</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Current Legal Owner</span>
@@ -595,12 +693,11 @@
     </div>
 </div>
 
-<!-- 🔥 New Firebase v10 Modular Architecture Integration -->
+<!-- 🔥 Firebase v10 Modular Architecture Integration -->
 <script type="module">
     import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    // Your Exact Web App Config Map
     const firebaseConfig = {
         apiKey: "AIzaSyAIG79RwnrUTaRNhFU8YWBjGlNWiZ1Eeaw",
         authDomain: "cm-smm-panel.firebaseapp.com",
@@ -611,20 +708,38 @@
         appId: "1:805393568681:web:e1c454a61e17b394082ab8"
     };
 
-    // Safe App Instantiation
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     const db = getDatabase(app);
 
     function showModal() { document.body.classList.add("modal-active"); }
     function hideModal() { document.body.classList.remove("modal-active"); }
 
-    // Navigation and Popup Interactions
+    /* --- DISCORD APP/PLAY STORE TRIGGER LOGIC --- */
+    const discordBtn = document.getElementById("discordBtn");
+    if (discordBtn) {
+        discordBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            const inviteCode = "HwyrW3Jak";
+            const appUrl = "discord://invite/" + inviteCode;
+            const webUrl = "https://discord.gg/" + inviteCode;
+            const playStoreUrl = "https://play.google.com/store/apps/details?id=com.discord";
+
+            let start = Date.now();
+            window.location.href = appUrl;
+
+            setTimeout(function() {
+                if (Date.now() - start < 1800) {
+                    window.location.href = playStoreUrl;
+                }
+            }, 1200);
+        });
+    }
+
     document.addEventListener("click", function(e) {
         if (e.target && e.target.id === "closeBtn") { hideModal(); }
         if (e.target === document.getElementById("modalOverlay")) { hideModal(); }
     });
 
-    // Main Live Verification Runtime Pipeline
     document.addEventListener("click", function(e) {
         if (e.target && e.target.id === "verifyBtn") {
             const watchCodeEl = document.getElementById("watchCode");
@@ -639,19 +754,16 @@
 
             if (codeInput === "") { alert("Please enter a code."); return; }
 
-            // Trigger Shimmer Loaders
             shimmerLoader.style.display = "flex";
             actualDataView.style.display = "none";
             showModal();
 
-            // Setup Real-time Active Sync Stream (`onValue` listens instantly for new writes)
             const upperCaseRef = ref(db, 'watches/' + codeInput.toUpperCase());
             
             onValue(upperCaseRef, (snapshot) => {
                 if (snapshot.exists()) {
                     renderWatchData(snapshot.val());
                 } else {
-                    // Lowercase Node Fallback Checks
                     const lowerCaseRef = ref(db, 'watches/' + codeInput.toLowerCase());
                     onValue(lowerCaseRef, (lowSnapshot) => {
                         if (lowSnapshot.exists()) {
@@ -665,19 +777,33 @@
             }, (error) => {
                 console.error("Live Stream Failure: ", error);
                 hideModal();
-                alert("Database synchronization failed. Please review security rules or connection state.");
+                alert("Database synchronization failed.");
             });
 
             function renderWatchData(data) {
+                const modalContainerBox = document.getElementById("modalContainerBox");
                 const resModel = document.getElementById("resModel");
                 const resStatus = document.getElementById("resStatus");
                 const resOwner = document.getElementById("resOwner");
                 const resDate = document.getElementById("resDate");
+                const resBadgeText = document.getElementById("resBadgeText");
+
+                const itemTheme = (data.theme && data.theme.toLowerCase() === "diamond") ? "diamond" : "gold";
+
+                modalContainerBox.className = "modal-content theme-" + itemTheme;
 
                 if (resModel) resModel.innerText = data.model || "-";
                 if (resStatus) resStatus.innerText = data.status || "1 of 1 (Unique)";
                 if (resOwner) resOwner.innerText = data.owner || "-";
                 if (resDate) resDate.innerText = data.date || "-";
+
+                if (resBadgeText) {
+                    if (itemTheme === "diamond") {
+                        resBadgeText.innerText = "✦ DIAMOND EXCLUSIVE REGISTRY ✦";
+                    } else {
+                        resBadgeText.innerText = "✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦";
+                    }
+                }
                 
                 shimmerLoader.style.display = "none";
                 actualDataView.style.display = "block";
