@@ -386,40 +386,122 @@
         
         .modal-content {
             background: linear-gradient(135deg, #121212 0%, #0a0a0a 100%);
-            border: 1px solid var(--gold-primary); 
             border-radius: 16px;
             width: 100%; max-width: 450px; padding: 35px 25px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(223, 186, 107, 0.05); 
             position: relative;
             transform: scale(0.9); transition: transform 0.3s ease; text-align: center;
             pointer-events: auto !important; box-sizing: border-box;
-            overflow: hidden;
+            overflow: visible !important;
         }
         body.modal-active .modal-content { transform: scale(1); }
 
-        .modal-content::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.08) 50%, transparent 100%);
-            transform: skewX(-20deg); animation: loopCardShimmer 4s infinite ease-in-out;
-            pointer-events: none; z-index: 1;
+        /* --- CORNER ELEMENTS --- */
+        .corner-gem {
+            position: absolute;
+            z-index: 20;
+        }
+        .gem-top-left { top: -10px; left: -10px; }
+        .gem-bottom-right { bottom: -10px; right: -10px; }
+
+        /* --- GOLD THEME --- */
+        .modal-content.theme-gold {
+            border: 2px solid #dfba6b;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(223, 186, 107, 0.15);
+        }
+        .theme-gold .corner-gem {
+            width: 16px; height: 16px;
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, #fff2b2 0%, #dfba6b 50%, #9a7b36 100%);
+            box-shadow: 0 0 8px #dfba6b;
+            border: 1px solid #ffffff;
+        }
+        .theme-gold .status-badge { color: #dfba6b; }
+        .theme-gold .info-row { border-bottom: 1px solid rgba(223, 186, 107, 0.15); }
+        .theme-gold .btn-close {
+            background: transparent; color: #dfba6b; border: 1px solid #dfba6b;
+        }
+        .theme-gold .btn-close:hover { background: #dfba6b; color: #000000; box-shadow: 0 0 15px rgba(223, 186, 107, 0.4); }
+
+        /* --- DIAMOND THEME (Balanced Average Speed Shimmer & Fixed Single Smooth Flow) --- */
+        .modal-content.theme-diamond {
+            border: 2px solid #b9f2ff;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(185, 242, 255, 0.3);
+            animation: diamondEntryPulse 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+            overflow: visible !important;
         }
 
-        @keyframes loopCardShimmer {
-            0% { left: -150%; }
-            30% { left: 150%; }
-            100% { left: 150%; }
+        /* Clean average speed background shimmer overlay */
+        .modal-content.theme-diamond::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.15) 50%, transparent 65%);
+            background-size: 200% 200%;
+            animation: popupFullShimmer 2.5s linear infinite;
+            pointer-events: none;
+            z-index: 5;
         }
+
+        @keyframes popupFullShimmer {
+            0% { background-position: -200% -200%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        @keyframes diamondEntryPulse {
+            0% { transform: scale(0.6); opacity: 0; filter: brightness(1.5); }
+            60% { transform: scale(1.04); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+        }
+
+        .theme-diamond .corner-gem {
+            width: 24px; height: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #b9f2ff 50%, #00b4d2 100%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 35%, 50% 100%, 0% 35%);
+            box-shadow: 0 0 8px rgba(185, 242, 255, 0.6);
+            z-index: 25;
+        }
+        .theme-diamond .gem-top-left { top: -12px; left: -12px; }
+        .theme-diamond .gem-bottom-right { bottom: -12px; right: -12px; }
+
+        /* Diamond theme text styling: average speed, balanced look, strictly NO blue glow */
+        .theme-diamond .status-badge,
+        .theme-diamond .info-label,
+        .theme-diamond .info-value {
+            background: linear-gradient(90deg, #ffffff 0%, #b9f2ff 35%, #ffffff 50%, #b9f2ff 65%, #ffffff 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none !important;
+            filter: none !important;
+            animation: textShimmerAverage 2s linear infinite;
+        }
+
+        @keyframes textShimmerAverage {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        .theme-diamond .info-row { border-bottom: 1px solid rgba(185, 242, 255, 0.2); }
         
-        .status-badge { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold-primary); letter-spacing: 1px; margin-bottom: 30px; font-weight: 700; line-height: 1.4; position: relative; z-index: 2; }
+        .theme-diamond .btn-close {
+            background: linear-gradient(135deg, #00b4d2 0%, #0077b6 100%); 
+            color: #ffffff; border: 1px solid #b9f2ff;
+        }
+        .theme-diamond .btn-close:hover { background: #b9f2ff; color: #000000; box-shadow: 0 0 15px rgba(185, 242, 255, 0.5); }
+
+        .status-badge { font-family: 'Cinzel', serif; font-size: 1.05rem; letter-spacing: 1px; margin-bottom: 30px; font-weight: 700; line-height: 1.4; position: relative; z-index: 10; }
         
-        .info-container { width: 100%; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 2; }
+        .info-container { width: 100%; margin: 0 auto 30px auto; display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 10; }
         .info-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 14px 5px; border-bottom: 1px solid rgba(223, 186, 107, 0.1); 
-            gap: 15px; text-align: left;
+            padding: 14px 5px; gap: 15px; text-align: left;
         }
         .info-label { color: var(--text-muted); font-size: 0.88rem; font-weight: 400; white-space: nowrap; }
-        .info-value { color: var(--text-light); font-size: 0.95rem; font-weight: 600; text-align: right; word-break: break-word; }
+        .info-value { font-size: 0.95rem; font-weight: 600; text-align: right; word-break: break-word; }
 
         .shimmer-wrapper { display: none; width: 100%; flex-direction: column; gap: 16px; margin: 10px 0 20px 0; }
         .shimmer-header {
@@ -449,7 +531,7 @@
             100% { background-position: -200% 0; }
         }
 
-        .actual-data { display: block; animation: fadeIn 0.4s ease forwards; width: 100%; }
+        .actual-data { display: block; animation: fadeIn 0.4s ease forwards; width: 100%; position: relative; z-index: 10; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -457,30 +539,39 @@
         }
 
         .btn-close {
-            background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary);
             padding: 12px 40px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
             letter-spacing: 2px; cursor: pointer; text-transform: uppercase; border-radius: 6px;
             position: relative; z-index: 100000; margin-top: 10px; transition: all 0.2s ease;
         }
-        .btn-close:hover { background: var(--gold-primary); color: #000000; box-shadow: 0 0 15px rgba(223, 186, 107, 0.4); }
 
         .footer-section { background: radial-gradient(circle at top, #141414 0%, #050505 100%); padding: 50px 20px 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; width: 100%; box-sizing: border-box; }
         .brand-title { font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 6px; background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 12px 0; text-transform: uppercase; font-weight: 700; }
         .philosophy-box { max-width: 700px; margin: 0 auto 30px; font-size: 13px; color: #666; line-height: 1.7; }
         
         .credits-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 0 auto 40px auto; max-width: 320px; width: 100%; }
+        
+        /* Credit cards with normal strength shimmer effect */
         .credit-card { 
-            background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(212, 175, 55, 0.4); 
+            background: rgba(10, 10, 10, 0.8); 
+            border: 1px solid rgba(212, 175, 55, 0.4); 
             padding: 15px 25px; width: 100%; border-radius: 8px; text-align: center; 
-            box-shadow: 0 0 15px rgba(223, 186, 107, 0.15); transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px rgba(223, 186, 107, 0.15); 
             position: relative; overflow: hidden; box-sizing: border-box;
         }
-        .credit-card:hover { box-shadow: 0 0 25px rgba(223, 186, 107, 0.35); transform: translateY(-2px); }
         .credit-card::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(223, 186, 107, 0.12) 50%, transparent 100%);
-            transform: skewX(-20deg); animation: loopCardShimmer 4s infinite ease-in-out; pointer-events: none;
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(60deg, transparent 40%, rgba(223, 186, 107, 0.15) 50%, transparent 60%);
+            transform: rotate(30deg);
+            animation: creditShimmer 3s linear infinite;
+            pointer-events: none;
         }
+        @keyframes creditShimmer {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        .credit-card:hover { box-shadow: 0 0 25px rgba(223, 186, 107, 0.35); transform: translateY(-2px); }
         
         .credit-card .role { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: #888; display: block; margin-bottom: 5px; position: relative; z-index: 2; }
         .credit-card .identity { font-family: 'Cinzel', serif; font-size: 15px; color: #fff; font-weight: 700; position: relative; z-index: 2; }
@@ -489,7 +580,32 @@
         .deals-text { color: #666; } .deals-text a { color: #d4af37; text-decoration: none; font-weight: 600; }
         .social-wrapper { display: flex; gap: 15px; align-items: center; }
         .contact-us-label { font-size: 10px; letter-spacing: 1px; color: #d4af37; font-weight: 700; }
-        .social-icon img { width: 18px; height: 18px; filter: grayscale(1) brightness(1.3); }
+        
+        /* Social Icons with Real Brand Colors on Click / Active */
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .social-icon img { width: 16px; height: 16px; filter: grayscale(1) brightness(1.3); transition: filter 0.3s ease; }
+        
+        /* Real brand colors triggered on click/active or hover state */
+        .social-icon.instagram:hover, .social-icon.instagram:active { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+        .social-icon.instagram:hover img, .social-icon.instagram:active img { filter: brightness(2) invert(0); }
+
+        .social-icon.email:hover, .social-icon.email:active { background: #ea4335; }
+        .social-icon.email:hover img, .social-icon.email:active img { filter: brightness(2) invert(0); }
+
+        .social-icon.youtube:hover, .social-icon.youtube:active { background: #ff0000; }
+        .social-icon.youtube:hover img, .social-icon.youtube:active img { filter: brightness(2) invert(0); }
+
+        .social-icon.discord:hover, .social-icon.discord:active { background: #5865F2; }
+        .social-icon.discord:hover img, .social-icon.discord:active img { filter: brightness(2) invert(0); }
+
         .disclaimer-text { margin-top: 30px; font-size: 9px; color: #333; letter-spacing: 1px; }
 
         @media (max-width: 480px) {
@@ -545,9 +661,10 @@
             <div class="deals-text">BEST DEALS TODAY — <a target="_blank">EXPLORE COLLECTION</a></div>
             <div class="social-wrapper">
                 <span class="contact-us-label">CONTACT US</span>
-                <a href="https://www.instagram.com/mr_chief_india?igsh=dWNqMjIzcWVlbXht=" target="_blank" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"></a>
-                <a href="mailto:mrchiefx12@gmail.com" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Email"></a>
-                <a href="https://youtube.com/@mrchief-c?si=0qDQUJmI7umYpPGo" target="_blank" class="social-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube"></a>
+                <a href="https://www.instagram.com/mr_chief_india?igsh=dWNqMjIzcWVlbXht=" target="_blank" class="social-icon instagram"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"></a>
+                <a href="https://discord.gg/HwyrW3Jak" target="_blank" class="social-icon discord"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord"></a>
+                <a href="mailto:mrchiefx12@gmail.com" class="social-icon email"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Email"></a>
+                <a href="https://youtube.com/@mrchief-c?si=0qDQUJmI7umYpPGo" target="_blank" class="social-icon youtube"><img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube"></a>
             </div>
         </div>
         <div class="disclaimer-text">Notice: This App is linked with Web. Not published officially.</div>
@@ -556,7 +673,11 @@
 
 <!-- POPUP MODAL -->
 <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
+    <div class="modal-content" id="modalContainerBox">
+        <!-- Gems placed at Upper-Left and Lower-Right Corners -->
+        <div class="corner-gem gem-top-left"></div>
+        <div class="corner-gem gem-bottom-right"></div>
+
         <!-- Premium Initial Skeleton Loader -->
         <div class="shimmer-wrapper" id="shimmerLoader">
             <div class="shimmer-header"></div>
@@ -569,7 +690,7 @@
 
         <!-- Dynamic Registry Data Wrapper -->
         <div class="actual-data" id="actualDataView" style="display: none;">
-            <div class="status-badge">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
+            <div class="status-badge" id="resBadgeText">✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦</div>
             
             <div class="info-container">
                 <div class="info-row">
@@ -578,7 +699,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Global Status</span>
-                    <span class="info-value" id="resStatus" style="color: #dfba6b;">-</span>
+                    <span class="info-value" id="resStatus">-</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Current Legal Owner</span>
@@ -595,12 +716,11 @@
     </div>
 </div>
 
-<!-- 🔥 New Firebase v10 Modular Architecture Integration -->
+<!-- 🔥 Firebase v10 Modular Architecture Integration -->
 <script type="module">
     import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    // Your Exact Web App Config Map
     const firebaseConfig = {
         apiKey: "AIzaSyAIG79RwnrUTaRNhFU8YWBjGlNWiZ1Eeaw",
         authDomain: "cm-smm-panel.firebaseapp.com",
@@ -611,20 +731,17 @@
         appId: "1:805393568681:web:e1c454a61e17b394082ab8"
     };
 
-    // Safe App Instantiation
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     const db = getDatabase(app);
 
     function showModal() { document.body.classList.add("modal-active"); }
     function hideModal() { document.body.classList.remove("modal-active"); }
 
-    // Navigation and Popup Interactions
     document.addEventListener("click", function(e) {
         if (e.target && e.target.id === "closeBtn") { hideModal(); }
         if (e.target === document.getElementById("modalOverlay")) { hideModal(); }
     });
 
-    // Main Live Verification Runtime Pipeline
     document.addEventListener("click", function(e) {
         if (e.target && e.target.id === "verifyBtn") {
             const watchCodeEl = document.getElementById("watchCode");
@@ -639,19 +756,16 @@
 
             if (codeInput === "") { alert("Please enter a code."); return; }
 
-            // Trigger Shimmer Loaders
             shimmerLoader.style.display = "flex";
             actualDataView.style.display = "none";
             showModal();
 
-            // Setup Real-time Active Sync Stream (`onValue` listens instantly for new writes)
             const upperCaseRef = ref(db, 'watches/' + codeInput.toUpperCase());
             
             onValue(upperCaseRef, (snapshot) => {
                 if (snapshot.exists()) {
                     renderWatchData(snapshot.val());
                 } else {
-                    // Lowercase Node Fallback Checks
                     const lowerCaseRef = ref(db, 'watches/' + codeInput.toLowerCase());
                     onValue(lowerCaseRef, (lowSnapshot) => {
                         if (lowSnapshot.exists()) {
@@ -665,19 +779,33 @@
             }, (error) => {
                 console.error("Live Stream Failure: ", error);
                 hideModal();
-                alert("Database synchronization failed. Please review security rules or connection state.");
+                alert("Database synchronization failed.");
             });
 
             function renderWatchData(data) {
+                const modalContainerBox = document.getElementById("modalContainerBox");
                 const resModel = document.getElementById("resModel");
                 const resStatus = document.getElementById("resStatus");
                 const resOwner = document.getElementById("resOwner");
                 const resDate = document.getElementById("resDate");
+                const resBadgeText = document.getElementById("resBadgeText");
+
+                const itemTheme = (data.theme && data.theme.toLowerCase() === "diamond") ? "diamond" : "gold";
+
+                modalContainerBox.className = "modal-content theme-" + itemTheme;
 
                 if (resModel) resModel.innerText = data.model || "-";
                 if (resStatus) resStatus.innerText = data.status || "1 of 1 (Unique)";
                 if (resOwner) resOwner.innerText = data.owner || "-";
                 if (resDate) resDate.innerText = data.date || "-";
+
+                if (resBadgeText) {
+                    if (itemTheme === "diamond") {
+                        resBadgeText.innerText = "✦ DIAMOND EXCLUSIVE REGISTRY ✦";
+                    } else {
+                        resBadgeText.innerText = "✦ OFFICIAL CHIEF REGISTRY VERIFIED ✦";
+                    }
+                }
                 
                 shimmerLoader.style.display = "none";
                 actualDataView.style.display = "block";
@@ -2783,35 +2911,6 @@
             gap: 10px;
         }
         .cv-card-header { font-size: 18px; font-weight: 800; color: var(--cv-accent-color); }
-        
-        /* PREMIUM ROUNDED BOX FOR BALANCE */
-        .cv-card-balance-badge {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1.5px solid var(--cv-accent-color);
-            padding: 6px 14px;
-            border-radius: 8px;
-            text-align: right;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            min-width: 100px;
-            flex-shrink: 0;
-        }
-        .cv-card-balance-label {
-            font-size: 9px;
-            font-weight: bold;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: block;
-        }
-        .cv-card-balance-value {
-            color: #fff;
-            font-size: 1.15rem;
-            font-weight: 900;
-            display: block;
-            text-shadow: 0 0 5px var(--cv-accent-color);
-            margin-top: 1px;
-            letter-spacing: 0.5px;
-        }
 
         .cv-card-list { list-style: none; padding: 0; margin: 0 0 15px 0; font-size: 13px; line-height: 1.6; }
         .cv-card-list li { margin-bottom: 5px; padding-left: 20px; position: relative; }
@@ -2831,25 +2930,11 @@
 
         /* THEMES */
         .cv-silver-card { background: #111; --cv-accent-color: #E0E0E0; }
-        .cv-silver-card .cv-buy-btn { background: linear-gradient(to right, #E0E0E0, #A0A0A0); }
+        .cv-silver-card .cv-buy-btn { background: linear-gradient(to right, #E0E0E0, #A0A0A0); color: #000; }
         .cv-gold-card { background: #1a1505; --cv-accent-color: #D4AF37; }
-        .cv-gold-card .cv-buy-btn { background: linear-gradient(to right, #F1C40F, #B8860B); }
+        .cv-gold-card .cv-buy-btn { background: linear-gradient(to right, #F1C40F, #B8860B); color: #000; }
         .cv-diamond-card { background: #051a22; --cv-accent-color: #B9F2FF; }
-        .cv-diamond-card .cv-buy-btn { background: linear-gradient(to right, #81D4FA, #039BE5); }
-
-        /* Timer Styling */
-        .cv-voucher-timer {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: bold;
-            color: #ff9800;
-            margin-bottom: 15px;
-            display: none;
-        }
+        .cv-diamond-card .cv-buy-btn { background: linear-gradient(to right, #81D4FA, #039BE5); color: #000; }
 
         /* Voucher Code Display */
         .cv-voucher-code-container {
@@ -2916,7 +3001,7 @@
         .cv-notice-section ol { padding-left: 15px; margin: 0; }
         .cv-notice-section li { margin-bottom: 6px; }
 
-        /* MODALS (EXACT CORNER AND ALIGNMENT MATCH) */
+        /* MODALS */
         .cv-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85); z-index: 10000;
@@ -2946,7 +3031,6 @@
         }
         .cv-modal-close:hover { color: #fff; }
         
-        /* EXACT TITLE COLOR FROM IMAGE */
         .cv-modal-title-custom {
             text-align: center; 
             font-size: 16px; 
@@ -2957,7 +3041,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* DASHED LINE EXACTLY BELOW TITLE */
         .cv-modal-divider {
             border: none;
             border-top: 1px dashed #333333;
@@ -2965,7 +3048,6 @@
             width: 96%;
         }
         
-        /* QR IMAGE CONTAINER WITH ROUNDED CORNERS MATCH */
         .cv-modal-qr-container {
             width: 220px; 
             height: auto; 
@@ -2990,7 +3072,6 @@
             line-height: 1.4; margin-bottom: 20px; padding: 0 8px;
         }
         
-        /* INPUTS & BUTTONS STYLING */
         .cv-utr-input {
             width: 100%; background: transparent; 
             border: 1px solid #333;
@@ -3045,26 +3126,17 @@
             <p class="cv-subtitle" id="tier-subtitle">SELECT YOUR TIER</p>
         </header>
 
-        <div class="cv-voucher-timer" id="voucherTimer">
-            NEXT CREDIT IN: <span id="timerCountdown">00d 00h 00m 00s</span>
-        </div>
-
         <div class="cv-cards-container" id="cardsContainer">
             <!-- SILVER CARD -->
             <div class="cv-voucher-card cv-silver-card" id="card-silver">
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
                         <div class="cv-card-header">SILVER VOUCHER</div>
-                        <div class="cv-card-balance-badge" style="display: none;" id="bal-badge-silver">
-                            <span class="cv-card-balance-label">Available Balance</span>
-                            <span class="cv-card-balance-value" id="bal-val-silver">₹0</span>
-                        </div>
                     </div>
                     <ul class="cv-card-list">
-                        <li>50% discount on store items</li>
-                        <li>₹200 monthly store credit</li>
-                        <li>Valid for products only</li>
-                        <li>Non-withdrawable</li>
+                        <li>10% Discount</li>
+                        <li>2 Free Watch Repairings</li>
+                        <li>Dedicated Community Access</li>
                     </ul>
                     <button class="cv-buy-btn" data-tier="silver" data-amount="200">BUY ₹200</button>
                     
@@ -3080,16 +3152,13 @@
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
                         <div class="cv-card-header">GOLD VOUCHER</div>
-                        <div class="cv-card-balance-badge" style="display: none;" id="bal-badge-gold">
-                            <span class="cv-card-balance-label">Available Balance</span>
-                            <span class="cv-card-balance-value" id="bal-val-gold">₹0</span>
-                        </div>
                     </div>
                     <ul class="cv-card-list">
-                        <li>50% discount on store items</li>
-                        <li>₹400 monthly store credit</li>
-                        <li>Valid for products only</li>
-                        <li>Non-withdrawable</li>
+                        <li>10% Discount</li>
+                        <li>3 Free Watch Repairings</li>
+                        <li>Exclusive App Access</li>
+                        <li>Extended Warranty</li>
+                        <li>Dedicated Community Access</li>
                     </ul>
                     <button class="cv-buy-btn" data-tier="gold" data-amount="400">BUY ₹400</button>
 
@@ -3105,16 +3174,14 @@
                 <div class="cv-card-content">
                     <div class="cv-card-header-row">
                         <div class="cv-card-header">DIAMOND VOUCHER</div>
-                        <div class="cv-card-balance-badge" style="display: none;" id="bal-badge-diamond">
-                            <span class="cv-card-balance-label">Available Balance</span>
-                            <span class="cv-card-balance-value" id="bal-val-diamond">₹0</span>
-                        </div>
                     </div>
                     <ul class="cv-card-list">
-                        <li>50% discount on store items</li>
-                        <li>₹800 monthly store credit</li>
-                        <li>Valid for products only</li>
-                        <li>Non-withdrawable</li>
+                        <li>10% Discount</li>
+                        <li>10 Free Watch Repairings</li>
+                        <li>Exclusive App Access</li>
+                        <li>Customizable Watch Strap</li>
+                        <li>Dedicated Community Access</li>
+                        <li>Free Delivery</li>
                     </ul>
                     <button class="cv-buy-btn" data-tier="diamond" data-amount="800">BUY ₹800</button>
 
@@ -3132,36 +3199,20 @@
                 <span>💳</span> Chief Membership / Voucher
             </div>
             <div class="cv-detail-row">
-                <div class="cv-detail-label">Current Available Balance</div>
-                <div class="cv-detail-val" id="det-current-balance" style="font-weight: 900; color: #2ecc71; font-size: 20px;">₹0</div>
-            </div>
-            <div class="cv-detail-row">
-                <div class="cv-detail-label">Voucher price</div>
+                <div class="cv-detail-label">Voucher Price</div>
                 <div class="cv-detail-val" id="det-price">₹0</div>
             </div>
             <div class="cv-detail-row">
-                <div class="cv-detail-label">Instant discount</div>
-                <div class="cv-detail-val" style="color: #ffd700;">50% OFF</div>
+                <div class="cv-detail-label">Store Discount</div>
+                <div class="cv-detail-val" style="color: #ffd700;">10% OFF</div>
             </div>
             <div class="cv-detail-row">
-                <div class="cv-detail-label">Monthly credit</div>
-                <div class="cv-detail-val" id="det-monthly">₹0</div>
+                <div class="cv-detail-label">Free Repairings Left</div>
+                <div class="cv-detail-val" id="det-repair-count" style="color: #81D4FA;">0 Left</div>
             </div>
             <div class="cv-detail-row">
-                <div class="cv-detail-label">Credit duration</div>
-                <div class="cv-detail-val" id="det-duration">0 months</div>
-            </div>
-            <div class="cv-detail-row">
-                <div class="cv-detail-label">Total possible credit</div>
-                <div class="cv-detail-val" id="det-total" style="color: #ffd700;">₹0</div>
-            </div>
-            <div class="cv-detail-row">
-                <div class="cv-detail-label">Credit usable at</div>
-                <div class="cv-detail-val">Chief store only</div>
-            </div>
-            <div class="cv-detail-row">
-                <div class="cv-detail-label">Cash withdrawal</div>
-                <div class="cv-detail-val" style="color: #ff5252;">Not allowed</div>
+                <div class="cv-detail-label">Perks & Access</div>
+                <div class="cv-detail-val" id="det-perks" style="color: #ffd700; text-align: right; max-width: 180px;">-</div>
             </div>
         </div>
 
@@ -3169,22 +3220,18 @@
         <div class="cv-notice-section">
             <h3>Terms & Conditions:</h3>
             <ol>
-                <li>Use: Credit Money can only be used at the Chief Store.</li>
-                <li>Withdraw: Credit Money is non-withdrawable and cannot be converted into cash.</li>
-                <li>Monthly Credit: Credit Money is added to your voucher every month.</li>
-                <li>Credit Money: Use it to buy products only from the Chief Store.</li>
-                <li>Voucher: Products bought with a voucher are not eligible for another voucher.</li>
-                <li>Discount: 50% OFF can be used on one product only.</li>
-                <li>Policy: By using a Chief Voucher, you agree to the Chief Voucher Terms & Conditions.</li>
+                <li>Repairings: Free repairings are valid for registered Chief watches only.</li>
+                <li>Discount: 10% Flat OFF is applied on eligible Chief watches & accessories.</li>
+                <li>Policy: By purchasing a Chief Voucher, you agree to the Chief Terms & Conditions.</li>
             </ol>
         </div>
     </div>
 
-    <!-- MODAL LAYOUTS -->
+    <!-- MODALS -->
     <div class="cv-modal-overlay" id="paymentModal">
         <div class="cv-modal-card">
             <button class="cv-modal-close" id="closePaymentModalBtn">&times;</button>
-            <div class="cv-modal-title-custom" id="modalTitle">Pay ₹200 For Advanced Starter</div>
+            <div class="cv-modal-title-custom" id="modalTitle">Pay ₹200 For Silver Voucher</div>
             <hr class="cv-modal-divider">
             <div class="cv-modal-qr-container">
                 <img class="cv-modal-qr-img" src="https://github.com/cmsmmpanel/CM-SMM-PANEL/blob/main/fam.png?raw=true" alt="UPI QR Code">
@@ -3302,7 +3349,7 @@
                 var detectedId = fetchAndroidUserId();
                 if (detectedId && detectedId !== "CHIEF_GUEST" && detectedId !== userId) {
                     userId = detectedId;
-                    console.log("User successfully connected to workspace: " + userId);
+                    console.log("User successfully connected: " + userId);
                     startFirebaseSync();
                 } else if (!firebaseListenerRef && detectedId === "CHIEF_GUEST") {
                     userId = "CHIEF_GUEST";
@@ -3333,14 +3380,19 @@
                             var req = userData.pendingRequest;
                             
                             if (req.status === "approved") {
+                                var defaultRepairs = req.tier === 'silver' ? 2 : (req.tier === 'gold' ? 3 : 10);
+                                var defaultPerks = req.tier === 'silver' ? "Community Access" : 
+                                                  (req.tier === 'gold' ? "App Access, Warranty" : 
+                                                  "App Access, Strap, Free Delivery");
+
                                 var finalVoucherData = {
                                     tier: req.tier,
                                     price: req.price,
                                     voucherCode: req.voucherCode,
                                     purchaseDate: Date.now(),
-                                    currentBalance: 0, 
-                                    nextRefreshTime: Date.now() + (30 * 24 * 60 * 60 * 1000), 
-                                    monthsRemaining: req.duration 
+                                    repairsLeft: defaultRepairs,
+                                    perks: defaultPerks,
+                                    discountPercent: 10
                                 };
 
                                 approvedVoucherBackupData = finalVoucherData;
@@ -3367,7 +3419,6 @@
                     document.getElementById('waitingModal').style.display = "none";
                     document.getElementById('successModal').style.display = "none";
                     document.getElementById('voucherDetailsCard').style.display = "none";
-                    document.getElementById('voucherTimer').style.display = "none";
                     document.getElementById('tier-subtitle').innerText = "SELECT YOUR TIER";
                     
                     ['silver', 'gold', 'diamond'].forEach(function(t) {
@@ -3376,7 +3427,6 @@
                             card.style.display = "block";
                             var btn = card.querySelector('.cv-buy-btn');
                             if (btn) btn.style.display = "block";
-                            document.getElementById("bal-badge-" + t).style.display = "none";
                             document.getElementById("code-" + t).style.display = "none";
                         }
                     });
@@ -3393,8 +3443,7 @@
                 var utrInput = document.getElementById('utrNumberInput');
                 var paymentModal = document.getElementById('paymentModal');
 
-                var displayName = tier.charAt(0).toUpperCase() + tier.slice(1);
-                if(tier === 'silver') displayName = "Advanced Starter";
+                var displayName = tier.charAt(0).toUpperCase() + tier.slice(1) + " Voucher";
                 
                 if (modalTitle) modalTitle.innerText = "Pay ₹" + amount + " For " + displayName;
                 if (utrInput) utrInput.value = "";
@@ -3420,7 +3469,6 @@
                 window.location.href = upiUri;
             }
 
-            // --- FIXED SECTION: confirm() removed for Android WebView compatibility ---
             document.getElementById('cancelPaymentBtn').addEventListener('click', function() {
                 if(!db) return;
                 db.ref("users/" + userId + "/pendingRequest").remove().then(function() {
@@ -3462,14 +3510,12 @@
                 var tierShort = currentSelectedTier.substring(0,3).toUpperCase();
                 
                 var voucherCode = "CHIEF-" + tierShort + "-" + cleanId + "-" + timePart + "-" + randPart;
-                var duration = currentSelectedTier === 'silver' ? 12 : 10;
 
                 var pendingRequestData = {
                     tier: currentSelectedTier,
                     price: currentSelectedAmount,
                     voucherCode: voucherCode,
                     utr: utrVal,
-                    duration: duration,
                     status: "pending", 
                     timestamp: Date.now()
                 };
@@ -3483,10 +3529,8 @@
             function renderActiveVoucher(voucherData) {
                 var tier = voucherData.tier;
                 var voucherCode = voucherData.voucherCode;
-                var currentBalance = voucherData.currentBalance;
-                var nextRefreshTime = voucherData.nextRefreshTime;
                 var price = voucherData.price;
-                var monthsRemaining = voucherData.monthsRemaining;
+                var repairsLeft = voucherData.repairsLeft !== undefined ? voucherData.repairsLeft : (tier === 'silver' ? 2 : (tier === 'gold' ? 3 : 10));
                 
                 document.getElementById('tier-subtitle').innerText = "YOUR ACTIVE VOUCHER";
 
@@ -3497,11 +3541,6 @@
                         var btn = card.querySelector('.cv-buy-btn');
                         if (btn) btn.style.display = "none";
                         
-                        var balBadge = document.getElementById("bal-badge-" + t);
-                        balBadge.style.display = "block";
-                        
-                        document.getElementById("bal-val-" + t).innerText = "₹" + currentBalance;
-
                         document.getElementById("code-" + t).style.display = "block";
                         document.getElementById("code-val-" + t).innerText = voucherCode;
                     } else {
@@ -3510,64 +3549,21 @@
                 });
 
                 document.getElementById('voucherDetailsCard').style.display = "block";
-                document.getElementById('det-current-balance').innerText = "₹" + currentBalance;
                 document.getElementById('det-price').innerText = "₹" + price;
+                document.getElementById('det-repair-count').innerText = repairsLeft + " Free Repairs";
 
-                var monthlyCred = 200; var durationStr = "12 months total"; var totalPossible = 2400;
-                if (tier === 'gold') { monthlyCred = 400; durationStr = "10 months total"; totalPossible = 4000; }
-                if (tier === 'diamond') { monthlyCred = 800; durationStr = "10 months total"; totalPossible = 8000; }
+                var perksText = "Community Access";
+                if (tier === 'gold') { perksText = "App Access, Warranty"; }
+                if (tier === 'diamond') { perksText = "App Access, Strap, Free Delivery"; }
 
-                document.getElementById('det-monthly').innerText = "₹" + monthlyCred;
-                document.getElementById('det-duration').innerText = durationStr;
-                document.getElementById('det-total').innerText = "₹" + totalPossible;
-
-                document.getElementById('voucherTimer').style.display = "block";
-
-                if (window.voucherTimerInterval) {
-                    clearInterval(window.voucherTimerInterval);
-                }
-
-                window.voucherTimerInterval = setInterval(function() {
-                    var now = Date.now();
-                    var difference = nextRefreshTime - now;
-
-                    if (difference <= 0) {
-                        clearInterval(window.voucherTimerInterval);
-                        
-                        if (monthsRemaining > 0 && db) {
-                            var updatedBalance = currentBalance + monthlyCred;
-                            var newRefreshTime = Date.now() + (30 * 24 * 60 * 60 * 1000);
-                            var updatedMonths = monthsRemaining - 1;
-
-                            var newUpdate = {
-                                currentBalance: updatedBalance,
-                                nextRefreshTime: newRefreshTime,
-                                monthsRemaining: updatedMonths
-                            };
-
-                            db.ref("users/" + userId + "/activeVoucher").update(newUpdate).then(function() {
-                                voucherData.currentBalance = updatedBalance;
-                                voucherData.nextRefreshTime = newRefreshTime;
-                                voucherData.monthsRemaining = updatedMonths;
-                                renderActiveVoucher(voucherData);
-                            });
-                        } else {
-                            document.getElementById('timerCountdown').innerText = "VOUCHER DURATION EXPIRED";
-                        }
-                    } else {
-                        var days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                        document.getElementById('timerCountdown').innerText = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-                    }
-                }, 1000);
+                document.getElementById('det-perks').innerText = perksText;
             }
         })();
     </script>
 </body>
 </html>
 </div>
+        </div>
         <div id="frag-privacy" class="embed-fragment">
             <div id="chief-legal-container">
   <style>
@@ -5863,4 +5859,3 @@ body {
     </script>
 </body>
 </html>
-
